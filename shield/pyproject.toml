@@ -1,0 +1,56 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "alpha-shield"
+version = "0.1.0"
+description = "Alpha Sovereign: The Cognitive AI & Risk Management Core"
+authors = ["Alpha Architect <admin@alphasovereign.system>"]
+readme = "README.md"
+packages = [{include = "shield"}]
+
+# ==========================================================
+# 1. المكدس التقني الأساسي (The Core Stack)
+# ==========================================================
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"  # نستخدم إصداراً مستقراً جداً من بايثون
+
+# --- Data Science & Math (العمود الفقري للبيانات) ---
+numpy = "^1.26.0"        # العمليات الحسابية السريعة
+pandas = "^2.1.0"        # معالجة السلاسل الزمنية (Time-Series)
+scipy = "^1.11.0"        # خوارزميات علمية متقدمة
+
+# --- Machine Learning & AI (العقل العصبي) ---
+torch = "^2.1.0"         # PyTorch: لبناء نماذج التعلم العميق والشبكات العصبية
+scikit-learn = "^1.3.0"  # خوارزميات تعلم الآلة التقليدية (Regression, Clustering)
+
+# --- Communication & API (قنوات الاتصال) ---
+fastapi = "^0.104.0"     # لإنشاء واجهة REST API سريعة جداً
+uvicorn = "^0.23.0"      # خادم ASGI لتشغيل FastAPI
+grpcio = "^1.59.0"       # مكتبة gRPC للاتصال فائق السرعة مع Flutter/Rust
+grpcio-tools = "^1.59.0" # أدوات توليد ملفات البروتوكول
+
+# --- Utilities (أدوات مساعدة) ---
+pydantic = "^2.4.0"      # التحقق من صحة البيانات (Data Validation) بصرامة
+python-dotenv = "^1.0.0" # إدارة المتغيرات البيئية والأسرار
+loguru = "^0.7.2"        # نظام تسجيل (Logging) متطور وسهل القراءة
+
+# ==========================================================
+# 2. أدوات التطوير (Dev Tools)
+# ==========================================================
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"        # إطار عمل للاختبارات
+black = "^23.9.0"        # لتنسيق الكود تلقائياً (Code Formatter)
+flake8 = "^6.1.0"        # لاكتشاف الأخطاء البرمجية (Linter)
+mypy = "^1.6.0"          # للتحقق من الأنواع (Type Checking)
+
+# ==========================================================
+# 3. إعدادات الأدوات (Configuration)
+# ==========================================================
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"

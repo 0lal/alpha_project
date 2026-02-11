@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package alpha.brain;
+
+// =============================================================================
+// ALPHA SOVEREIGN - BRAIN SERVICE PROTOCOL
+// =============================================================================
+// هذا الملف يعرف رسائل وهياكل البيانات التي يتبادلها العقل والمحرك.
+// يتم تحويله تلقائياً إلى كود Python (للعقل) وكود Rust (للمحرك).
+// =============================================================================
+
+// خدمة العقل (الواجهة التي يستدعيها المحرك أو الواجهة)
+service BrainOracle {
+  // طلب تحليل للسياق (مشاعر، سيولة، وضع السوق)
+  rpc AnalyzeContext (ContextRequest) returns (ContextAnalysis);
+
+  // طلب تنبؤ بحركة السعر المستقبلية
+  rpc PredictTrajectory (PredictionRequest) returns (PredictionResponse);
+  
+  // طلب استشارة استراتيجية (هل أدخل هذه الصفقة؟)
+  rpc ConsultStrategy (TradeProposal) returns (StrategyVerdict);
+}
+
+// -----------------------------------------------------------------------------
+// Message Definitions (تعريف الرسائل)
+// -----------------------------------------------------------------------------
+
+message ContextRequest {
+  string symbol = 1;         // e.g., "BTCUSDT"
+  string timeframe = 2;      // e.g., "1h", "4h"
+  int32 lookback_candles = 3; // عدد الشموع المطلوبة للتحليل
+}
+
+message ContextAnalysis {
+  string sentiment = 1;      // "BULLISH", "BEARISH", "NEUTRAL"
+  double volatility_score = 2; // 0.0 - 1.0
+  string market_regime = 3;  // "TRENDING", "RANGING", "CHOPPY"
+  double confidence = 4;     // نسبة الثقة في التحليل
+}
+
+message PredictionRequest {
+  string symbol = 1;
+  repeated double recent_prices = 2; // آخر 50 إغلاق مثلاً
+  int32 horizon_steps = 3;   // كم خطوة للأمام؟
+}
+
+message PredictionResponse {
+  repeated double predicted_path = 1; // المسار المتوقع
+  double upper_bound = 2;    // النطاق السعري العلوي
+  double lower_bound = 3;    // النطاق السعري السفلي
+}
+
+message TradeProposal {
+  string request_id = 1;
+  string symbol = 2;
+  string side = 3;           // "BUY" or "SELL"
+  double amount = 4;
+  double current_price = 5;
+}
+
+message StrategyVerdict {
+  string request_id = 1;
+  bool approved = 2;         // نعم/لا
+  string refusal_reason = 3; // لماذا الرفض؟ (للتسجيل)
+  double risk_score = 4;     // تقييم المخاطرة (0.0 - 1.0)
+  double suggested_leverage = 5; // الرافعة المقترحة
+}
