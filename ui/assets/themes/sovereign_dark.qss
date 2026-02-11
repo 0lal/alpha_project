@@ -1,0 +1,244 @@
+/* Sovereign Dark - Dynamic Template 
+   Variables like @background will be injected by ThemeEngine at runtime.
+   Style: Professional / Modern SaaS / Clean
+*/
+
+/* --- General Reset --- */
+QMainWindow, QWidget {
+    background-color: @background;
+    color: @text_primary;
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+    font-size: 10pt;
+    outline: none;
+}
+
+/* --- Buttons (Modern & Soft) --- */
+QPushButton {
+    background-color: @surface;
+    border: 1px solid @grid_line;
+    border-radius: 4px;
+    padding: 6px 16px;
+    color: @text_primary;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background-color: @grid_line; /* Slightly lighter */
+    border: 1px solid @secondary;
+}
+QPushButton:pressed {
+    background-color: @selection;
+    border: 1px solid @primary;
+}
+QPushButton:disabled {
+    background-color: @background;
+    color: @text_secondary;
+    border: 1px solid @grid_line;
+}
+
+/* --- Input Fields (Clean & Focused) --- */
+QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox {
+    background-color: @background; /* Darker than surface for input depth */
+    border: 1px solid @grid_line;
+    border-radius: 4px;
+    padding: 5px;
+    color: @text_primary;
+    selection-background-color: @secondary;
+    selection-color: @background;
+}
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 1px solid @secondary; /* Cyan glow on focus */
+}
+
+/* --- Scrollbars (Sleek & Minimal) --- */
+QScrollBar:vertical {
+    background: @background;
+    width: 10px;
+    margin: 0px;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical {
+    background: @grid_line;
+    min-height: 20px;
+    border-radius: 5px;
+    margin: 2px;
+}
+QScrollBar::handle:vertical:hover {
+    background: @secondary;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* Horizontal */
+QScrollBar:horizontal {
+    background: @background;
+    height: 10px;
+    margin: 0px;
+    border-radius: 5px;
+}
+QScrollBar::handle:horizontal {
+    background: @grid_line;
+    min-width: 20px;
+    border-radius: 5px;
+    margin: 2px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: @secondary;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+/* --- Tables & Lists (The Financial Grid) --- */
+QTableWidget, QTableView, QListWidget, QTreeWidget {
+    background-color: @surface;
+    alternate-background-color: @background; /* Striped rows for readability */
+    gridline-color: @grid_line;
+    border: none;
+    selection-background-color: @selection;
+    selection-color: @text_primary;
+}
+
+/* Header looks like a modern app header */
+QHeaderView::section {
+    background-color: @background;
+    color: @text_secondary;
+    border: none;
+    border-bottom: 2px solid @grid_line;
+    padding: 6px;
+    font-weight: bold;
+    font-size: 9pt;
+    text-transform: uppercase;
+}
+QTableCornerButton::section {
+    background-color: @background;
+    border: none;
+}
+
+/* --- Tabs (Professional Navigation) --- */
+QTabWidget::pane {
+    border: 1px solid @grid_line;
+    background: @surface;
+    border-radius: 4px;
+}
+QTabBar::tab {
+    background: @background;
+    color: @text_secondary;
+    padding: 8px 16px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-right: 2px;
+}
+QTabBar::tab:selected {
+    background: @surface;
+    color: @primary;
+    border-bottom: 2px solid @primary; /* Active indicator line */
+    font-weight: bold;
+}
+QTabBar::tab:hover {
+    background: @grid_line;
+    color: @text_primary;
+}
+
+/* --- Combobox (Dropdown) --- */
+QComboBox {
+    background-color: @background;
+    border: 1px solid @grid_line;
+    border-radius: 4px;
+    padding: 4px 10px;
+    color: @text_primary;
+}
+QComboBox:hover {
+    border: 1px solid @secondary;
+}
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid @grid_line;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+QComboBox QAbstractItemView {
+    border: 1px solid @grid_line;
+    background-color: @surface;
+    selection-background-color: @selection;
+    outline: none;
+}
+
+/* --- Menus --- */
+QMenu {
+    background-color: @surface;
+    border: 1px solid @grid_line;
+    color: @text_primary;
+    border-radius: 4px;
+    padding: 4px;
+}
+QMenu::item {
+    padding: 6px 24px;
+    border-radius: 2px;
+}
+QMenu::item:selected {
+    background-color: @selection;
+    color: @primary;
+}
+QMenu::separator {
+    height: 1px;
+    background: @grid_line;
+    margin: 4px 8px;
+}
+
+/* --- Tooltips --- */
+QToolTip {
+    border: 1px solid @grid_line;
+    background-color: @surface;
+    color: @text_primary;
+    padding: 4px;
+    border-radius: 2px;
+    opacity: 240;
+}
+
+/* --- Specific Components --- */
+/* Horizontal Line Separator */
+QFrame[frameShape="4"] { 
+    color: @grid_line;
+    background-color: @grid_line;
+    max-height: 1px;
+    border: none;
+}
+
+/* Checkboxes */
+QCheckBox {
+    spacing: 8px;
+}
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 1px solid @grid_line;
+    border-radius: 3px;
+    background: @background;
+}
+QCheckBox::indicator:checked {
+    background-color: @primary;
+    border: 1px solid @primary;
+}
+QCheckBox::indicator:hover {
+    border: 1px solid @secondary;
+}
+
+/* GroupBox */
+QGroupBox {
+    border: 1px solid @grid_line;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 10px;
+    color: @text_secondary;
+}
