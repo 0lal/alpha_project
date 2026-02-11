@@ -1,0 +1,119 @@
+# ALPHA SOVEREIGN ORGANISM - STEALTH NETWORK MATRIX
+
+# =================================================================
+# ALPHA SOVEREIGN ORGANISM - MASTER NETWORK CONFIGURATION
+# =================================================================
+# File: config/network/proxy_config.yaml
+# Status: PRODUCTION (Authenticated & Live)
+# Security Level: HIGH (Kill Switch Active)
+# Forensic Purpose: إدارة هوية الشبكة وتوزيع الأحمال بين المصادر الثلاثة لضمان عدم التتبع.
+# =================================================================
+
+# -----------------------------------------------------------------
+# 1. إعدادات النظام الأساسية (CORE STRATEGY)
+# -----------------------------------------------------------------
+system_settings:
+  # وضع التشغيل الهجين: يوازن بين السرعة (Webshare) والتخفي (Oxylabs) والمرونة (ProxyScrape).
+  active_mode: "HYBRID"
+  
+  # مفتاح القتل (Kill Switch):
+  # true = إذا فشلت جميع البروكسيات، اقطع الإنترنت تماماً لمنع تسرب IP منزلك الحقيقي.
+  kill_switch_enabled: true
+  
+  # إدارة الوقت والتدوير:
+  timeout_seconds: 20           # أقصى مدة لانتظار الاستجابة من السيرفر.
+  rotation_interval_minutes: 5  # تغيير هوية الاتصال كل 5 دقائق لتضليل أنظمة التتبع.
+
+# -----------------------------------------------------------------
+# 2. مصفوفة البروكسي النشطة (ACTIVE PROXY MATRIX)
+# -----------------------------------------------------------------
+# تحذير: هذه البيانات حساسة وحقيقية تم استخراجها من ملفاتك.
+
+providers:
+  # [المصدر 1] Webshare: للاستخدام اليومي والسرعة العالية
+  # النوع: Static Residential/Datacenter Mix
+  # المصدر: ملف بروكسي.txt
+  - id: "WEBSHARE_STATIC"
+    provider: "webshare"
+    type: "static_list"
+    connection:
+      host: "23.95.150.145"
+      port: 6114
+    auth:
+      username: "dxpldybu"
+      password: "egao1hkivo4q"
+    priority: 1  # الأولوية الأولى لتوفير استهلاك الرصيد المدفوع في المصادر الأخرى.
+
+  # [المصدر 2] Oxylabs: للمهام الحساسة جداً (High Anonymity)
+  # النوع: Premium Datacenter (US IP)
+  # المصدر: ملف بروكسي.txt + network_policy.yaml
+  - id: "OXYLABS_PREMIUM"
+    provider: "oxylabs"
+    type: "datacenter"
+    connection:
+      host: "dc.oxylabs.io"
+      port: 8000
+    auth:
+      # تم دمج اسم المستخدم مع تحديد الدولة (US) لضمان الموقع الجغرافي الأمريكي
+      username: "customer-bishoy1100_jFhDx-country-US"
+      password: "UKbd=zZe~yg57d67"
+    priority: 2  # يستخدم عند الحظر أو للمواقع التي تتطلب IP أمريكي حصراً (مثل Google/Binance US).
+
+  # [المصدر 3] ProxyScrape: للمرونة والتوسع اللانهائي (Infinite Rotation)
+  # النوع: Dynamic API (يقوم بجلب قوائم متجددة تلقائياً)
+  # المصدر: مفتاح API من ملف بروكسي.txt
+  - id: "PROXYSCRAPE_API"
+    provider: "proxyscrape"
+    type: "dynamic_api"
+    credentials:
+      api_key: "qmk2n1tp11acut0pxwwf"
+    settings:
+      # رابط استدعاء القائمة (HTTP Only لضمان السرعة)
+      fetch_url: "https://api.proxyscrape.com/v4/free-proxy-list/get?request=displayproxies&protocol=http&timeout=10000"
+      auto_refresh: true      # تجديد القائمة تلقائياً
+      refresh_interval: 3600  # كل ساعة
+    priority: 3  # يستخدم كاحتياطي استراتيجي أو لعمليات المسح الواسعة (Scraping).
+
+# -----------------------------------------------------------------
+# 3. قواعد التوجيه الذكية (ROUTING LOGIC)
+# -----------------------------------------------------------------
+# هذا القسم يحدد أي بروكسي يتم استخدامه لكل موقع بناءً على الأهمية.
+
+routing_rules:
+  # القاعدة 1: جوجل والخدمات المالية -> تتطلب أقصى جودة وموثوقية (Oxylabs).
+  - target_domain: "google.com"
+    action: "FORCE_PROVIDER"
+    provider_id: "OXYLABS_PREMIUM"
+    reason: "AVOID_CAPTCHA_AND_GEO_LOCK"
+
+  - target_domain: "binance.com"
+    action: "FORCE_PROVIDER"
+    provider_id: "OXYLABS_PREMIUM"
+    reason: "FINANCIAL_SECURITY"
+
+  # القاعدة 2: التواصل الاجتماعي -> تتطلب تدوير مستمر لتجنب الحظر (Webshare + ProxyScrape).
+  - target_domain: "facebook.com"
+    action: "LOAD_BALANCE"
+    provider_ids: ["WEBSHARE_STATIC", "PROXYSCRAPE_API"]
+    reason: "ANTI_BOT_PROTECTION"
+
+  - target_domain: "twitter.com"
+    action: "LOAD_BALANCE"
+    provider_ids: ["WEBSHARE_STATIC", "PROXYSCRAPE_API"]
+
+  # القاعدة 3: كل ما تبقى -> استخدم الأرخص والأسرع (Webshare).
+  - target_domain: "*"
+    action: "DEFAULT"
+    provider_id: "WEBSHARE_STATIC"
+
+# -----------------------------------------------------------------
+# 4. بروتوكولات الطوارئ (EMERGENCY PROTOCOLS)
+# -----------------------------------------------------------------
+failover:
+  max_retries: 3                  # عدد المحاولات قبل إعلان فشل الاتصال.
+  ban_bad_proxy_minutes: 60       # مدة حظر البروكسي التالف (ساعة كاملة).
+  notify_on_critical_failure: true # إرسال تنبيه للمشغل (أنت) في حال سقوط النظام بالكامل.
+  
+  # وضع الذعر (Panic Mode):
+  # في حال اكتشاف محاولة اختراق، يتم تفعيل هذا الوضع لعزل النظام فوراً.
+  panic_mode_trigger: "IDS_ALERT_LEVEL_5"

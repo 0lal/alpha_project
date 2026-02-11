@@ -1,0 +1,125 @@
+# =============================================================================
+# ALPHA SOVEREIGN - ADVISORY QUALITY STANDARDS (ISO-9001 FOR AI)
+# =============================================================================
+# Path: alpha_project/config/logic/advisory_standards.yaml
+# Role: Quality Assurance, Confidence Thresholds, and Conflict Resolution.
+# Enforcement: ADVISORY_AGGREGATOR (The Final Gatekeeper)
+# =============================================================================
+
+standards:
+  version: "4.0.0-Sovereign-Truth"
+  
+  # [FORENSIC RULE]: قاعدة "الصمت من ذهب".
+  # النظام لا ينصح إلا إذا كان واثقاً. التخمين ممنوع.
+  # "It is better to miss a trade than to lose capital on a guess."
+
+# -----------------------------------------------------------------------------
+# 1. CONFIDENCE THRESHOLDS (عتبات اليقين)
+# -----------------------------------------------------------------------------
+confidence_levels:
+  
+  # مستوى: يقين مطلق (تنفيذ فوري)
+  TIER_1_CERTAINTY:
+    min_score: 90
+    required_confluence: "3+ Independent Signals"
+    action: "AUTO_EXECUTE_WITH_FULL_SIZE"
+    allowed_tone: "DIRECTIVE" ("Execute now")
+
+  # مستوى: احتمالية عالية (دخول حذر)
+  TIER_2_HIGH_PROB:
+    min_score: 75
+    required_confluence: "2 Independent Signals"
+    action: "EXECUTE_WITH_HALF_SIZE"
+    allowed_tone: "ADVISORY" ("Recommend entry")
+
+  # مستوى: مضاربة / شك (صمت)
+  TIER_3_SPECULATIVE:
+    max_score: 74
+    action: "SILENCE_AND_WAIT"
+    allowed_tone: "OBSERVATIONAL" ("Monitoring structure")
+    _forensic_note: "Any signal below 75% confidence is discarded as noise."
+
+# -----------------------------------------------------------------------------
+# 2. DATA SUFFICIENCY (كفاية الأدلة)
+# -----------------------------------------------------------------------------
+# لا يمكن إصدار حكم بدون أدلة كاملة.
+evidence_requirements:
+  
+  # الحد الأدنى من المصادر
+  source_diversity:
+    technical: "Must combine Price Action + Volume + Momentum"
+    fundamental: "Must combine On-Chain Data + Macro Economic Data"
+    sentiment: "Must filter out bot activity"
+
+  # نضارة البيانات (Data Freshness)
+  staleness_limits:
+    price_data: "max_age: 1 minute"
+    news_data: "max_age: 4 hours"
+    on_chain_data: "max_age: 1 block"
+  
+  # الإجراء عند نقص البيانات
+  on_missing_data: "ABORT_ANALYSIS_AND_RETURN_NULL"
+
+# -----------------------------------------------------------------------------
+# 3. CONFLICT RESOLUTION (بروتوكول فك الاشتباك)
+# -----------------------------------------------------------------------------
+# ماذا يحدث عندما يختلف "مجلس الحكماء"؟
+consensus_protocol:
+  
+  # الهرمية الوظيفية (من يملك الكلمة العليا؟)
+  hierarchy:
+    1_SUPREME: "Guardian Sentinel"   # (Risk) - يملك حق الفيتو المطلق.
+    2_STRATEGIC: "Chief Economist"   # (Macro) - يحدد الاتجاه العام (Long/Short).
+    3_TACTICAL: "Technical Sniper"   # (Entry) - يحدد التوقيت فقط إذا وافق الأعلى.
+    4_ADVISORY: "Market Psychologist"# (Sentiment) - رأي استشاري لترجيح الكفة.
+
+  # سيناريوهات الصراع
+  scenarios:
+    # القناص يريد الشراء، والاقتصادي يقول السوق هابط
+    sniper_buy_vs_economist_sell:
+      winner: "Chief Economist"
+      action: "CANCEL_TRADE"
+      reason: "Never trade against the macro trend."
+
+    # الجميع موافق، لكن الحارس يرفض بسبب المخاطرة
+    all_yes_vs_sentinel_no:
+      winner: "Guardian Sentinel"
+      action: "BLOCK_TRADE"
+      reason: "Safety overrides profit."
+
+    # تعادل الأصوات (Split Vote)
+    tie_breaker:
+      default_action: "NO_ACTION"
+      _rationale: "In doubt, stay in cash."
+
+# -----------------------------------------------------------------------------
+# 4. OUTPUT FORMATTING (بروتوكول التواصل)
+# -----------------------------------------------------------------------------
+communication_style:
+  
+  # مبدأ: النتيجة أولاً (BLUF - Bottom Line Up Front)
+  structure:
+    1_verdict: "BUY / SELL / HOLD" (Must be the first word)
+    2_confidence: "Score %"
+    3_rationale: "Why? (Bullet points)"
+    4_falsification: "What would prove us wrong?" (Invalidation point)
+
+  # الممنوعات اللغوية (Forbidden Patterns)
+  anti_patterns:
+    - "Hedging": ["Maybe", "Could possibly", "Not financial advice"]
+    - "Hindsight": ["I knew this would happen"]
+    - "Ambiguity": ["Wait for confirmation" without defining what confirmation is]
+
+# -----------------------------------------------------------------------------
+# 5. INTEGRITY CHECKS (فحص النزاهة)
+# -----------------------------------------------------------------------------
+qa_checks:
+  # هل النصيحة قابلة للتنفيذ؟
+  is_actionable:
+    check: "Does it contain Entry, Stop Loss, and Take Profit?"
+    if_false: "REJECT_OUTPUT"
+  
+  # هل النصيحة قانونية؟
+  is_compliant:
+    check: "Does it violate 'compliance_filters.yaml'?"
+    if_false: "TRIGGER_COMPLIANCE_ALARM"

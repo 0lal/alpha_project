@@ -1,0 +1,94 @@
+# Internal Firewall Rules
+
+# ALPHA SOVEREIGN ORGANISM - REAL NETWORK SECURITY POLICY
+# =================================================================
+# File: config/security/network_policy.yaml
+# Status: PRODUCTION (STRICT ENFORCEMENT)
+# Core Responsibility: تحديد من مسموح له بالدخول والخروج من النظام.
+# Integration: متوافق تماماً مع إعدادات البروكسي الحقيقية.
+# =================================================================
+
+global_policy:
+  # المبدأ الأساسي: كل شيء ممنوع حتى تثبت براءته.
+  default_inbound_action: "DROP"   # منع أي اتصال قادم من الإنترنت
+  default_outbound_action: "DROP"  # منع أي اتصال خارجي غير معرف أدناه
+  enable_dpi: true                 # تفعيل فحص الحزم العميق (Deep Packet Inspection)
+
+internal_zones:
+  # المنطقة الآمنة: السماح فقط للعمليات داخل جهازك بالحديث مع بعضها
+  # المصدر والوجهة هما 127.0.0.1 (جهازك فقط)
+  - zone_name: "LOCAL_LOOPBACK"
+    description: "الاتصال الداخلي بين Python و Rust وقواعد البيانات"
+    protocol: "TCP"
+    allow_ports: 
+      - 5555  # ZeroMQ Pub
+      - 5556  # ZeroMQ Rep
+      - 6379  # Redis (الذاكرة السريعة)
+      - 5432  # PostgreSQL (قاعدة البيانات)
+    source_ip: "127.0.0.1"
+    destination_ip: "127.0.0.1"
+    action: "ALLOW"
+
+external_whitelist:
+  # -----------------------------------------------------------
+  # 1. الخدمات الأساسية (Core Services)
+  # -----------------------------------------------------------
+  - service: "Binance API"
+    domain: "api.binance.com"
+    port: 443
+    protocol: "HTTPS"
+  
+  - service: "Binance Stream"
+    domain: "stream.binance.com"
+    port: 9443
+    protocol: "WSS" # مقبس الويب للأسعار اللحظية
+
+  - service: "OpenRouter AI"
+    domain: "openrouter.ai"
+    port: 443
+    protocol: "HTTPS"
+
+  - service: "Google Gemini"
+    domain: "generativelanguage.googleapis.com"
+    port: 443
+    protocol: "HTTPS"
+
+  # -----------------------------------------------------------
+  # 2. بوابات البروكسي المعتمدة (Authorized Proxies)
+  # ضروري جداً لكي يعمل ملف proxy_config.yaml
+  # -----------------------------------------------------------
+  - service: "Webshare Proxy Node"
+    ip: "23.95.150.145" # IP الخاص باشتراكك
+    port: 6114
+    protocol: "HTTP"
+    
+  - service: "Oxylabs Gate"
+    domain: "dc.oxylabs.io"
+    port: 8000
+    protocol: "HTTP"
+
+  - service: "ProxyScrape API"
+    domain: "api.proxyscrape.com"
+    port: 443
+    protocol: "HTTPS"
+
+ids_rules:
+  # قواعد كشف التسلل (Intrusion Detection System)
+  
+  # حماية الموارد: إذا حاول كود داخلي إرسال 500 طلب في الثانية، يتم خنقه.
+  rate_limiting:
+    enabled: true
+    max_requests_per_second: 500
+    action_on_exceed: "THROTTLE"
+
+  # كشف الفحص: إذا حاول برنامج غريب فحص منافذ جهازك.
+  port_scan_detection:
+    enabled: true
+    trigger_threshold: 3
+    action: "LOCKDOWN_LOCAL_PORTS"
+
+  # القائمة السوداء المطلقة (تواقيع خطرة)
+  blocked_signatures:
+    - port: 21    # FTP (نقل ملفات غير آمن)
+    - port: 23    # Telnet (تحكم عن بعد قديم)
+    - port: 3389  # RDP (سطح المكتب البعيد - مغلق للأمان)

@@ -1,0 +1,114 @@
+# =============================================================================
+# ALPHA SOVEREIGN - CONTEXT & MEMORY STRATEGY (THE HIPPOCAMPUS)
+# =============================================================================
+# Path: alpha_project/config/memory/context_strategy.yaml
+# Role: Managing the AI's limited attention span (Token Window Management)
+# Impact: Prevents Hallucinations & "Lost-in-the-Middle" Phenomenon
+# =============================================================================
+
+memory_architecture:
+  version: "4.0.0-Sovereign"
+  
+  # [FORENSIC RULE]: قاعدة "الاقتصاد في التفكير".
+  # الذاكرة أغلى مورد في النظام. لا تضيعها في تذكر "تحية الصباح".
+  # كل توكن يجب أن يخدم الهدف النهائي: الربح أو الحماية.
+
+# -----------------------------------------------------------------------------
+# 🧠 MEMORY TIERS (طبقات الذاكرة)
+# -----------------------------------------------------------------------------
+layers:
+  
+  # 1. الذاكرة العاملة (Working Memory / RAM)
+  # ما يحدث "الآن". (السياق المباشر للمحادثة).
+  short_term:
+    structure: "Sliding Window"
+    capacity_messages: 10
+    retention_policy: "FIFO (First In, First Out)"
+    focus: "Immediate execution & active alerts"
+
+  # 2. الذاكرة العرضية (Episodic Memory / Summary)
+  # ما حدث "اليوم". (ملخصات الساعات الماضية).
+  medium_term:
+    structure: "Summarized Blocks"
+    trigger: "Every 4 hours OR every 50 messages"
+    compression_method: "LLM_Summarization"
+    _prompt: "Summarize market moves and key decisions. Discard chitchat."
+
+  # 3. الذاكرة الدلالية (Semantic Memory / Vector DB)
+  # الخبرة المتراكمة (الدروس، الكتب، التاريخ).
+  long_term:
+    structure: "Vector Embeddings (RAG)"
+    retrieval_strategy: "Similarity Search (Cosine Similarity)"
+    storage: "ChromaDB / Pinecone (Local)"
+
+# -----------------------------------------------------------------------------
+# ⚖️ TOKEN BUDGET (ميزانية الانتباه)
+# -----------------------------------------------------------------------------
+# كيف نوزع مساحة الموديل (مثلاً 32k توكن) على المدخلات؟
+context_composition:
+  
+  # التعليمات العليا (الدستور والشخصية) - [DO NOT TOUCH]
+  system_prompt: 
+    allocation_percent: 15
+    priority: "CRITICAL"
+  
+  # البيانات الحية (الأسعار، المؤشرات، الأخبار العاجلة)
+  live_data:
+    allocation_percent: 45
+    priority: "HIGH"
+    strategy: "Most recent ticks + aggregated indicators"
+  
+  # الذاكرة المسترجعة (RAG - ذكريات الماضي)
+  retrieved_context:
+    allocation_percent: 25
+    priority: "MEDIUM"
+    filter: "Only fetch if similarity score > 0.8"
+  
+  # المحادثة الحالية (سؤال المستخدم وجواب البوت)
+  conversation_history:
+    allocation_percent: 15
+    priority: "LOW"  # يمكن قص المحادثة القديمة إذا ضاق المكان
+
+# -----------------------------------------------------------------------------
+# 🗜️ COMPRESSION LOGIC (منطق الضغط)
+# -----------------------------------------------------------------------------
+# [PREDICTION]: الموديلات ستصبح أغلى مع زيادة السياق. الضغط يوفر المال والسرعة.
+compression_rules:
+  
+  # ضغط البيانات الرقمية
+  financial_data:
+    action: "Convert raw JSON to Markdown tables"
+    _example: "Instead of 50 lines of JSON, use 1 line: | BTC | 95000 | +2% |"
+  
+  # ضغط الأخبار
+  news_articles:
+    action: "Extract Headlines & Sentiment Only"
+    remove: ["Boilerplate text", "Author bios", "Ads", "Disclaimers"]
+
+# -----------------------------------------------------------------------------
+# 🔍 RAG STRATEGY (استراتيجية البحث في الذاكرة)
+# -----------------------------------------------------------------------------
+retrieval_augmented_generation:
+  enabled: true
+  
+  # متى نبحث في الماضي؟
+  triggers:
+    - "User asks about historical events ('What happened in 2021?')"
+    - "System detects a pattern similar to a previous crash"
+    - "Complex strategy formulation request"
+
+  # ماذا نسترجع؟
+  query_expansion:
+    enabled: true
+    _logic: "If user asks 'inflation', also search for 'CPI', 'Rates', 'Fed'."
+
+# -----------------------------------------------------------------------------
+# 🛡️ AMNESIA PREVENTION (منع النسيان)
+# -----------------------------------------------------------------------------
+# حماية التعليمات الحساسة من أن تُطرد خارج النافذة.
+critical_anchors:
+  always_include:
+    - "User Risk Profile (Risk Tolerance)"
+    - "Current Portfolio Balance"
+    - "Stop-Loss Rules"
+    - "Guardian Sentinel Veto Status"

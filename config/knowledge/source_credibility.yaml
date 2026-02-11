@@ -1,0 +1,158 @@
+# =============================================================================
+# ALPHA SOVEREIGN - SOURCE CREDIBILITY MATRIX (MINISTRY OF TRUTH)
+# =============================================================================
+# Path: alpha_project/config/knowledge/source_credibility.yaml
+# Role: Information Filtering, Truth Verification, and Persona Routing.
+# Classification: STRATEGIC INTELLIGENCE (Layer 0)
+# Version: 5.0.0-Sovereign-Truth
+# =============================================================================
+
+knowledge_base:
+  version: "5.0.0-Sovereign"
+  
+  # [FORENSIC RULE]: مبدأ "الحقيقة النسبية".
+  # وزن المصدر يحدد مدى تأثيره على القرار.
+  # Score 1.0 = حقيقة مطلقة (تنفذ فوراً).
+  # Score 0.0 = ضوضاء تامة (تجاهل).
+
+# -----------------------------------------------------------------------------
+# 1. TRUST HIERARCHY (هرم الثقة)
+# -----------------------------------------------------------------------------
+trust_tiers:
+  
+  # الطبقة 0: الحقيقة الرياضية (Mathematical Truth)
+  # [CONSUMER]: Technical Sniper & Guardian Sentinel
+  # [CRITICAL]: البلوكشين لا يكذب. هذا هو المصدر الوحيد الذي يملك حق النقض.
+  tier_0_immutable:
+    weight: 1.0
+    sources:
+      - "On-Chain Data (Etherscan/Mempool)"
+      - "Chainlink Oracles (Price Feeds)"
+      - "Exchange Proof of Reserves (Merkle Tree)"
+      - "Smart Contract Events (Logs)"
+    action: "OVERRIDE_ALL_OTHERS"
+
+  # الطبقة 1: المؤسسات السيادية (Institutional Grade)
+  # [CONSUMER]: Chief Economist
+  # مصادر تخضع لرقابة قانونية، الكذب فيها له عواقب قضائية.
+  tier_1_sovereign:
+    weight: 0.90
+    sources:
+      - "SEC Filings (EDGAR)"
+      - "Federal Reserve Official Releases (FRED)"
+      - "Bloomberg Terminal (Direct API)"
+      - "Reuters / Financial Times / WSJ"
+    action: "DRIVE_MACRO_STRATEGY"
+
+  # الطبقة 2: متخصصو الصناعة (Industry Specific)
+  # [CONSUMER]: Technical Sniper & General Analysis
+  # مصادر موثوقة لكنها قد تحمل انحيازاً (Bias).
+  tier_2_specialist:
+    weight: 0.75
+    sources:
+      - "CoinDesk / The Block / Decrypt"
+      - "Glassnode / Nansen (Analytics)"
+      - "Messari Research Reports"
+      - "Official Project GitBooks & Whitepapers"
+
+  # الطبقة 3: الذكاء الجماعي (Hive Mind / Sentiment)
+  # [CONSUMER]: Market Psychologist ONLY
+  # [WARNING]: مفيدة لقراءة "المشاعر" فقط، وليس "الحقائق".
+  tier_3_social:
+    weight: 0.30
+    sources:
+      - "X (Twitter) - Verified Key Opinion Leaders (KOLs)"
+      - "Reddit (r/Bitcoin, r/CryptoCurrency) - Trending Only"
+      - "TradingView Ideas (Top Authors)"
+      - "LunarCrush Social Dominance"
+    action: "USE_FOR_SENTIMENT_SCORING_ONLY"
+
+  # الطبقة 4: القائمة السوداء (The Void)
+  # [CONSUMER]: Firewall (Blocked)
+  # مصادر معروفة بنشر الإشاعات (FUD) أو الاحتيال.
+  tier_4_blacklisted:
+    weight: -1.0
+    categories:
+      - "Unverified Telegram Pump Groups"
+      - "YouTube Thumbnails with '100x' Claims"
+      - "Websites registered < 30 days ago"
+      - "Known Phishing Domains"
+    action: "BLOCK_AND_IGNORE"
+
+# -----------------------------------------------------------------------------
+# 2. PERSONA DATA ROUTING (توجيه البيانات للشخصيات)
+# -----------------------------------------------------------------------------
+# [NEW]: نربط كل نوع من البيانات بالشخصية المسؤولة عنها لمنع التشتت.
+data_subscriptions:
+  
+  chief_economist:
+    allow: ["tier_1_sovereign", "tier_2_specialist"]
+    ignore: ["tier_3_social"]
+    _rationale: "Economist must not be distracted by Twitter rumors."
+
+  technical_sniper:
+    allow: ["tier_0_immutable", "tier_2_specialist"]
+    ignore: ["tier_1_sovereign"]
+    _rationale: "Sniper cares about Price/Volume, not Fed speeches."
+
+  market_psychologist:
+    allow: ["tier_3_social", "tier_2_specialist"]
+    focus: "Sentiment Divergence"
+    _rationale: "Psychologist's job is to read the Crowd."
+
+  guardian_sentinel:
+    allow: ["tier_0_immutable", "tier_4_blacklisted"]
+    focus: "Threat Detection"
+    _rationale: "Sentinel watches the Blockchain for hacks and the Blacklist for scams."
+
+# -----------------------------------------------------------------------------
+# 3. VERIFICATION PROTOCOLS (بروتوكولات التحقق الجنائي)
+# -----------------------------------------------------------------------------
+verification_logic:
+  
+  # 1. فك الاشتباك (Conflict Resolution)
+  # مثال: تويتر يقول "إفلاس" (Tier 3)، والبيانات الرسمية تقول "لا" (Tier 1).
+  conflict_resolution:
+    rule: "HIGHER_TIER_WINS"
+    exception: "If Tier 0 (Chain) contradicts Tier 1 (Gov), Tier 0 wins."
+    _example: "SEC says 'X approved', but Contract says 'Reverted'. Trust Contract."
+
+  # 2. الحماية من التزييف العميق (Deepfake Defense)
+  # [FORENSIC]: التحقق من التواقيق الرقمية للأخبار الخطيرة.
+  cryptographic_verification:
+    require_pgp_for_major_announcements: true
+    verify_contract_address_on_multiple_explorers: true
+    ignore_unsigned_pdfs_from_chat_apps: true
+
+  # 3. التحقق المتقاطع (Cross-Verification)
+  # لا تصدق السعر من مصدر واحد.
+  price_integrity:
+    min_sources_to_confirm_price: 3 (Binance + Coinbase + Chainlink)
+    max_deviation_allowed_percent: 0.5
+    action_on_deviation: "HALT_TRADING_SUSPECTED_DEPEG"
+
+# -----------------------------------------------------------------------------
+# 4. INFORMATION DECAY (عمر المعلومة الافتراضي)
+# -----------------------------------------------------------------------------
+# الخبر المالي يفسد بسرعة. هذا يمنع النظام من التفاعل مع أخبار قديمة.
+time_decay_halflife:
+  tier_0_immutable: "0 seconds"   (Real-time only)
+  tier_1_sovereign: "4 hours"     (Macro data lasts longer)
+  tier_2_specialist: "1 hour"
+  tier_3_social: "15 minutes"     (Social sentiment is fleeting)
+
+stale_data_policy:
+  threshold_hours: 24
+  action: "ARCHIVE_AND_EXCLUDE_FROM_DECISION"
+
+# -----------------------------------------------------------------------------
+# 5. SOURCE HEALTH MONITOR (مراقبة صحة المصادر)
+# -----------------------------------------------------------------------------
+health_check:
+  check_interval_minutes: 5
+  max_silence_duration: "1 hour"
+  
+  # إذا انقطع اتصال بلومبيرغ، انتقل لرويترز.
+  failover_strategy:
+    tier_1: "Switch to Secondary API"
+    tier_0: "Switch to Backup RPC Node"

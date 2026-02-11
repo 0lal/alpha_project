@@ -1,0 +1,67 @@
+{
+  "_FILE_HEADER": {
+    "Project": "ALPHA SOVEREIGN ORGANISM",
+    "Version": "36.0.0-HYBRID",
+    "Status": "PRODUCTION",
+    "Pillar": "Resilience & Resource Intelligence",
+    "Purpose": "Combined Bandwidth Protection with Advanced Ban Evasion."
+  },
+
+  "GLOBAL_POLICY": {
+    "safety_margin_percent": 10,
+    "default_timeout_seconds": 30,
+    "max_retries": 3,
+    "backoff_strategy": "EXPONENTIAL_BACKOFF"
+  },
+
+  "SERVICES": {
+    "binance_engine": {
+      "requests_per_minute_weight": 1000,
+      "max_weight_per_minute": 5400,
+      "orders_per_second": 5,
+      "action_on_limit": "QUEUE_AND_DELAY",
+      "strict_mode": true
+    },
+
+    "ai_orchestrator": {
+      "provider": "OpenRouter",
+      "requests_per_minute": 20,
+      "tokens_per_minute": 40000,
+      "max_cost_per_hour_usd": 2.0,
+      "fallback_strategy": "SWITCH_TO_LOCAL_MODEL"
+    },
+
+    "scraping_intelligence": {
+      "proxyscrape_update_interval_sec": 3600,
+      "local_scraping": {
+        "requests_per_domain_per_minute": 10,
+        "min_delay_ms": 2000,
+        "randomize_delay": true
+      }
+    }
+  },
+
+  "INFRASTRUCTURE_GUARDS": {
+    "webshare_limited": {
+      "max_daily_bandwidth_mb": 30,
+      "throttle_strategy": "STOP_ON_LIMIT"
+    },
+    "oxylabs_unlimited": {
+      "max_concurrent_connections": 50,
+      "priority": "HIGH_LOAD_TASKS"
+    }
+  },
+
+  "SURVIVAL_CIRCUIT_BREAKERS": {
+    "http_429_recovery": {
+      "trigger": "ONCE",
+      "cooldown_seconds": 60,
+      "action": "THROTTLE_ALL_SERVICES"
+    },
+    "http_418_emergency": {
+      "trigger": "IMMEDIATE",
+      "action": "TRIGGER_EMERGENCY_PROXY_ROTATION",
+      "alert_level": "CRITICAL"
+    }
+  }
+}

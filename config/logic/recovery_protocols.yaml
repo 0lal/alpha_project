@@ -1,0 +1,193 @@
+# =============================================================================
+# ALPHA SOVEREIGN - UNIFIED DISASTER RECOVERY & SELF-HEALING PROTOCOLS
+# =============================================================================
+# Path: alpha_project/config/logic/recovery_protocols.yaml
+# Version: 5.0.0-Unified-Sovereign
+# Role: The single source of truth for Logic, Storage, and Network resilience.
+# Enforcement: WATCHDOG PROCESS (Runs outside the main loop)
+# =============================================================================
+
+recovery_system:
+  mode: "ACTIVE_DEFENSE"
+  
+  # [FORENSIC RULE]: قاعدة "الحقيقة الواحدة".
+  # الذاكرة المحلية (RAM/DB) مشكوك فيها بعد الانهيار.
+  # المنصة (Exchange) والبلوكشين هما المصدر الوحيد للحقيقة.
+
+# -----------------------------------------------------------------------------
+# 1. 🔌 COLD START & RECONCILIATION (إجراءات الإقلاع والتحقق)
+# -----------------------------------------------------------------------------
+boot_sequence:
+  
+  # تدقيق الحالة (State Audit)
+  # [CRITICAL]: هل لدينا صفقات مفتوحة لا نعرف عنها شيئاً؟
+  reconciliation:
+    step_1: "FETCH_OPEN_ORDERS_FROM_EXCHANGE"
+    step_2: "FETCH_WALLET_BALANCE_FROM_EXCHANGE"
+    step_3: "COMPARE_WITH_LOCAL_DB"
+    
+    # إذا وجدنا اختلافاً (مثلاً: DB يقول كاش، والمنصة تقول لدينا BTC)
+    on_mismatch: 
+      action: "TRUST_EXCHANGE_AND_UPDATE_DB"
+      log_level: "CRITICAL_FORENSIC_ALERT"
+
+  # فحص الفجوة الزمنية (Time Gap Analysis)
+  # هل السوق تحرك بجنون ونحن نائمون؟
+  market_gap_check:
+    max_allowed_gap_minutes: 60
+    
+    # إذا كان النظام طافياً لأكثر من ساعة
+    action_on_large_gap:
+      - "CANCEL_ALL_PENDING_ORDERS"
+      - "PAUSE_TRADING_FOR_15_MIN"
+      - "RECALCULATE_ALL_INDICATORS"
+
+# -----------------------------------------------------------------------------
+# 2. 💾 STORAGE RESILIENCE (حماية الذاكرة والبيانات)
+# -----------------------------------------------------------------------------
+# [MERGED FROM: config/storage/recovery_map.yaml]
+storage_policy:
+  
+  # أهداف التعافي (RPO/RTO)
+  objectives:
+    rpo_financial_data: "ZERO_LOSS"        # لا تسامح مع فقدان الصفقات
+    rpo_system_logs: "1h"                  # يمكن فقدان ساعة من السجلات
+    rto_critical_restore: "5m"             # يجب أن تعود القاعدة في 5 دقائق
+
+  # مصفوفة النسخ الاحتياطي (Backup Matrix)
+  backup_schedule:
+    # النسخ الساخن (اللحظي)
+    hot_snapshots:
+      frequency: "EVERY_1_HOUR"
+      retention: "24_HOURS"
+      path: "/var/lib/postgresql/data/snapshots"
+      compression: "NONE" # السرعة أهم
+    
+    # النسخ البارد (طويل الأمد)
+    cold_archives:
+      frequency: "DAILY_AT_0300"
+      retention: "90_DAYS"
+      path: "data/backups/cold_storage/"
+      encryption: "AES-256-GCM"
+      compression: "ZSTD_LEVEL_9"
+
+  # خريطة التخزين البديل (Failover Storage)
+  # إذا امتلأ القرص الرئيسي
+  failover_volumes:
+    primary: 
+      id: "alpha_db_data"
+      status: "ACTIVE"
+    emergency_spillover:
+      id: "alpha_temp_spill"
+      location: "./data/temp_overflow/"
+      trigger: "DISK_USAGE > 95%"
+      allowed_data: ["LOGS", "CACHE_DUMPS"]
+
+  # معالجة فساد البيانات (Corruption Response)
+  corruption_handling:
+    minor_index_corruption: "REINDEX_ONLINE"
+    major_page_corruption: 
+      action: "EMERGENCY_SHUTDOWN"
+      recovery: "RESTORE_LAST_VALID_SNAPSHOT"
+
+# -----------------------------------------------------------------------------
+# 3. 🌐 INFRASTRUCTURE & NETWORK (البنية التحتية والشبكة)
+# -----------------------------------------------------------------------------
+# [MERGED FROM: config/network/recovery_map.yaml]
+infrastructure_guard:
+  
+  # مراقبة الحاويات (Docker Watchdog)
+  container_health:
+    check_interval_seconds: 10
+    on_failure: "DOCKER_AUTO_RESTART"
+    max_restarts: 5
+
+  # الانهيار الحراري (Thermal Critical)
+  # حماية الجهاز الفعلي من الاحتراق
+  thermal_protection:
+    critical_temp_celsius: 90
+    action: "GRACEFUL_SHUTDOWN"
+    log_alert: "HARDWARE_HEAT_CRITICAL"
+
+  # انقطاع الاتصال (Connectivity Loss)
+  network_outage:
+    # انقطاع قصير (< 1 دقيقة)
+    micro_outage:
+      action: "BUFFER_REQUESTS_AND_RETRY"
+      retry_strategy: "JITTERED_BACKOFF"
+    
+    # انقطاع متوسط (1 - 15 دقيقة)
+    sustained_outage:
+      action: "ENTER_DEFENSIVE_MODE"
+      cancel_orders: true
+      switch_proxy: "IF_FAILURES > 5 THEN SWITCH_PROVIDER"
+    
+    # انقطاع طويل (> 15 دقيقة)
+    blackout_mode:
+      action: "HIBERNATE_AND_ALERT_USER"
+
+  # خريطة العقد (Topology)
+  nodes:
+    primary_local:
+      id: "NODE_ALPHA_GENESIS"
+      role: "MASTER_SINGLE"
+      location: "LOCAL_WSL2"
+
+# -----------------------------------------------------------------------------
+# 4. 🤖 API & DATA INTEGRITY (حماية العقل)
+# -----------------------------------------------------------------------------
+data_integrity_guard:
+  
+  # الوصول لحدود الـ API (Rate Limit Jail)
+  rate_limit_breach:
+    immediate_action: "HALT_ALL_REQUESTS_FOR_60s"
+    secondary_action: "SWITCH_TO_WEBSOCKET_ONLY"
+    
+  # البيانات الفاسدة (Bad JSON)
+  malformed_data:
+    tolerance_threshold: 5
+    action: "FLUSH_DATA_CACHE_AND_RECONNECT"
+
+# -----------------------------------------------------------------------------
+# 5. 🧠 COGNITIVE SAFETY (الجنون المؤقت)
+# -----------------------------------------------------------------------------
+ai_hallucination_guard:
+  
+  # اكتشاف الهلوسة
+  triggers:
+    - "Model suggests buying price > 20% current price"
+    - "Model returns invalid JSON format 3 times"
+    - "Model stuck in repetitive loop"
+    
+  # بروتوكول "استئصال الفص الجبهي" (Lobotomy Protocol)
+  response:
+    step_1: "DISABLE_AI_REASONING_ENGINE"
+    step_2: "FALLBACK_TO_HARDCODED_LOGIC (RSI + MACD only)"
+    step_3: "NOTIFY_ADMIN_TO_RESET_MODEL"
+
+# -----------------------------------------------------------------------------
+# 6. 🛡️ EMERGENCY LOCKDOWN (الإغلاق الدفاعي)
+# -----------------------------------------------------------------------------
+lockdown_triggers:
+  
+  # انهيار المحفظة (Equity Drop)
+  equity_drop:
+    trigger: "Total Equity drops > 10% in 5 minutes"
+    action: "LIQUIDATE_POSITIONS_AND_FREEZE_ACCOUNTS"
+    
+  # فشل المصادقة (Auth Failure)
+  auth_failure:
+    trigger: "HTTP 401 Unauthorized"
+    action: "DELETE_INVALID_KEYS_AND_WAIT_FOR_USER"
+
+# -----------------------------------------------------------------------------
+# 7. 🔮 DECENTRALIZED RECOVERY (الملاذ الأخير)
+# -----------------------------------------------------------------------------
+post_collapse_protocol:
+  enabled: false
+  
+  # البحث عن الأموال على البلوكشين مباشرة
+  on_chain_recovery:
+    rpc_nodes: ["https://eth.llamarpc.com", "https://btc.getblock.io"]
+    wallet_scanner: "ACTIVE"
+    emergency_method: "emergencyWithdraw()"

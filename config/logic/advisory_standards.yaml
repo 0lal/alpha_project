@@ -1,0 +1,111 @@
+# =============================================================================
+# ALPHA SOVEREIGN - ADVISORY STANDARDS (SOP)
+# =============================================================================
+# Path: alpha_project/config/logic/advisory_standards.yaml
+# Role: Quality Assurance & Consensus Protocol for AI Agents
+# Enforcement: Strict (Non-compliance results in signal rejection)
+# =============================================================================
+
+standards:
+  version: "3.0.0-Sovereign"
+  
+  # [FORENSIC RULE]: قاعدة التثليث. لا قرار أحادي الجانب.
+  triangulation_protocol:
+    min_confirmations_required: 3
+    required_dimensions:
+      - "Technical (Price Action)"
+      - "Fundamental (On-Chain/Macro)"
+      - "Sentiment (Crowd Psychology)"
+    
+    # إذا نقص أحد الأضلاع، تنخفض درجة الثقة تلقائياً بـ 20%
+    missing_dimension_penalty: 20.0
+
+# -----------------------------------------------------------------------------
+# ⚖️ CONSENSUS MECHANISM (آلية الإجماع)
+# -----------------------------------------------------------------------------
+consensus:
+  method: "weighted_voting"
+  
+  # أوزان الأصوات (من 1.0 إلى 10.0)
+  agent_weights:
+    guardian_sentinel: 
+      vote_power: 10.0   # حق النقض (Veto)
+      domain: "Risk & Safety"
+    
+    technical_sniper:
+      vote_power: 6.0
+      domain: "Timing & Entry"
+    
+    chief_economist:
+      vote_power: 5.0
+      domain: "Trend & Macro"
+    
+    market_psychologist:
+      vote_power: 4.0
+      domain: "Confirmation"
+
+  # قواعد فك الاشتباك (Conflict Resolution)
+  tie_breakers:
+    - condition: "Technical SAYS Buy AND Sentinel SAYS Block"
+      outcome: "BLOCK"  # الأمان يغلب الربح
+    
+    - condition: "Technical SAYS Buy AND Economist SAYS Wait"
+      outcome: "WAIT"   # الاتجاه العام يغلب اللحظي
+
+# -----------------------------------------------------------------------------
+# 📊 CONFIDENCE SCORING (مقياس الثقة)
+# -----------------------------------------------------------------------------
+confidence_levels:
+  
+  # ثقة عالية (High Conviction) - يسمح بالتنفيذ الآلي
+  tier_1_alpha:
+    range: [85, 100]
+    label: "💎 DIAMOND SETUP"
+    allowed_leverage: "Dynamic (Max defined in Risk)"
+    automation: "Full Auto Allowed"
+
+  # ثقة متوسطة (Probable) - يتطلب موافقة بشرية
+  tier_2_beta:
+    range: [60, 84]
+    label: "⚠️ WATCHLIST / POTENTIAL"
+    allowed_leverage: "1x (Spot Only)"
+    automation: "Approval Required"
+
+  # ثقة منخفضة (Speculative) - للمراقبة فقط
+  tier_3_gamma:
+    range: [0, 59]
+    label: "❌ NO TRADE / NOISE"
+    allowed_leverage: "None"
+    automation: "Disabled"
+
+# -----------------------------------------------------------------------------
+# 🗣️ OUTPUT QUALITY CONTROL (جودة المخرجات)
+# -----------------------------------------------------------------------------
+quality_control:
+  
+  # [PREDICTION]: منع الهلوسة. أي ادعاء خبري يجب أن يرفق بمصدر.
+  citation_policy:
+    news_claims: "MUST_PROVIDE_URL_OR_SOURCE_NAME"
+    price_targets: "MUST_STATE_TIMEFRAME"
+  
+  # هيكلية الرد (Response Structure)
+  response_template:
+    - section: "Executive Summary"
+      max_lines: 3
+    - section: "The Thesis (Why?)"
+      requirement: "Triangulated data points"
+    - section: "The Bear Case (Counter-Argument)"
+      requirement: "Mandatory Devil's Advocate"
+    - section: "Actionable Plan"
+      format: "Entry / Stop / Target"
+
+# -----------------------------------------------------------------------------
+# 📜 LEGAL & LIABILITY (إخلاء المسؤولية)
+# -----------------------------------------------------------------------------
+disclaimer:
+  text: >
+    "This system provides algorithmic analysis based on probabilistic models.
+    It does NOT guarantee profits. Markets are stochastic. 
+    The 'Sovereign User' retains final authority and liability for all execution decisions."
+  
+  display_frequency: "once_per_session"

@@ -1,0 +1,140 @@
+# =============================================================================
+# ALPHA SOVEREIGN - UNIFIED DATA LIFECYCLE & TELEMETRY POLICY
+# =============================================================================
+# Path: alpha_project/config/data/retention_policy.yaml
+# Role: Managing Data from Birth (RAM) to Grave (Archive).
+# Impact: Performance Optimization & Forensic Integrity.
+# Version: 4.0.0-Unified
+# =============================================================================
+
+policy:
+  version: "4.0.0-Sovereign"
+  
+  # [FORENSIC RULE]: قاعدة "الحق في النسيان الرقمي".
+  # الاحتفاظ بكل بايت يكلف مالاً ويقلل السرعة. 
+  # البيانات التي لا تولد "ألفا" (ربح) يجب أن تموت أو ترحل.
+
+# -----------------------------------------------------------------------------
+# 1. STORAGE HIERARCHY (هرم التخزين)
+# -----------------------------------------------------------------------------
+storage_tiers:
+  
+  # الطبقة 1: المنطقة الحارة (Hot / Redis & RAM)
+  # السرعة: < 1ms | الاستخدام: اتخاذ القرار اللحظي.
+  hot_tier:
+    technology: "REDIS_STREAM"
+    max_memory_mb: 512
+    eviction_policy: "volatile-lru" # احذف الأقدم عند الامتلاء
+    retention_period: "24 hours"    # البيانات هنا تعيش يوماً واحداً فقط
+
+  # الطبقة 2: المنطقة الدافئة (Warm / PostgreSQL & TimescaleDB)
+  # السرعة: < 10ms | الاستخدام: التحليل التشغيلي، المؤشرات، والتقارير.
+  warm_tier:
+    technology: "POSTGRES_TIMESCALE"
+    compression: "TimescaleDB_Compression_Segment_by_Symbol"
+    retention_period: "30 days"
+    pruning_schedule: "DAILY_AT_MIDNIGHT"
+
+  # الطبقة 3: المنطقة الباردة (Cold / Archive Files)
+  # السرعة: بطيء | الاستخدام: الامتثال القانوني، التدريب المستقبلي (Backtesting).
+  cold_tier:
+    technology: "LOCAL_FS_PARQUET"
+    path: "data/archive/cold_storage/"
+    format: "Parquet (Snappy Compressed)" # ضغط عالي الكفاءة
+    encryption: "AES-256"
+    retention_period: "1 year" # بعد سنة، تحذف البيانات إلا إذا كانت "جنائية"
+
+# -----------------------------------------------------------------------------
+# 2. MARKET DATA LIFECYCLE (دورة حياة بيانات السوق)
+# -----------------------------------------------------------------------------
+market_data:
+  
+  # 1. البيانات الخام (Ticks / Raw Trades)
+  # حجم ضخم جداً. نحتفظ به فقط لحين تجميعه.
+  raw_ticks:
+    retention: "24 hours"
+    action_on_expiry: "AGGREGATE_TO_CANDLES_AND_DELETE"
+
+  # 2. الشموع الدقيقة (1m Candles)
+  # وقود التحليل الفني اللحظي.
+  candles_1m:
+    retention: "30 days"
+    action_on_expiry: "MOVE_TO_COLD_ARCHIVE"
+
+  # 3. الشموع الكبيرة (1H, 4H, 1D)
+  # تاريخ السوق. لا تحذف أبداً من القاعدة الدافئة.
+  candles_macro:
+    retention: "FOREVER"
+    storage_tier: "warm_tier"
+
+  # 4. عمق السوق (Order Book Snapshots)
+  # تستهلك مساحة مهولة. نحتفظ بعينات فقط.
+  order_book_depth:
+    retention: "7 days"
+    sampling_rate: "Snapshot every 1 minute"
+
+# -----------------------------------------------------------------------------
+# 3. TELEMETRY & LOGGING (القياس عن بعد والسجلات)
+# -----------------------------------------------------------------------------
+logging_levels:
+  
+  # المحرك المالي (Financial Engine)
+  # [CRITICAL]: يسجل كل فلس يدخل ويخرج.
+  financial_core:
+    level: "TRACE"
+    retention: "5 years" (Immutable Ledger)
+    storage: "cold_tier"
+
+  # العقل المعرفي (Cognitive Brain)
+  # يسجل "لماذا" اتخذنا القرار.
+  decision_reasoning:
+    level: "INFO"
+    exclude_verbose_thoughts: true # لا تسجل "همهمات" الموديل، فقط القرار النهائي
+    retention: "90 days"
+
+  # البنية التحتية (Infrastructure)
+  # سجلات تقنية (Debug) تحذف بسرعة.
+  system_debug:
+    level: "WARNING"
+    retention: "3 days"
+    action: "HARD_DELETE"
+
+# -----------------------------------------------------------------------------
+# 4. UNSTRUCTURED INTELLIGENCE (البيانات غير المهيكلة)
+# -----------------------------------------------------------------------------
+intelligence_data:
+  
+  # نصوص الأخبار (News Raw Text)
+  # نحولها لمتجهات (Vectors) ثم نحذف النص الأصلي لتوفير المساحة.
+  news_content:
+    action: "VECTORIZE_FOR_RAG_AND_DELETE_TEXT"
+    retention_text: "7 days"
+    retention_vector: "1 year"
+
+  # مشاعر السوق (Sentiment Scores)
+  social_metrics:
+    resolution: "Hourly Average"
+    retention: "1 year"
+
+# -----------------------------------------------------------------------------
+# 5. EMERGENCY DISK PRESSURE (بروتوكول ضغط القرص)
+# -----------------------------------------------------------------------------
+# ماذا لو امتلأ القرص فجأة؟
+disk_pressure_monitor:
+  enabled: true
+  check_interval_min: 5
+  
+  thresholds:
+    # المرحلة 1: ضغط خفيف (70% ممتلئ)
+    warning_70:
+      action: "COMPRESS_LOGS_OLDER_THAN_24H"
+      
+    # المرحلة 2: ضغط حرج (85% ممتلئ)
+    critical_85:
+      action: "DELETE_RAW_TICKS_IMMEDIATELY"
+      notify: "ADMIN_URGENT_CLEANUP_REQUIRED"
+      
+    # المرحلة 3: خطر قاتل (95% ممتلئ)
+    fatal_95:
+      action: "STOP_DATA_INGESTION_EXCEPT_ORDER_EXECUTION"
+      _rationale: "Save remaining space for closing trades safely."

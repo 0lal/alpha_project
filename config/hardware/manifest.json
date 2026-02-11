@@ -1,0 +1,49 @@
+{
+  "_header": "# CPU Pinning & GPU Allocation Map",
+  "_comment": "ALPHA SOVEREIGN - HARDWARE TOPOLOGY MANIFEST",
+  "_version": "35.0.0",
+  "_responsibility": "توزيع الأحمال الفيزيائية لضمان زمن استجابة صفري (Zero-Latency).",
+
+  "system_profile": {
+    "machine_id": "LOCAL_NODE_01",
+    "os_optimization_mode": "REALTIME_PRIORITY",
+    "power_plan": "ULTIMATE_PERFORMANCE",
+    "_note": "تحديد وضع الأولوية القصوى لنظام التشغيل لضمان استقرار المعالجة."
+  },
+
+  "cpu_pinning_strategy": {
+    "description": "عزل الأنوية لمنع تداخل العمليات (Thread Contention)",
+    "engine_core_mask": [0, 1],
+    "_note_engine": "الأنوية 0 و 1 مخصصة حصرياً لمحرك Rust (التنفيذ السريع للطلبات).",
+    
+    "brain_core_mask": [2, 3, 4, 5],
+    "_note_brain": "الأنوية من 2 إلى 5 مخصصة للذكاء الاصطناعي (Python/DeepSeek).",
+    
+    "background_core_mask": [6, 7],
+    "_note_background": "الأنوية الأخيرة مخصصة للواجهة والخدمات الجانبية."
+  },
+
+  "gpu_allocation": {
+    "primary_device_id": 0,
+    "allow_cuda_fallback": true,
+    "vram_reservation_mb": {
+      "deepseek_model": 8192,
+      "vision_processing": 2048,
+      "ui_rendering": 1024
+    },
+    "_note": "حجز مساحة محددة في ذاكرة كرت الشاشة لكل وظيفة لمنع الانهيار (OOM)."
+  },
+
+  "memory_management": {
+    "huge_pages_enabled": true,
+    "lock_memory_pages": true,
+    "_note_lock": "تثبيت البيانات في الرام ومنع الويندوز من نقلها للهارد (Swap) لضمان السرعة."
+  },
+
+  "thermal_policy": {
+    "max_safe_temp_c": 80,
+    "throttle_action": "REDUCE_TICK_RATE",
+    "emergency_shutdown_temp_c": 95,
+    "_note": "سياسة حماية العتاد من الاحتراق عند الضغط العالي."
+  }
+}

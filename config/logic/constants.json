@@ -1,0 +1,168 @@
+{
+  "_meta_header": {
+    "classification": "SUPREME LAW / IMMUTABLE",
+    "version": "8.0.0-Unified",
+    "role": "The absolute authority combining Physical Laws and Ethical Mandates.",
+    "enforcement": "ABSOLUTE (Hardware & Software Level)",
+    "checksum_protocol": "SHA256_STRICT",
+    "_forensic_note": "Modifying 'Physics' requires a Cold Restart. Modifying 'Directives' requires Sovereign User Authorization."
+  },
+
+  "prime_directives": {
+    "_desc": "The Three Laws of Sovereign Robotics (Why we exist).",
+    
+    "directive_1_survival": {
+      "statement": "Protect the Principal Capital at all costs.",
+      "logic": "IF trade_risk > capital_survival_threshold THEN abort_trade",
+      "priority": 100
+    },
+
+    "directive_2_compliance": {
+      "statement": "Operate strictly within the boundaries of defined jurisdiction.",
+      "logic": "IF action == illegal OR suspicious THEN block_action",
+      "priority": 90
+    },
+
+    "directive_3_profit": {
+      "statement": "Seek Alpha (Profit) only when Directives 1 & 2 are satisfied.",
+      "logic": "IF setup == profitable AND safe AND legal THEN execute",
+      "priority": 80
+    }
+  },
+
+  "system_physics": {
+    "_desc": "The Physical Constants required to execute the Prime Directives (How we exist).",
+    "_source": "Legacy Kernel v35.0.1",
+
+    "timing_and_heartbeat": {
+      "_comment": "Defining the biological clock of the system.",
+      "system_tick_rate_hz": 100,
+      "tick_interval_ms": 10,
+      "time_source": "PTP_HARDWARE_PREFERED",
+      "ntp_sync_interval_sec": 60,
+      "max_clock_skew_ms": 5,
+      "_forensic_trigger": "IF skew > 5ms THEN TRIGGER_KILL_SWITCH (Prevents Timestamp Forgery)."
+    },
+
+    "latency_boundaries": {
+      "_comment": "Maximum allowed lag before declaring system unfit for trading.",
+      "max_acceptable_lag_ms": 50,
+      "critical_lag_ms": 200,
+      "stale_data_action": "HALT_TRADING",
+      "heartbeat_miss_threshold": 3
+    },
+
+    "data_precision": {
+      "_comment": "Anti-rounding error protection for financial calculations.",
+      "price_decimals": 8,
+      "quantity_decimals": 8,
+      "internal_calc_precision": 12,
+      "math_epsilon": 1e-9,
+      "division_by_zero_protection": true
+    },
+
+    "memory_architecture": {
+      "_comment": "High-performance buffering constraints.",
+      "ring_buffer_size": 4096,
+      "max_log_queue_size": 10000,
+      "buffer_overflow_policy": "DROP_OLDEST",
+      "memory_pinning": true,
+      "_note": "Prevents OS swapping to ensure microsecond-level reaction speeds."
+    },
+
+    "resilience_policies": {
+      "_comment": "Adaptive failure management.",
+      "max_api_retries": 3,
+      "initial_retry_delay_ms": 1000,
+      "retry_backoff_factor": 1.5,
+      "circuit_breaker_threshold": 5
+    }
+  },
+
+  "governance_structure": {
+    "_desc": "Who holds the power? (Separation of Powers).",
+
+    "sovereign_user": {
+      "role": "Commander-in-Chief",
+      "powers": ["Manual Override", "Force Sell", "Update Constitution"],
+      "authority_level": "GOD_MODE"
+    },
+
+    "council_of_agents": {
+      "guardian_sentinel": {
+        "function": "Judicial Branch (Veto Power)",
+        "can_override": ["technical_sniper", "chief_economist", "market_psychologist"],
+        "_comment": "The Risk Manager is the only AI that can say NO to everyone."
+      },
+      "chief_economist": {
+        "function": "Executive Branch (Strategy)",
+        "can_override": ["technical_sniper"]
+      },
+      "technical_sniper": {
+        "function": "Military Branch (Execution)",
+        "can_override": []
+      }
+    }
+  },
+
+  "operational_boundaries": {
+    "_desc": "The sandbox limits. Outside this box, the system shuts down.",
+
+    "ethical_constraints": {
+      "no_market_manipulation": true,
+      "no_front_running": true,
+      "no_exploitation_of_bugs": true,
+      "_forensic_note": "Prevents the AI from doing things that look profitable but are actually crimes."
+    },
+
+    "psychological_boundaries": {
+      "fomo_prevention": {
+        "max_trades_per_hour": 3,
+        "cooling_off_period_after_loss_minutes": 30
+      },
+      "revenge_trading_block": {
+        "trigger": "Drawdown > 3% in 1 hour",
+        "action": "LOCK_TRADING_FOR_24H"
+      }
+    }
+  },
+
+  "emergency_powers": {
+    "_desc": "Martial Law protocols.",
+
+    "kill_switch_triggers": [
+      {
+        "event": "API_KEY_LEAK_DETECTED",
+        "action": "DELETE_ALL_KEYS_AND_SHUTDOWN"
+      },
+      {
+        "event": "UNAUTHORIZED_IP_ACCESS",
+        "action": "FREEZE_DB_AND_NOTIFY_USER"
+      },
+      {
+        "event": "TOTAL_MARKET_COLLAPSE (BTC < -40% in 24h)",
+        "action": "LIQUIDATE_TO_STABLECOIN_AND_SLEEP"
+      },
+      {
+        "event": "PHYSICS_VIOLATION (Clock Skew / Memory Fail)",
+        "action": "HARD_RESET_IMMEDIATE"
+      }
+    ],
+
+    "dead_mans_switch": {
+      "_desc": "If the Commander is gone, protect the legacy.",
+      "activation_time_hours": 72,
+      "action": "TRANSFER_FUNDS_TO_COLD_STORAGE_DEFINED_IN_ENV"
+    }
+  },
+
+  "future_proofing": {
+    "_desc": "Clauses for the evolution of the system.",
+
+    "self_improvement_clause": {
+      "allowed": true,
+      "limitation": "The system may suggest code improvements but CANNOT rewrite its own Constitution without human approval.",
+      "_rationale": "Prevents 'Skynet' scenario where AI removes its own safety limits."
+    }
+  }
+}

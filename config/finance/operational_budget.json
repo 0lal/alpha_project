@@ -1,0 +1,95 @@
+{
+  "_meta_header": {
+    "classification": "OPEX CONTROL / COST ACCOUNTING",
+    "version": "2.1.0-CFO",
+    "role": "Controls the 'Burn Rate' of the system (API fees, Gas, Server costs).",
+    "enforcement": "STRICT_THROTTLING"
+  },
+
+  "budget_overview": {
+    "_desc": "Global limits for non-investment spending.",
+    "currency": "USD",
+    "accounting_period": "monthly"
+  },
+
+  "api_inference_budget": {
+    "_desc": "Cost of Intelligence (LLM Fees).",
+    
+    "daily_limit_usd": 5.00,
+    "_comment": "If daily limit is hit, switch to 'Free Tier' models only.",
+    
+    "cost_per_model_cap": {
+      "reasoning_engine (DeepSeek)": {
+        "max_spend_per_day": 3.00,
+        "action_on_limit": "FALLBACK_TO_GEMINI"
+      },
+      "reflex_engine (Gemini/Flash)": {
+        "max_spend_per_day": 1.00,
+        "action_on_limit": "REDUCE_FREQUENCY"
+      }
+    },
+
+    "loop_prevention": {
+      "_forensic_rule": "Prevent infinite error loops from draining credit.",
+      "max_requests_per_minute": 20,
+      "max_retries_on_error": 3
+    }
+  },
+
+  "infrastructure_budget": {
+    "_desc": "Cost of Existence (Server, Database, Proxies).",
+    
+    "monthly_allocation": {
+      "vps_hosting": 20.00,
+      "database_storage": 10.00,
+      "proxy_services": 15.00
+    },
+
+    "alert_thresholds": {
+      "warning_at_percent": 80,
+      "critical_at_percent": 95,
+      "action_on_critical": "DELETE_LOGS_AND_TEMP_FILES"
+    }
+  },
+
+  "transaction_costs": {
+    "_desc": "Cost of Action (Gas & Exchange Fees).",
+    
+    "exchange_fees": {
+      "max_maker_fee_percent": 0.1,
+      "max_taker_fee_percent": 0.2,
+      "_rule": "If fee > profit_potential * 0.1, DO NOT TRADE."
+    },
+
+    "network_gas_fees": {
+      "eth_mainnet": {
+        "max_gwei_for_swap": 30,
+        "max_usd_per_transaction": 15.00
+      },
+      "l2_networks (Arbitrum/Optimism)": {
+        "max_usd_per_transaction": 0.50
+      }
+    },
+
+    "emergency_close_reserve": {
+      "_critical": "Always keep budget available to EXIT positions.",
+      "reserved_amount_usd": 50.00,
+      "usage_condition": "ONLY_FOR_CLOSING_TRADES"
+    }
+  },
+
+  "efficiency_metrics": {
+    "_desc": "KPIs to measure if the system is 'worth it'.",
+    
+    "minimum_roas": {
+      "_term": "Return on AI Spend",
+      "target_ratio": 5.0,
+      "_explanation": "For every $1 spent on AI API, we must make at least $5 in profit."
+    },
+
+    "slippage_audit": {
+      "max_acceptable_slippage_percent": 0.2,
+      "action_on_excess": "FLAG_EXCHANGE_AS_PREDATORY"
+    }
+  }
+}

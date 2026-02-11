@@ -1,0 +1,47 @@
+{
+  "_comment": "ALPHA SOVEREIGN - ADAPTIVE TUNING MATRIX (The Reflex System)",
+  "_pillar": "Evolution & Adaptation",
+  "_responsibility": "تعديل سلوك النظام ديناميكياً بناءً على حالة السوق (Regime Switching).",
+
+  "market_regimes": {
+    "CALM_BULL": {
+      "description": "سوق صاعد هادئ - انخفاض التقلب",
+      "learning_rate": 0.05,
+      "risk_tolerance_multiplier": 1.2,
+      "confirmation_ticks_required": 5,
+      "preferred_strategy": "TREND_FOLLOWING"
+    },
+    "VOLATILE_CHOP": {
+      "description": "سوق متذبذب عرضي - تقلب متوسط",
+      "learning_rate": 0.01,
+      "risk_tolerance_multiplier": 0.8,
+      "confirmation_ticks_required": 12,
+      "preferred_strategy": "MEAN_REVERSION"
+    },
+    "HYPER_CRASH": {
+      "description": "انهيار مفاجئ - تقلب شديد (Black Swan)",
+      "learning_rate": 0.00,
+      "risk_tolerance_multiplier": 0.1,
+      "confirmation_ticks_required": 50,
+      "preferred_strategy": "CASH_PROTECTION"
+    }
+  },
+
+  "auto_correction": {
+    "enabled": true,
+    "max_drawdown_tolerance": 0.03,
+    "consecutive_loss_limit": 3,
+    "action_on_limit": "SWITCH_TO_PAPER_TRADING"
+  },
+
+  "model_switching_thresholds": {
+    "latency_sensitive": {
+      "max_response_time_ms": 200,
+      "fallback_model": "google/gemini-2.0-flash-exp:free"
+    },
+    "reasoning_sensitive": {
+      "min_confidence_score": 0.85,
+      "fallback_model": "xiaomi/mimo-v2-flash:free"
+    }
+  }
+}

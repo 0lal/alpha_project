@@ -1,0 +1,187 @@
+# =============================================================================
+# ALPHA SOVEREIGN - REPORTING MATRIX (THE NEWSROOM)
+# =============================================================================
+# Path: alpha_project/config/communication/reporting_matrix.yaml
+# Role: Determining WHO speaks, WHEN they speak, and HOW LOUDLY.
+# Classification: LOGISTICS & USER EXPERIENCE (Layer 4)
+# Version: 6.0.0-Council-Integrated
+# =============================================================================
+
+reporting_protocol:
+  version: "6.0.0-Sovereign"
+  
+  # [FORENSIC RULE]: قاعدة "اقتصاد الانتباه" (Attention Economy).
+  # النظام يعمل كـ "خادم كتوم". لا يتحدث إلا إذا كانت المعلومة تساوي مالاً أو تنقذ مالاً.
+  # "If everything is urgent, nothing is urgent."
+
+# -----------------------------------------------------------------------------
+# 📡 CHANNELS CONFIGURATION (قنوات البث)
+# -----------------------------------------------------------------------------
+channels:
+  
+  # 1. السجل الجنائي (The Blackbox)
+  # [ALWAYS ON]: يسجل كل همسة وكل تفكير للمراجعة اللاحقة.
+  terminal_log:
+    enabled: true
+    verbosity: "DEBUG" # يسجل حتى عمليات التفكير الداخلية
+    retention: "Local_File_System"
+
+  # 2. غرفة القيادة (UI Dashboard)
+  # إشعارات بصرية للمستخدم الجالس أمام الشاشة.
+  ui_notification:
+    enabled: true
+    priority_filter: "INFO_AND_ABOVE"
+    sound_enabled: true
+    duration_sec: 5
+
+  # 3. الخط الساخن (Remote Uplink)
+  # [SECURE]: يتطلب تفعيل التوكن في .env
+  telegram_uplink:
+    enabled: true
+    mode: "WEBHOOK"
+    chat_id_env_var: "TELEGRAM_CHAT_ID"
+    # يسمح فقط للرسائل الهامة بالوصول للهاتف
+    min_severity_to_send: "WARNING"
+
+# -----------------------------------------------------------------------------
+# 🗣️ PERSONA REPORTING SIGNATURES (توقيعات الشخصيات)
+# -----------------------------------------------------------------------------
+# كيف نميز من المتحدث؟
+persona_signatures:
+  
+  chief_economist:
+    prefix: "🏛️ [MACRO]"
+    color: "BLUE"
+    style: "Formal & Strategic"
+    allowed_channels: ["terminal_log", "ui_notification"] # لا يزعجك على التيليجرام إلا نادراً
+    
+  technical_sniper:
+    prefix: "🎯 [SNIPER]"
+    color: "GREEN"
+    style: "Data-Driven & Concise"
+    allowed_channels: ["ALL_CHANNELS"] # إشارات التداول تصل لكل مكان
+    
+  market_psychologist:
+    prefix: "🧠 [SENTIMENT]"
+    color: "PURPLE"
+    style: "Observational"
+    allowed_channels: ["terminal_log"] # تحليلات نفسية للمراجعة فقط
+    
+  guardian_sentinel:
+    prefix: "🛡️ [SENTINEL]"
+    color: "RED"
+    style: "ALARMIST & IMPERATIVE"
+    allowed_channels: ["ALL_CHANNELS_OVERRIDE_DND"] # يكسر الصمت
+
+# -----------------------------------------------------------------------------
+# 🗓️ SCHEDULED BRIEFS (التقارير المجدولة)
+# -----------------------------------------------------------------------------
+schedules:
+  
+  # [A] الإيجاز الاستراتيجي (الاقتصادي)
+  morning_strategy:
+    persona: "chief_economist"
+    time: "08:00" # Local Time
+    template: "MACRO_OUTLOOK"
+    content: ["Overnight Flows", "Key Economic Events", "Risk Bias"]
+
+  # [B] نبض السوق (النفسي)
+  midday_pulse:
+    persona: "market_psychologist"
+    interval_hours: 4
+    condition: "Volatility > 3%" # لا تتحدث إذا كان السوق ميتاً
+    template: "SENTIMENT_FLASH"
+
+  # [C] كشف الحساب (الحارس)
+  evening_audit:
+    persona: "guardian_sentinel"
+    time: "22:00"
+    template: "RISK_AUDIT"
+    content: ["P&L", "Exposure Check", "Compliance Verification"]
+
+# -----------------------------------------------------------------------------
+# 🚨 ALERT SEVERITY & ESCALATION (مصفوفة التصعيد)
+# -----------------------------------------------------------------------------
+alert_logic:
+  
+  # المستوى 1: معلومة (Log Only)
+  # مثال: "اكتمل تحليل الشارت"، "تم تحديث البيانات".
+  SEV_1_INFO:
+    channels: ["terminal_log"]
+    sound: "none"
+    dnd_bypass: false
+
+  # المستوى 2: فرصة (Opportunity)
+  # مثال: "إشارة دخول من القناص".
+  SEV_2_OPPORTUNITY:
+    channels: ["terminal_log", "ui_notification", "telegram_uplink"]
+    sound: "subtle_chime"
+    dnd_bypass: false
+
+  # المستوى 3: تحذير (Warning)
+  # مثال: "الحارس يرفض صفقة"، "انعكاس في الاتجاه".
+  SEV_3_WARNING:
+    channels: ["ALL_CHANNELS"]
+    sound: "alert_ping"
+    dnd_bypass: false
+    retry: 1
+
+  # المستوى 4: خطر وجودي (NUCLEAR / DEFCON 1)
+  # مثال: "إفلاس منصة"، "هجوم إلكتروني"، "خسارة 20%".
+  SEV_4_CRITICAL:
+    channels: ["ALL_CHANNELS"]
+    sound: "SIREN_LOOP"
+    dnd_bypass: true        # [FORENSIC]: أيقظ المستخدم فوراً.
+    require_ack: true       # استمر في التنبيه حتى يتم التأكيد.
+    action: "TRIGGER_SMS_GATEWAY_IF_AVAILABLE"
+
+# -----------------------------------------------------------------------------
+# 📝 MESSAGE TEMPLATES (قوالب الرسائل الذكية)
+# -----------------------------------------------------------------------------
+templates:
+  
+  # قالب إشارة التداول (Sniper)
+  TRADE_SIGNAL: |
+    {PREFIX} **TRADE DETECTED: {PAIR}**
+    ━━━━━━━━━━━━━━━━━━━━
+    Signal: **{ACTION}** (Conf: {CONFIDENCE}%)
+    Entry: `{ENTRY_ZONE}`
+    🛑 Stop: `{STOP_LOSS}` | 🎯 TP: `{TAKE_PROFIT}`
+    
+    ⚖️ R:R: {RISK_REWARD}
+    📝 Logic: {RATIONALE_SHORT}
+
+  # قالب التحذير الأمني (Sentinel)
+  SECURITY_VETO: |
+    {PREFIX} **ACTION BLOCKED**
+    ━━━━━━━━━━━━━━━━━━━━
+    🚫 **Veto Reason:** {REASON}
+    Attempted by: {REQUESTING_AGENT}
+    Risk Score: {RISK_SCORE}/100
+    
+    🛡️ System remains safe. No action taken.
+
+  # قالب الملخص الاقتصادي (Economist)
+  MACRO_OUTLOOK: |
+    {PREFIX} **DAILY BRIEFING**
+    ━━━━━━━━━━━━━━━━━━━━
+    🌍 **Regime:** {MARKET_REGIME} (Bias: {BIAS})
+    
+    Key Drivers:
+    • {DRIVER_1}
+    • {DRIVER_2}
+    
+    Strategy: **{STRATEGIC_ADVICE}**
+
+# -----------------------------------------------------------------------------
+# 🌙 BIO-CLOCK SYNCHRONIZATION (احترام النوم)
+# -----------------------------------------------------------------------------
+do_not_disturb:
+  enabled: true
+  # يتم سحب هذه القيم من investor_profile.json
+  sync_with_profile: true
+  
+  # الاستثناءات الوحيدة لكسر النوم
+  white_list_events:
+    - "SEV_4_CRITICAL"
+    - "OPEN_POSITION_LIQUIDATION_RISK"

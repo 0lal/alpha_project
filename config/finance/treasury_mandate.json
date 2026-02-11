@@ -1,0 +1,118 @@
+{
+  "_meta_header": {
+    "classification": "SOVEREIGN ASSET MANAGEMENT",
+    "version": "5.0.0-CFO",
+    "role": "Controls capital allocation, risk sizing, and profit taking.",
+    "enforcement": "HARD_CODED_LIMITS"
+  },
+
+  "capital_allocation": {
+    "_desc": "How is the pie divided?",
+    
+    "buckets": {
+      "core_holdings": {
+        "percent": 50,
+        "description": "Long-term assets (BTC/ETH). Never sold on short-term noise.",
+        "storage": "Cold Wallet Preference"
+      },
+      "satellite_alpha": {
+        "percent": 30,
+        "description": "Active trading capital for swing/scalp strategies.",
+        "storage": "Exchange Hot Wallet"
+      },
+      "war_chest_cash": {
+        "percent": 20,
+        "description": "Stablecoins (USDC/USDT) reserved for market crashes.",
+        "activation_trigger": "Market Drawdown > 20%"
+      }
+    }
+  },
+
+  "position_sizing_logic": {
+    "_desc": "How much to bet on a single trade?",
+    
+    "base_risk_per_trade": {
+      "_comment": "Never risk more than 1-2% of total equity on a single setup.",
+      "percent": 1.5
+    },
+
+    "dynamic_sizing_multiplier": {
+      "_comment": "Adjust size based on AI Confidence Score (from Advisory Standards).",
+      "tier_1_diamond": 1.5,  "_note": "Max 2.25% risk",
+      "tier_2_beta": 1.0,     "_note": "Max 1.5% risk",
+      "tier_3_gamma": 0.0,    "_note": "No trade"
+    },
+
+    "absolute_limits": {
+      "max_single_asset_exposure_percent": 15.0,
+      "max_leverage_allowed": 3,
+      "_warning": "Leverage > 3x requires 'guardian_sentinel' manual override."
+    }
+  },
+
+  "harvesting_strategy": {
+    "_desc": "Rules for taking profit (Selling logic).",
+    
+    "take_profit_levels": [
+      {
+        "target_roi_percent": 15.0,
+        "sell_amount_percent": 30.0,
+        "action": "Move Stop Loss to Breakeven"
+      },
+      {
+        "target_roi_percent": 30.0,
+        "sell_amount_percent": 30.0,
+        "action": "Trail Stop Loss"
+      },
+      {
+        "target_roi_percent": 50.0,
+        "sell_amount_percent": 20.0,
+        "action": "Let the rest run (Moonbag)"
+      }
+    ],
+
+    "moonbag_policy": {
+      "_desc": "The remaining 20% is held until trend reversal is confirmed on Weekly timeframe.",
+      "force_exit_condition": "Weekly Candle Close below EMA 20"
+    }
+  },
+
+  "defensive_protocols": {
+    "_desc": "Shields against volatility and stupidity.",
+    
+    "stop_loss_mandate": {
+      "require_hard_stop_on_entry": true,
+      "max_distance_percent": 10.0
+    },
+
+    "circuit_breakers": {
+      "_comment": "If these limits are hit, the bot shuts down automatically.",
+      "max_daily_drawdown_percent": 5.0,
+      "max_weekly_drawdown_percent": 10.0,
+      "max_consecutive_losses": 4,
+      "cooldown_period_hours": 24
+    }
+  },
+
+  "operational_costs": {
+    "_desc": "Accounting for the cost of doing business.",
+    
+    "slippage_tolerance": {
+      "standard": 0.5,
+      "high_volatility": 1.5,
+      "action_on_exceed": "CANCEL_ORDER"
+    },
+
+    "gas_fee_limits": {
+      "max_gas_price_gwei": 50,
+      "min_trade_size_to_cover_gas_multiplier": 10,
+      "_explanation": "Don't spend $20 gas on a $50 trade. Trade must be at least 10x the fee."
+    },
+
+    "tax_reserve_auto_save": {
+      "_future_feature": "Automatically move profit percentage to sub-account.",
+      "enabled": true,
+      "rate_percent": 10.0
+    }
+  }
+}

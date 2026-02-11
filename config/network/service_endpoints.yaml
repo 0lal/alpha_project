@@ -1,0 +1,112 @@
+# =================================================================
+# ALPHA SOVEREIGN ORGANISM - SERVICE ENDPOINTS REGISTRY (SANITIZED)
+# =================================================================
+# File: config/network/service_endpoints.yaml
+# Status: PRODUCTION (Environment-Variable Driven)
+# Security Level: SAFE (Secrets delegated to OS Environment)
+# Forensic Purpose: خريطة الاتصال للخدمات الخارجية والداخلية.
+# =================================================================
+
+# -----------------------------------------------------------------
+# 1. الدماغ المعرفي (COGNITIVE BRAIN SERVICES)
+# -----------------------------------------------------------------
+# يعتمد على متغيرات البيئة التي تبدأ بـ OPENROUTER_KEY_*
+
+llm_provider:
+  active_service: "openrouter_xiaomi" # الافتراضي، يمكن تغييره ديناميكياً
+
+  services:
+    # 1. Xiaomi MiMo: للتفكير المنطقي العميق (Deep Reasoning)
+    openrouter_xiaomi:
+      name: "Xiaomi MiMo V2"
+      url: "https://openrouter.ai/api/v1/chat/completions"
+      # مفتاح التفكير (Reasoning Key)
+      api_key_env: "OPENROUTER_KEY_REASONING" 
+      model_id: "xiaomi/mimo-v2-flash:free"
+      context_window: 32000
+      timeout_seconds: 90
+
+    # 2. Google Gemini: للسرعة القصوى (High Speed / Reflex)
+    openrouter_gemini:
+      name: "Google Gemini 2.0 Flash"
+      url: "https://openrouter.ai/api/v1/chat/completions"
+      # مفتاح السرعة (Speed Key)
+      api_key_env: "OPENROUTER_KEY_SPEED"
+      model_id: "google/gemini-2.0-flash-exp:free"
+      context_window: 1000000
+      timeout_seconds: 30
+
+    # 3. Qwen VL: للرؤية البصرية (Visual Cortex)
+    openrouter_vision:
+      name: "Qwen 2.5 Vision"
+      url: "https://openrouter.ai/api/v1/chat/completions"
+      # مفتاح الرؤية (Vision Key)
+      api_key_env: "OPENROUTER_KEY_VISION"
+      model_id: "qwen/qwen-2.5-vl-7b-instruct:free"
+      capabilities: ["text", "vision"]
+
+# -----------------------------------------------------------------
+# 2. الذكاء المحلي الرديف (LOCAL INTELLIGENCE - FALLBACK)
+# -----------------------------------------------------------------
+
+free_tier_brain:
+  active: true
+  provider_type: "openai_compatible"
+  connection:
+    host: "localhost"
+    port: 1337
+    base_url: "http://localhost:1337/v1"
+  auth:
+    api_key_env: "LOCAL_BRAIN_KEY" # عادة sk-alpha-local
+  settings:
+    default_model: "gpt-3.5-turbo"
+    stream_response: true
+
+# -----------------------------------------------------------------
+# 3. أسواق المال (FINANCIAL DATA STREAMS)
+# -----------------------------------------------------------------
+
+market_data:
+  binance_websocket:
+    url: "wss://stream.binance.com:9443/ws"
+    streams: ["btcusdt@trade", "btcusdt@depth10", "ethusdt@trade"]
+    ping_interval_sec: 180
+
+  binance_rest:
+    base_url: "https://api.binance.com"
+    api_key_env: "EXCHANGE_API_KEY"
+    secret_key_env: "EXCHANGE_SECRET"
+    endpoints:
+      ticker: "/api/v3/ticker/price"
+      depth: "/api/v3/depth"
+      order: "/api/v3/order"
+      account: "/api/v3/account"
+    rate_limit: "1200_req_per_minute"
+
+# -----------------------------------------------------------------
+# 4. البنية التحتية (INTERNAL INFRASTRUCTURE)
+# -----------------------------------------------------------------
+
+internal_services:
+  # الذاكرة الدائمة (PostgreSQL)
+  database:
+    service_name: "alpha_db"
+    host: "localhost"
+    port: 5432
+    username_env: "DB_USER"
+    password_env: "DB_PASS"
+    db_name: "alpha_sovereign_db"
+    pool_size: 20
+
+  # الذاكرة السريعة (Redis)
+  cache:
+    service_name: "alpha_cache"
+    host: "localhost"
+    port: 6379
+    password_env: "REDIS_PASS"
+    db_index: 0
+    ttl_default: 3600
+
+  # الاتصال العصبي (gRPC Bridge)
+  brain_bridge:
+    target_env: "BRAIN_GRPC_TARGET" # localhost:50051

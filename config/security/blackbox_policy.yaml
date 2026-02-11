@@ -1,0 +1,120 @@
+# =============================================================================
+# ALPHA SOVEREIGN - BLACK BOX RECORDER POLICY (FDR / CVR)
+# =============================================================================
+# Path: alpha_project/config/security/blackbox_policy.yaml
+# Role: Immutable logging of decisions, state, and errors for post-mortem analysis.
+# Enforcement: KERNEL LEVEL (Trading disabled if Black Box is offline)
+# =============================================================================
+
+blackbox:
+  version: "6.0.0-Forensic"
+  
+  # [FORENSIC RULE]: قاعدة "إذا لم يُسجل، فهو لم يحدث".
+  # في المحاكم المالية والتقنية، الدليل الوحيد المقبول هو السجل المشفر والموقع زمنياً.
+
+# -----------------------------------------------------------------------------
+# 🎙️ COCKPIT VOICE RECORDER (CVR) - تسجيل عقل النظام
+# -----------------------------------------------------------------------------
+# تسجيل الحوار الداخلي بين "مجلس الإدارة" (الشخصيات) والموديلات.
+decision_recording:
+  
+  # تسجيل "لماذا" تم اتخاذ القرار
+  ai_reasoning_trace:
+    enabled: true
+    capture_scope:
+      - "Full Prompt Sent to LLM"
+      - "Raw Response Received"
+      - "Parsed Logic (JSON extraction)"
+    
+    # [PRIVACY]: تنقيح البيانات الحساسة قبل الكتابة على القرص
+    # يمنع تسريب مفاتيح API في السجلات بالخطأ.
+    redaction_patterns:
+      - "r'sk-[a-zA-Z0-9]{20,}'"  # OpenAI/DeepSeek Keys
+      - "r'0x[a-fA-F0-9]{64}'"    # Private Keys
+
+  # لقطة لحالة السوق وقت القرار
+  context_snapshot:
+    enabled: true
+    fields: ["BTC_PRICE", "RSI_VALUE", "FEAR_GREED_INDEX", "ORDER_BOOK_IMBALANCE"]
+    _rationale: "To prove the AI acted correctly based on the data it HAD at that moment."
+
+# -----------------------------------------------------------------------------
+# ✈️ FLIGHT DATA RECORDER (FDR) - تسجيل فيزياء النظام
+# -----------------------------------------------------------------------------
+# تسجيل المقاييس التقنية (حرارة، سرعة، أخطاء).
+telemetry_recording:
+  
+  # دقة التسجيل (Sampling Rate)
+  sampling:
+    normal_mode: "Event Based (On Change)"
+    crisis_mode: "High Frequency (Every 100ms)"  # يفعّل تلقائياً عند التذبذب العالي
+    
+  # ما الذي نسجله؟
+  metrics:
+    - "Latency (API Response Time)"
+    - "Memory Usage (RAM)"
+    - "Risk Exposure %"
+    - "Slippage Detected"
+
+# -----------------------------------------------------------------------------
+# 🔒 INTEGRITY & IMMUTABILITY (النزاهة وعدم القابلية للتعديل)
+# -----------------------------------------------------------------------------
+evidence_protection:
+  
+  # التوقيع الرقمي (Digital Signing)
+  # [FORENSIC]: كل ملف سجل يتم إغلاقه، نولد له بصمة ونخزنها.
+  hashing:
+    algorithm: "SHA-256"
+    store_hash_in: "alpha_project/forensics/ledger/checksums.json"
+  
+  # التثبيت على البلوكشين (Future Proofing)
+  # نشر بصمة السجل على شبكة عامة لإثبات الوجود (Proof of Existence).
+  blockchain_anchoring:
+    enabled: false  # Set to true when wallet is connected
+    network: "Polygon (Matic)"
+    frequency: "Daily (End of Day Settlement)"
+
+  # الحماية من الحذف (WORM - Write Once, Read Many)
+  # منع النظام نفسه من تعديل السجلات القديمة.
+  file_permissions:
+    linux_attr: "+a (Append Only)"
+
+# -----------------------------------------------------------------------------
+# 💥 CRASH DUMP PROTOCOL (بروتوكول التحطم)
+# -----------------------------------------------------------------------------
+# ماذا يحدث في اللحظات الأخيرة قبل الموت؟
+fatal_error_handling:
+  
+  # التفريغ الطارئ للذاكرة (Core Dump)
+  on_system_panic:
+    action: "DUMP_MEMORY_STATE_TO_DISK"
+    max_dump_size_mb: 512
+    include_stack_trace: true
+    include_last_100_logs: true
+    
+  # رسالة الوداع (Last Gasp)
+  # محاولة أخيرة لإرسال استغاثة قبل انقطاع الطاقة/الاتصال.
+  last_gasp_alert:
+    target: "TELEGRAM_ADMIN"
+    message: "SYSTEM CRASHING. DUMP SAVED AT {PATH}. ERROR: {EXCEPTION}"
+
+# -----------------------------------------------------------------------------
+# 🕵️ FORENSIC RETENTION (سياسة الاحتفاظ بالأدلة)
+# -----------------------------------------------------------------------------
+retention_policy:
+  
+  # السجلات المالية (Trade Logs) - قانونياً 5-7 سنوات
+  financial_evidence:
+    storage_duration: "7 years"
+    storage_type: "Cold Archive (Encrypted Zip)"
+  
+  # سجلات التصحيح (Debug Logs) - تقنياً 7 أيام
+  technical_noise:
+    storage_duration: "7 days"
+    auto_delete: true
+
+  # سجلات الصندوق الأسود (Incident Reports) - للأبد
+  # السجلات المرتبطة بالخسائر أو الأخطاء الكبرى.
+  incident_evidence:
+    storage_duration: "FOREVER"
+    tag: "DO_NOT_DELETE"

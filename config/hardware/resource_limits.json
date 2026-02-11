@@ -1,0 +1,101 @@
+{
+  "_meta_header": {
+    "classification": "HARDWARE GOVERNANCE",
+    "version": "4.2.0-Physics",
+    "role": "Defines the physical boundaries of the machine to prevent crashes.",
+    "enforcement": "WATCHDOG_DAEMON"
+  },
+
+  "cpu_governance": {
+    "_desc": "Rules for processor usage to ensure the heartbeat never stops.",
+    
+    "load_thresholds": {
+      "warning_percent": 70,
+      "critical_percent": 90,
+      "_action_on_critical": "PAUSE_NON_ESSENTIAL_WORKERS (News/Sentiment)"
+    },
+
+    "thread_allocation": {
+      "_comment": "Prevent Python form hogging all cores via GIL.",
+      "max_worker_threads": 8,
+      "reserved_cores_for_os": 2,
+      "process_priority": "HIGH_REALTIME"
+    },
+
+    "infinite_loop_guard": {
+      "_forensic_rationale": "If a process uses 100% CPU for >60s, it is likely bugged.",
+      "max_sustained_load_seconds": 60,
+      "action": "RESTART_WORKER_PROCESS"
+    }
+  },
+
+  "memory_management": {
+    "_desc": "RAM allocation strategy to avoid OOM (Out Of Memory) Killer.",
+    
+    "limits_mb": {
+      "soft_limit_warning": 4096,
+      "hard_limit_kill": 6144,
+      "_comment": "6GB Max per container/process."
+    },
+
+    "leak_detection": {
+      "_forensic_rationale": "Slow memory growth indicates a leak in Pandas/Numpy.",
+      "growth_rate_alert_mb_per_hour": 100,
+      "action": "TRIGGER_GARBAGE_COLLECTION_AGGRESSIVE"
+    },
+
+    "swap_policy": {
+      "allow_swap_usage": false,
+      "_reason": "Swapping to disk is too slow for HFT (High Frequency Trading)."
+    }
+  },
+
+  "disk_io_protection": {
+    "_desc": "Storage preservation for forensic integrity.",
+    
+    "space_reservation": {
+      "min_free_space_gb": 10,
+      "_action_on_low_space": "DELETE_OLD_LOGS_AND_STOP_DOWNLOADING_IMAGES"
+    },
+
+    "critical_reserve_mb": {
+      "_comment": "Space reserved ONLY for the Black Box recorder.",
+      "size": 500,
+      "write_permission": "SYSTEM_KERNEL_ONLY"
+    },
+
+    "ssd_wear_leveling": {
+      "_future_proofing": "Avoid writing too many small files.",
+      "buffer_flush_interval_seconds": 5
+    }
+  },
+
+  "network_bandwidth": {
+    "_desc": "Traffic shaping to prevent DDoS-ing ourselves.",
+    
+    "throughput_limits": {
+      "max_requests_per_second_api": 10,
+      "max_websocket_messages_per_second": 50
+    },
+
+    "bandwidth_reservation": {
+      "_comment": "Always keep a lane open for the 'SELL' button.",
+      "reserved_uplink_kbps": 256,
+      "priority_traffic": ["ORDER_EXECUTION", "HEARTBEAT_PING"]
+    }
+  },
+
+  "gpu_acceleration": {
+    "_desc": "Settings for Local LLM Inference (Future Module).",
+    
+    "vram_allocation": {
+      "max_usage_percent": 80,
+      "allow_shared_memory": false
+    },
+    
+    "thermal_throttling": {
+      "max_gpu_temp_celsius": 80,
+      "_action": "PAUSE_AI_INFERENCE_FALLBACK_TO_CLOUD_API"
+    }
+  }
+}

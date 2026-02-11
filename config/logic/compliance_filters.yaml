@@ -1,0 +1,109 @@
+# =============================================================================
+# ALPHA SOVEREIGN - COMPLIANCE & LEGAL FIREWALL
+# =============================================================================
+# Path: alpha_project/config/logic/compliance_filters.yaml
+# Role: Technical implementation of Constitution Directive #2 (Compliance).
+# Enforcement: PRE-TRADE CHECK (Trade is blocked if it violates these rules).
+# =============================================================================
+
+compliance:
+  version: "5.0.0-Constitutional-Alignment"
+  
+  _meta_alignment:
+    linked_constitution_articles: ["directive_2_compliance", "article_4_ethics"]
+    supremacy_rule: "IF conflict between This_File and Constitution THEN Constitution_Wins"
+
+# -----------------------------------------------------------------------------
+# 1. 🌍 JURISDICTION GEOFENCING (السياج الجغرافي القانوني)
+# -----------------------------------------------------------------------------
+# يحدد "السقف القانوني" الخارجي. النظام سيختار الأقل بين هذا السقف وسقف الدستور (10x).
+jurisdiction_control:
+  current_regime: "GLOBAL_UNRESTRICTED" 
+  # Options: [US_STRICT, EU_MICA, GLOBAL_UNRESTRICTED, ISLAMIC_FINANCE]
+
+  regimes:
+    # الولايات المتحدة (SEC/CFTC Rules)
+    US_STRICT:
+      regulatory_max_leverage: 1.0      # لا رافعة (Spot Only)
+      futures_allowed: false
+      privacy_coins_allowed: false
+      wash_sale_rule_days: 30           # منع إعادة الشراء قبل 30 يوماً من البيع بخسارة
+
+    # الاتحاد الأوروبي (MiCA Regulation)
+    EU_MICA:
+      regulatory_max_leverage: 20.0
+      futures_allowed: true
+      require_stablecoin_audit: true    # USDT قد يُحظر، تفضيل USDC/EURC
+
+    # التمويل الإسلامي (Sharia Compliant)
+    ISLAMIC_FINANCE:
+      regulatory_max_leverage: 1.0      # الرافعة حرام (Riba)
+      futures_allowed: false            # الغرر
+      lending_allowed: false            # الفائدة
+      forbidden_sectors: ["gambling", "alcohol", "adult", "conventional_banking"]
+
+    # المناطق الحرة (Dubai VARA / Offshore)
+    GLOBAL_UNRESTRICTED:
+      regulatory_max_leverage: 100.0    # القانون يسمح، لكن الدستور سيقيده بـ 10x
+      futures_allowed: true
+      privacy_coins_allowed: true
+
+# -----------------------------------------------------------------------------
+# 2. ☣️ AML & TOXIC ASSET PROTECTION (الحماية من غسيل الأموال)
+# -----------------------------------------------------------------------------
+# تفاصيل تقنية لتنفيذ المادة "directive_2_compliance".
+aml_technical_filters:
+  
+  # القوائم السوداء للعناوين (Smart Contract & Wallet Blacklists)
+  sanctions_screening:
+    enabled: true
+    data_source: "Chainalysis_Oracle_Lite"
+    block_interaction_types: ["DEPOSIT", "WITHDRAWAL", "SWAP"]
+    
+    # القوائم المحظورة تقنياً
+    blocked_entities:
+      - "OFAC_SDN_LIST"             # عقوبات أمريكية
+      - "TORNADO_CASH_ROUTER"       # خلاطات العملات
+      - "LAZARUS_GROUP_WALLETS"     # هكرز كوريا الشمالية
+      - "DARKNET_MARKET_CLUSTERS"   # أسواق سوداء
+
+  # سياسة العملات الخصوصية (Monero/Zcash)
+  privacy_coin_handling:
+    assets: ["XMR", "ZEC", "DASH", "ROSE"]
+    action: "TRADE_WITH_CAUTION"
+    # العملات الخصوصية قانونية في بعض الدول لكن المنصات قد تحذفها (Delisting Risk)
+    max_portfolio_allocation_percent: 5.0
+
+# -----------------------------------------------------------------------------
+# 3. 👮 ANTI-MANIPULATION ENGINE (شرطة السوق)
+# -----------------------------------------------------------------------------
+# تفاصيل تقنية لتنفيذ المادة "article_4_ethics" من الدستور.
+# الدستور يمنع التلاعب، وهذا الملف يحدد "كيف نكشف التلاعب".
+market_integrity_checks:
+  
+  # منع التداول الذاتي (Wash Trading)
+  # التعريف التقني: بيع وشراء نفس الأصل بفارق زمني ضئيل جداً.
+  wash_trade_prevention:
+    min_holding_period_seconds: 60
+    check_order_book_depth: true    # التأكد من وجود سيولة حقيقية غير سيولتنا
+    prevent_self_match: true        # منع مطابقة أوامر البيع الخاصة بنا مع أوامر الشراء
+
+  # منع التظاهر/الخداع (Spoofing)
+  # التعريف التقني: وضع أمر ضخم وإلغاؤه فوراً.
+  spoofing_prevention:
+    min_order_life_milliseconds: 5000  # أي أمر يوضع يجب أن يبقى 5 ثوانٍ على الأقل
+    max_cancellation_ratio: 0.8        # إذا ألغيت 80% من أوامرك، ستُصنف كـ Spoofer
+
+# -----------------------------------------------------------------------------
+# 4. 🔍 SMART CONTRACT SAFETY (فحص العقود الذكية)
+# -----------------------------------------------------------------------------
+# [FORENSIC]: حماية إضافية للتمويل اللامركزي (DeFi).
+token_security_audit:
+  
+  # قبل شراء أي عملة جديدة (Altcoin/Meme)، افحص العقد.
+  pre_buy_checks:
+    verify_source_code: true        # الكود يجب أن يكون منشوراً (Verified)
+    check_honeypot: true            # هل يمكن البيع؟ (Is Sellable?)
+    check_renounced_ownership: true # هل تخلى المطور عن الملكية؟
+    max_buy_tax_percent: 5.0        # لا تشتري إذا كانت ضريبة الشراء > 5%
+    max_sell_tax_percent: 5.0

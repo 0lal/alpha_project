@@ -1,0 +1,131 @@
+# =============================================================================
+# ALPHA SOVEREIGN - ACCESS CONTROL LIST (ACL) & IAM POLICY
+# =============================================================================
+# Path: alpha_project/config/security/access_control.yaml
+# Role: Authentication, Authorization, and Network Perimeter Defense
+# Enforcement: KERNEL LEVEL (Any violation triggers immediate ban)
+# =============================================================================
+
+access_control:
+  version: "5.5.0-Fortress"
+  
+  # [FORENSIC RULE]: مبدأ "انعدام الثقة" (Zero Trust).
+  # لا تثق بأي طلب حتى لو جاء من الشبكة الداخلية.
+  # كل طلب يجب أن يحمل "جواز سفر" (Token) و "تأشيرة دخول" (Permission).
+
+# -----------------------------------------------------------------------------
+# 🔐 AUTHENTICATION STANDARDS (معايير التحقق من الهوية)
+# -----------------------------------------------------------------------------
+authentication:
+  
+  # طريقة التشفير المعتمدة للجلسات
+  token_standard: "JWT (JSON Web Token)"
+  algorithm: "Ed25519"  # أقوى وأسرع من RSA
+  
+  # عمر الجلسة (Session Lifespan)
+  # الجلسات الطويلة خطرة. اجبر المستخدم على إعادة الدخول دورياً.
+  session_ttl_minutes: 60
+  
+  # سياسة كلمة المرور (للوصول للوحة التحكم)
+  password_policy:
+    min_length: 16
+    require_special_chars: true
+    rotation_days: 90
+
+  # المصادقة متعددة العوامل (MFA)
+  # [CRITICAL]: إجباري للعمليات الحساسة.
+  mfa_enforcement:
+    login: "OPTIONAL"     # للدخول العادي (للسرعة)
+    withdrawal: "REQUIRED" # للسحب (للأمان)
+    config_change: "REQUIRED"
+
+# -----------------------------------------------------------------------------
+# 👮 ROLE-BASED ACCESS CONTROL (RBAC) - مصفوفة الصلاحيات
+# -----------------------------------------------------------------------------
+roles:
+  
+  # 1. القائد السيادي (GOD_MODE)
+  # أنت فقط. يملك صلاحية فعل أي شيء، بما في ذلك تدمير النظام.
+  sovereign_commander:
+    permissions: ["*"]
+    max_concurrent_sessions: 1
+    allowed_ips: ["HOME_STATIC_IP", "VPN_SECURE_IP"]
+
+  # 2. عملاء الذكاء الاصطناعي (Internal Agents)
+  # البوتات لها صلاحيات محدودة جداً.
+  ai_agent_trade:
+    permissions: ["market:read", "order:place", "order:cancel"]
+    denied: ["wallet:withdraw", "config:write"]
+    
+  ai_agent_analyst:
+    permissions: ["market:read", "news:read"]
+    denied: ["order:place", "wallet:read"]
+
+  # 3. وضع المشاهد (Auditor)
+  # للمراجعة فقط، لا يمكنه لمس أي زر.
+  read_only_observer:
+    permissions: ["dashboard:view", "logs:read"]
+    denied: ["*"]
+
+# -----------------------------------------------------------------------------
+# 🌐 NETWORK PERIMETER (السور الرقمي)
+# -----------------------------------------------------------------------------
+network_security:
+  
+  # القائمة البيضاء للعناوين (IP Whitelist)
+  # النظام لا يتحدث إلا مع هذه العناوين. الباقي يتم تجاهله بصمت (Stealth Mode).
+  ip_whitelist:
+    - "127.0.0.1"      # Localhost (Internal Logic)
+    - "192.168.1.0/24" # Home Network (Optional)
+  
+  # كشف التسلل (Intrusion Detection)
+  rate_limiting:
+    max_requests_per_minute: 60
+    ban_duration_minutes: 1440  # حظر 24 ساعة
+    
+    # [TRAP]: فخ العسل.
+    # إذا حاول شخص الوصول لعنوان /admin/backup.zip (ملف غير موجود)، احظره للأبد.
+    honeypot_endpoints:
+      - "/admin/backup.zip"
+      - "/config/.env"
+      - "/api/v1/debug"
+
+# -----------------------------------------------------------------------------
+# ☢️ DANGEROUS ACTION INTERLOCKS (صمامات الأمان النووية)
+# -----------------------------------------------------------------------------
+# عمليات تتطلب "تأكيداً بشرياً" إضافياً ولا يمكن أتمتتها بالكامل.
+critical_interlocks:
+  
+  # سحب الأموال
+  withdrawal:
+    requires_mfa: true
+    requires_email_confirmation: true
+    max_amount_per_day: 5000.0
+    cooling_off_period_hours: 4
+  
+  # تعديل الدستور
+  constitution_amendment:
+    requires_reboot: true
+    requires_backup_before_apply: true
+
+  # بيع الهلع (Panic Sell)
+  force_liquidate_all:
+    confirmation_text_required: "I_ACCEPT_THE_LOSS"
+    log_severity: "CRITICAL"
+
+# -----------------------------------------------------------------------------
+# 🕵️ API KEY SECURITY (أمن المفاتيح)
+# -----------------------------------------------------------------------------
+api_keys:
+  
+  # التدوير التلقائي (Rotation)
+  # [PREDICTION]: المفاتيح تتسرب دائماً. غيّرها قبل أن يستخدمها العدو.
+  rotation_policy:
+    exchange_keys: "Every 90 days"
+    internal_service_keys: "Every 30 days"
+  
+  # تخزين المفاتيح
+  # لا تخزن المفاتيح كنص واضح أبداً في الذاكرة لفترة طويلة.
+  storage:
+    method: "Environment Variables Only"
+    encryption_at_rest: true

@@ -1,0 +1,98 @@
+{
+  "_meta_header": {
+    "classification": "CHRONOMETRY / OPERATIONAL RHYTHM",
+    "version": "1.2.0-Timekeeper",
+    "role": "Defines the biological clock of the system (Sleep, Hunt, Maintenance).",
+    "enforcement": "SCHEDULER_DAEMON (Strict adherence to UTC)",
+    "_forensic_note": "Prevents trading during low liquidity 'kill zones' and enforces system reboot."
+  },
+
+  "time_standards": {
+    "_desc": "The reference clocks.",
+    "internal_clock": "UTC",
+    "reporting_clock": "Africa/Cairo",
+    "_rationale": "Always trade on UTC to avoid Daylight Savings Time (DST) bugs."
+  },
+
+  "operating_sessions": {
+    "_desc": "When is the casino open? (High Liquidity Windows Only).",
+    
+    "active_hunting_hours": {
+      "session_asia": { "start": "00:00", "end": "08:00", "focus": "Range_Trading" },
+      "session_london": { "start": "07:00", "end": "15:00", "focus": "Trend_Following" },
+      "session_new_york": { "start": "13:00", "end": "21:00", "focus": "Volatility_Breakout" },
+      "_overlap_bonus": "Double risk allocation during London/NY overlap (13:00-15:00 UTC)."
+    },
+
+    "kill_zones": {
+      "_forensic_warning": "Times when manipulation is highest and liquidity is lowest.",
+      "blocked_intervals": [
+        { "start": "21:00", "end": "23:59", "reason": "Post-NY Low Volume" },
+        { "start": "Friday_21:00", "end": "Sunday_18:00", "reason": "Weekend Chop / CME Gap Risk" }
+      ],
+      "action_in_zone": "REDUCE_POSITIONS_AND_WIDEN_STOPS"
+    }
+  },
+
+  "maintenance_windows": {
+    "_desc": "Scheduled downtime for self-repair (The 'Sleep' Cycle).",
+    
+    "daily_micro_reset": {
+      "time": "23:55",
+      "duration_minutes": 5,
+      "tasks": ["FLUSH_REDIS_CACHE", "ROTATE_LOGS", "VERIFY_WALLET_BALANCE"]
+    },
+
+    "weekly_deep_clean": {
+      "day": "Sunday",
+      "time": "03:00",
+      "duration_minutes": 60,
+      "tasks": [
+        "FULL_SYSTEM_REBOOT",
+        "RETRAIN_AI_MODELS",
+        "ARCHIVE_OLD_TICKS_TO_COLD_STORAGE",
+        "UPDATE_PIP_DEPENDENCIES"
+      ],
+      "force_kill_stuck_processes": true
+    }
+  },
+
+  "heartbeat_physics": {
+    "_desc": "Dynamic Tick Rate. Don't run at 100mph when the car is parked.",
+    
+    "modes": {
+      "crisis_mode": {
+        "trigger": "Volatility > 5% or Drawdown > 2%",
+        "tick_interval_ms": 100,
+        "api_polling_rate": "MAX_ALLOWED"
+      },
+      "normal_hunt": {
+        "trigger": "Active Session",
+        "tick_interval_ms": 1000,
+        "api_polling_rate": "STANDARD"
+      },
+      "hibernate": {
+        "trigger": "Kill Zone or Maintenance",
+        "tick_interval_ms": 60000,
+        "_comment": "Check pulse once per minute just to ensure server is alive."
+      }
+    }
+  },
+
+  "volatility_blackout_calendar": {
+    "_desc": "Future Proofing: Auto-pause during major economic events.",
+    
+    "events_to_dodge": [
+      "FOMC_MEETING",
+      "NON_FARM_PAYROLLS (NFP)",
+      "CPI_RELEASE"
+    ],
+    
+    "safety_protocol": {
+      "pause_before_minutes": 15,
+      "resume_after_minutes": 30,
+      "cancel_pending_orders": true,
+      "_rationale": "Don't gamble on binary outcomes. Wait for the trend to establish."
+    }
+  }
+}

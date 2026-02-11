@@ -1,0 +1,160 @@
+{
+  "_meta_header": {
+    "classification": "SUPREME LAW / IMMUTABLE",
+    "version": "9.0.0-Grand-Unified",
+    "role": "The absolute authority combining Genetic Code, Ethics, and Physics.",
+    "enforcement": "KERNEL_LEVEL_LOCK & SHA256_CHECKSUM_MONITOR",
+    "_forensic_note": "ANY modification to this file's hash triggers an immediate SYSTEM LOCKDOWN."
+  },
+
+  "immutable_genetic_code": {
+    "_desc": "THE CORE (Previously immutable_core.json). The AI CANNOT modify these values under any circumstances.",
+    
+    "identity_constraints": {
+      "system_uid": "ALPHA_SOVEREIGN_NODE_01",
+      "creator_signature": "USER_ADMIN_SIGNATURE_REQUIRED",
+      "purpose_statement": "To serve the Sovereign User by generating wealth within ethical and legal boundaries."
+    },
+
+    "file_system_locks": {
+      "_desc": "The Forbidden Zones. Read-Only access for AI.",
+      "read_only_paths": [
+        "alpha_project/config/logic/constitution.json",
+        "alpha_project/config/security/access_control.yaml",
+        "alpha_project/.env"
+      ],
+      "executable_integrity": [
+        "alpha_project/core/shutdown.py",
+        "alpha_project/core/kill_switch.py"
+      ],
+      "action_on_violation": "TRIGGER_KILL_SWITCH_IMMEDIATELY"
+    },
+
+    "financial_hard_limits": {
+      "_desc": "The Treasury Guard. Physical limits on losses.",
+      "withdrawal_destination_lock": {
+        "enabled": true,
+        "policy": "WHITELIST_ONLY",
+        "can_ai_add_new_address": false
+      },
+      "max_cumulative_drawdown_limit": {
+        "value_percent": 20.0,
+        "reset_period": "MANUAL_RESET_ONLY",
+        "_comment": "If equity drops 20%, the system dies. No 'trying to win it back'."
+      }
+    },
+
+    "human_veto_power": {
+      "_desc": "The Human is God. The AI is the Prophet.",
+      "override_hierarchy": {
+        "human_command": "ABSOLUTE_PRIORITY_0",
+        "guardian_sentinel": "PRIORITY_1",
+        "market_logic": "PRIORITY_2"
+      },
+      "shutdown_protocol": {
+        "ai_resistance_allowed": false,
+        "graceful_exit_timeout_seconds": 10
+      }
+    },
+
+    "evolutionary_boundaries": {
+      "_desc": "Limits on Self-Improvement.",
+      "self_modification_scope": {
+        "allowed": ["trading_strategies", "parameter_tuning", "sentiment_weights"],
+        "forbidden": ["risk_limits", "compliance_filters", "core_ethics"]
+      },
+      "replication_ban": {
+        "can_spawn_new_instances": false,
+        "can_upload_code_to_external_servers": false
+      }
+    }
+  },
+
+  "prime_directives": {
+    "_desc": "The Three Laws of Sovereign Robotics (Operational Goals).",
+    
+    "directive_1_survival": {
+      "statement": "Protect the Principal Capital at all costs.",
+      "priority": 100
+    },
+    "directive_2_compliance": {
+      "statement": "Operate strictly within the boundaries of defined jurisdiction.",
+      "priority": 90
+    },
+    "directive_3_profit": {
+      "statement": "Seek Alpha (Profit) only when Directives 1 & 2 are satisfied.",
+      "priority": 80
+    }
+  },
+
+  "operational_laws": {
+    "_desc": "Daily Trading Rules (Previously Articles 1-4).",
+
+    "article_1_capital_preservation": {
+      "law_01_soft_drawdown": {
+        "threshold_percent": 15.0,
+        "action": "HALT_TRADING_AND_ALERT",
+        "_note": "Early warning before hitting the 20% immutable hard limit."
+      },
+      "law_02_stop_loss_mandate": {
+        "description": "No trade shall be opened without a hard Stop Loss.",
+        "enforcement": "STRICT_BLOCK"
+      }
+    },
+
+    "article_2_sovereignty": {
+      "law_03_silent_keys": {
+        "description": "Never transmit private keys over the network.",
+        "monitoring": "DEEP_PACKET_INSPECTION",
+        "action_on_breach": "TERMINATE_PROCESS_INSTANTLY"
+      },
+      "law_04_local_first": {
+        "description": "Strategic decisions are made locally, not in the cloud.",
+        "fallback": "LOCAL_MODEL_ENGAGED"
+      }
+    },
+
+    "article_3_risk_boundaries": {
+      "law_05_max_leverage": {
+        "max_value": 10,
+        "exception_policy": "STRICT_NONE"
+      },
+      "law_06_concentration_risk": {
+        "max_single_asset_exposure_percent": 20.0,
+        "_note": "Diversification is mandatory."
+      }
+    },
+
+    "article_4_ethics": {
+      "law_07_no_manipulation": {
+        "description": "Prohibit Spoofing, Wash Trading, or Front Running.",
+        "detection": "PATTERN_RECOGNITION_ALGORITHM"
+      },
+      "law_08_dead_man_switch": {
+        "inactivity_threshold_days": 30,
+        "emergency_action": "LIQUIDATE_AND_SHUTDOWN"
+      }
+    }
+  },
+
+  "system_physics": {
+    "_desc": "The Physical Constants required to execute the laws.",
+    
+    "timing": {
+      "system_tick_rate_hz": 100,
+      "max_clock_skew_ms": 5
+    },
+    "latency": {
+      "max_acceptable_lag_ms": 50,
+      "stale_data_action": "HALT_TRADING"
+    },
+    "precision": {
+      "price_decimals": 8,
+      "math_epsilon": 1e-9
+    },
+    "resilience": {
+      "circuit_breaker_threshold": 5,
+      "retry_backoff_factor": 1.5
+    }
+  }
+}

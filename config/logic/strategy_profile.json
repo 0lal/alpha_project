@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "version": "2.0",
+    "last_updated": "2026-02-06T12:00:00Z",
+    "updated_by": "SYSTEM_INIT",
+    "description": "Master Strategy Configuration Profile"
+  },
+  "modules": {
+    "quant_analysis": {
+      "enabled": true,
+      "weight": 1.0,
+      "mode": "STANDARD",
+      "description": "Technical Indicators & Order Flow"
+    },
+    "sentiment_analysis": {
+      "enabled": true,
+      "weight": 0.8,
+      "mode": "HYBRID_CLOUD",
+      "description": "News & Social Media Impact via FinBERT/LLM"
+    },
+    "hybrid_reasoning": {
+      "enabled": true,
+      "weight": 1.5,
+      "mode": "VOTING_ARBITER",
+      "description": "LLM-based final decision making"
+    }
+  },
+  "risk_parameters": {
+    "strict_mode": true,
+    "max_concurrency": 3
+  },
+  "global_switch": "ACTIVE"
+}
