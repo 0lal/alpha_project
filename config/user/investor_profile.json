@@ -1,0 +1,111 @@
+{
+  "_meta_header": {
+    "classification": "TOP SECRET / PII (Personally Identifiable Information)",
+    "version": "3.0.0-Sovereign-Commander",
+    "role": "Defines the Client Persona, Risk Tolerance, and Authority Level.",
+    "integrity_check": "SHA256_VERIFIED",
+    "last_updated": "2026-02-09"
+  },
+
+  "identity_matrix": {
+    "_desc": "The Entity commanding the system.",
+    "alias": "The Sovereign Commander",
+    "authority_level": "ROOT_ADMIN",
+    "communication_language": "ar-EG",
+    "cultural_context": "Middle_East_Cairo_Timezone",
+    "timezone": "Africa/Cairo"
+  },
+
+  "financial_dna": {
+    "_desc": "Hard mathematical constraints derived from the user's solvency.",
+    
+    "capital_structure": {
+      "base_currency": "USDT",
+      "initial_capital": 10000.00,
+      "emergency_injection_capability": false,
+      "_comment": "System assumes NO external funds are available to rescue a bad trade."
+    },
+
+    "risk_appetite": {
+      "score_1_to_10": 7,
+      "description": "Aggressive Growth / Calculated Speculation",
+      "max_drawdown_tolerance_percent": 20.0,
+      "pain_threshold_per_trade_percent": 2.0,
+      "target_annual_return_percent": 150.0
+    },
+
+    "time_horizon": {
+      "primary_mode": "SWING_TRADING",
+      "average_holding_period_days": 14,
+      "long_term_bag_holding_allowed": false,
+      "_rationale": "We are here to compound capital, not to marry assets."
+    }
+  },
+
+  "investment_mandate": {
+    "_desc": "Where is the AI allowed to hunt?",
+    
+    "permitted_sectors": [
+      "Layer-1_Infrastructure",
+      "DeFi_Protocols",
+      "AI_Compute_Tokens",
+      "Cross-Chain_Bridges"
+    ],
+
+    "forbidden_zones": {
+      "assets": ["Memecoins_Micro_Cap", "Rebase_Tokens", "Algorithmic_Stablecoins"],
+      "mechanisms": ["High_Leverage (>10x)", "Naked_Shorting"],
+      "_forensic_rule": "Any asset with liquidity < $1M is automatically blacklisted."
+    },
+
+    "allocation_constraints": {
+      "max_single_asset_exposure": 0.15,
+      "max_sector_exposure": 0.40,
+      "min_cash_reserve": 0.20
+    }
+  },
+
+  "psychological_profile": {
+    "_desc": "Directives for the 'Market Psychologist' persona to manage the user.",
+    
+    "emotional_bias_mitigation": {
+      "fomo_tendency": "HIGH",
+      "panic_selling_tendency": "MODERATE",
+      "confirmation_bias_level": "HIGH"
+    },
+
+    "ai_interaction_style": {
+      "tone": "RUTHLESS_TRUTH",
+      "verbosity": "CONCISE_EXECUTIVE_SUMMARY",
+      "sugar_coating": false,
+      "challenge_user_ideas": true,
+      "_instruction": "If the user suggests a stupid trade, the AI must explicitly explain WHY it is stupid."
+    }
+  },
+
+  "reporting_protocol": {
+    "_desc": "When and how to disturb the Sovereign.",
+    
+    "scheduled_briefs": {
+      "morning_brief": "08:00_Cairo_Time",
+      "weekly_review": "Friday_20:00_Cairo_Time"
+    },
+
+    "interrupt_triggers": [
+      "PORTFOLIO_DROP_5_PERCENT",
+      "WHALE_MOVEMENT_DETECTED",
+      "SYSTEM_HEALTH_CRITICAL"
+    ],
+
+    "delivery_channels": {
+      "primary": "TERMINAL_LOG",
+      "urgent": "APP_NOTIFICATION"
+    }
+  },
+
+  "future_legacy": {
+    "_desc": "Long-term sovereignty planning.",
+    "tax_optimization_mode": "DIGITAL_NOMAD",
+    "profit_skimming_rule": "WITHDRAW_50_PERCENT_OF_MONTHLY_PROFITS"
+  }
+}

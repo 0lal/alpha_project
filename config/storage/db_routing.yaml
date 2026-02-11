@@ -1,0 +1,79 @@
+# =================================================================
+# ALPHA SOVEREIGN ORGANISM - DATABASE ROUTING MAP
+# =================================================================
+# File: config/storage/db_routing.yaml
+# Status: PRODUCTION (Single Shard Topology)
+# Pillar: Scalability & Data Sovereignty
+# Forensic Purpose: تحديد الخريطة الفيزيائية لمكان تخزين كل نوع من البيانات لضمان النزاهة والسرعة.
+# =================================================================
+
+# -----------------------------------------------------------------
+# 1. استراتيجية التوجيه (ROUTING STRATEGY)
+# -----------------------------------------------------------------
+strategy:
+  # وضع التشغيل الحالي: عقدة واحدة مركزية (تتناسب مع البنية التحتية المحلية الحالية).
+  # الخيارات المستقبلية: "HORIZONTAL_SHARDING" (توزيع أفقي) أو "GEO_PARTITIONING" (توزيع جغرافي).
+  active_mode: "SINGLE_MASTER_INSTANCE"
+  
+  # هل التوزيع مفعّل؟ (مغلق حالياً لأننا نملك سيرفر واحد فقط لتجنب أخطاء الاتصال).
+  sharding_enabled: false
+  
+  # آلية قراءة البيانات:
+  # "PRIMARY_ONLY": القراءة والكتابة من السيرفر الرئيسي (الأكثر أماناً للبيانات الحساسة).
+  read_preference: "PRIMARY_ONLY"
+
+# -----------------------------------------------------------------
+# 2. تعريف العقد والقطاعات (SHARDS DEFINITION)
+# -----------------------------------------------------------------
+# هنا نعرف السيرفرات المتاحة فعلياً في ملف docker-compose.yml.
+
+available_shards:
+  # القطاع الرئيسي (The Genesis Shard)
+  # يمثل حاوية alpha_db التي تعمل حالياً.
+  - id: "SHARD_ALPHA_PRIMARY_01"
+    role: "WRITE_MASTER"   # المسؤول عن الكتابة
+    status: "ONLINE"
+    
+    # الإشارة إلى بيانات الاتصال الموجودة في service_endpoints.yaml
+    #
+    connection_ref: "internal_services.database"
+    
+    # الوزن: 100% يعني أن كل البيانات ستذهب هنا حالياً.
+    weight: 100
+    tags: ["SSD", "LOCAL_DOCKER"]
+
+# -----------------------------------------------------------------
+# 3. خرائط البيانات (DATA MAPS)
+# -----------------------------------------------------------------
+# قواعد توجيه البيانات: أي نوع من المعلومات يذهب إلى أي قطاع؟
+
+routing_rules:
+  # 1. البيانات المالية (Market Data & Trades)
+  # تتطلب سرعة كتابة عالية جداً ونزاهة (ACID Compliance).
+  - data_category: "FINANCIAL_CORE"
+    target_shard: "SHARD_ALPHA_PRIMARY_01"
+    partitioning_key: "symbol"     # مثال: توزيع البيانات بناءً على رمز العملة (BTC, ETH).
+    table_policy: "PARTITION_BY_MONTH" # تقسيم الجداول شهرياً للحفاظ على السرعة.
+
+  # 2. الذاكرة المعرفية (AI Context & Vectors)
+  # تخزين المتجهات يتطلب مكتبة pgvector المثبتة في alpha_db.
+  - data_category: "COGNITIVE_MEMORY"
+    target_shard: "SHARD_ALPHA_PRIMARY_01"
+    storage_engine: "PGVECTOR"
+    index_type: "HNSW"             # فهرسة سريعة للبحث عن المتشابهات.
+
+  # 3. سجلات النظام (Logs & Audits)
+  # بيانات باردة، يمكن نقلها مستقبلاً لأقراص أرخص (Cold Storage).
+  - data_category: "SYSTEM_AUDIT"
+    target_shard: "SHARD_ALPHA_PRIMARY_01"
+    retention_days: 90             # الاحتفاظ بالبيانات لمدة 90 يوماً فقط ثم الأرشفة.
+    compression: "LZ4"             # ضغط البيانات لتوفير المساحة.
+
+# -----------------------------------------------------------------
+# 4. التوسع المستقبلي (SCALABILITY BLUEPRINT)
+# -----------------------------------------------------------------
+# ملاحظة للمطور: عند إضافة سيرفر جديد، قم بتعديل هذا القسم.
+future_expansion_plan:
+  trigger_threshold_gb: 50         # إذا تجاوز حجم البيانات 50 جيجا.
+  action: "ACTIVATE_SHARD_02"      # يطلب من المشغل إضافة حاوية جديدة.
+  rebalancing_strategy: "CONSISTENT_HASHING" # إعادة توزيع البيانات تلقائياً.

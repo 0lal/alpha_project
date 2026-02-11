@@ -1,0 +1,169 @@
+# =============================================================================
+# ALPHA SOVEREIGN - SYSTEM MANIFEST (THE LIVING CONSTITUTION)
+# =============================================================================
+# Path: alpha_project/config/system_manifest.yaml
+# Classification: PUBLIC STRUCTURE / INTERNAL LOGIC
+# Role: The absolute reference for system behavior, model routing, and limits.
+# Version: 6.0.0-Unified-Advisor
+# Status: PRODUCTION READY (Immutable Logic)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. SYSTEM IDENTITY & PHYSICS (الفيزياء والهوية)
+# -----------------------------------------------------------------------------
+system:
+  id: "Alpha_Node_001"
+  version: "6.0.0-Sovereign"
+  
+  # [FORENSIC NOTE]: بيئة التشغيل تحدد صرامة الأمان.
+  # production: يمنع التعديلات الحية، يفعل قواطع الدائرة، ويخفي الأخطاء التفصيلية.
+  environment: "production"
+
+  # [CRITICAL]: "نبض القلب" للنظام (System Heartbeat).
+  # هذه القيم تحدد سرعة استجابة النظام للأحداث.
+  physics:
+    global_timeout_seconds: 45.0  # أقصى صبر على أي عملية قبل قتلها
+    tick_rate_ms: 100             # سرعة تحديث البيانات (10 هرتز)
+    max_memory_usage_mb: 4096     # (4GB) حد الأمان قبل تفعيل التنظيف القسري
+    allow_hot_reload: false       # يمنع تغيير الكود أثناء العمل (للحفاظ على الاستقرار)
+
+# -----------------------------------------------------------------------------
+# 2. THE BRAIN & MODEL ROUTING (العقل والتوجيه)
+# -----------------------------------------------------------------------------
+# [ARCHITECTURE FIX]: تعيين الموديلات بناءً على الوظيفة وليس الاسم التجاري.
+# المفاتيح (API Keys) يتم سحبها من ملف .env
+brain:
+  enabled: true
+  
+  # auto: الراوتر يحلل النية ويوجه للموديل الأنسب (تحليل، سرعة، رؤية).
+  mode: "auto"
+  
+  # إعدادات الذاكرة العاملة (Context Management)
+  memory:
+    short_term_limit: 15          # آخر 15 رسالة تدخل في السياق السريع
+    long_term_retrieval: true     # تفعيل البحث في Vector DB (RAG)
+    compression_enabled: true     # ضغط السياق القديم لتوفير التوكنات
+
+  # --- خريطة القدرات العقلية (Cognitive Capabilities) ---
+  capabilities:
+    
+    # [A] المفكر الاستراتيجي (Deep Reasoning)
+    # يستخدمه: Chief Economist, Guardian Sentinel
+    # المهمة: التخطيط طويل المدى، كشف المخاطر المعقدة، تحليل الماكرو.
+    reasoner:
+      alias: "deep_thinker"
+      id: "deepseek/deepseek-r1:free" # أو xiaomi/mimo-v2
+      provider: "openrouter"
+      context_window: 16000
+      timeout: 120.0              # يحتاج وقتاً أطول للتفكير
+      cost_tier: "free"           # يفضل المجاني، ينتقل للمدفوع عند الضرورة
+
+    # [B] المستجيب السريع (Fast Reflex)
+    # يستخدمه: Technical Sniper, Market Psychologist
+    # المهمة: قراءة الأخبار، تحليل التغريدات، القرارات اللحظية.
+    reflex:
+      alias: "fast_core"
+      id: "google/gemini-2.0-flash-exp:free"
+      provider: "openrouter"
+      context_window: 32000
+      temperature: 0.7
+      timeout: 30.0
+
+    # [C] المحلل البصري (Visionary)
+    # يستخدمه: Technical Sniper (لقراءة الشارتات)
+    vision:
+      alias: "chart_reader"
+      id: "google/gemini-2.0-flash-exp:free"
+      provider: "openrouter"
+      timeout: 45.0
+
+    # [D] مهندس الكود (Code Expert)
+    # يستخدمه: النظام الداخلي (لتحسين الاستراتيجيات)
+    coder:
+      alias: "code_guru"
+      id: "mistralai/mistral-7b-instruct:free"
+      provider: "openrouter"
+      temperature: 0.1
+
+# -----------------------------------------------------------------------------
+# 3. ADVISORY COUNCIL MAP (خريطة مجلس الحكماء)
+# -----------------------------------------------------------------------------
+# [MERGE UPDATE]: ربط الشخصيات (Personas) بقدرات الدماغ (Brain Capabilities).
+advisory_board:
+  
+  # 1. كبير الاقتصاديين (الرؤية)
+  chief_economist:
+    file_path: "config/ai/personas/chief_economist.yaml"
+    required_capability: "reasoner"
+    voting_weight: 1.5  # صوته أعلى في القرارات طويلة المدى
+
+  # 2. القناص الفني (التنفيذ)
+  technical_sniper:
+    file_path: "config/ai/personas/technical_sniper.yaml"
+    required_capability: "vision" # يحتاج لرؤية الشارت + سرعة (Reflex)
+    voting_weight: 1.0
+
+  # 3. طبيب السوق النفسي (الشعور)
+  market_psychologist:
+    file_path: "config/ai/personas/market_psychologist.yaml"
+    required_capability: "reflex"
+    voting_weight: 0.8
+
+  # 4. الحارس الشخصي (الأمان)
+  guardian_sentinel:
+    file_path: "config/ai/personas/guardian_sentinel.yaml"
+    required_capability: "reasoner"
+    voting_weight: 2.0  # يملك حق الفيتو (Veto Power)
+    can_trigger_kill_switch: true
+
+# -----------------------------------------------------------------------------
+# 4. ENGINE UPLINK (اتصال العضلات - Rust)
+# -----------------------------------------------------------------------------
+# الإعدادات الفعلية للاتصال بالمحرك عالي السرعة.
+engine:
+  uplink_type: "grpc"
+  host: "127.0.0.1"      # Localhost حصرياً للأمان
+  port: 50051            # يجب أن يطابق ENGINE_PORT في .env
+  
+  # بروتوكول الأمان
+  auth_token_required: true
+  max_message_size_mb: 10
+  
+  # العمال (Concurrency)
+  worker_threads: 10
+
+# -----------------------------------------------------------------------------
+# 5. DATA PIPELINE (شرايين البيانات)
+# -----------------------------------------------------------------------------
+data:
+  # سياسة "البيانات الطازجة"
+  freshness_threshold_sec: 60
+  
+  # المصادر المعتمدة
+  collectors:
+    binance:
+      enabled: true
+      mode: "hybrid" # WebSocket (Live) + REST (History)
+      symbols: ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT"]
+      
+    news_aggregator:
+      enabled: true
+      filter_file: "config/data/ingestion_filters.json" # [LINKED FILE]
+      update_interval_sec: 300
+
+# -----------------------------------------------------------------------------
+# 6. SHIELD & SECURITY (جهاز المناعة)
+# -----------------------------------------------------------------------------
+shield:
+  # قاطع الدائرة (Circuit Breaker)
+  # يمنع النظام من حرق الأموال إذا حدث خطأ متكرر
+  circuit_breaker:
+    enabled: true
+    max_consecutive_errors: 5    # 5 أخطاء = إيقاف مؤقت
+    cool_down_seconds: 60        # استراحة دقيقة
+    
+  # سياسة الصندوق الأسود (Blackbox)
+  forensics:
+    enabled: true
+    policy_file: "config/security/blackbox_policy.yaml" # [LINKED FILE]
+    redact_sensitive_data: true
