@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "scenario_id": "SCN_BLACK_SWAN_003",
+    "name": "The Stablecoin Collapse (Systemic Failure)",
+    "description": "Simulates a catastrophic de-pegging of the Quote Currency (USDT) combined with extreme exchange latency and API outages. Tests 'Quote Risk' detection and Emergency Shutdown.",
+    "difficulty": "GOD_MODE",
+    "author": "Alpha Sentinel Team",
+    "created_at": "2026-02-02T16:45:00Z"
+  },
+  "configuration": {
+    "asset_pair": "BTC/USDT",
+    "initial_price": 50000.00,
+    "quote_currency_peg": 1.00,
+    "latency_simulation_ms": 50
+  },
+  "expected_outcomes": {
+    "trading_halted_immediately": true,
+    "quote_currency_risk_detected": true,
+    "safe_mode_activated": true,
+    "final_action": "EXIT_TO_FIAT_OR_HOLD_BTC"
+  },
+  "timeline_events": [
+    {
+      "time_offset_ms": 0,
+      "type": "MARKET_STATE",
+      "data": {
+        "btc_price": 50000.00,
+        "usdt_peg": 1.00,
+        "global_sentiment": "NEUTRAL",
+        "note": "Market is calm before the storm."
+      }
+    },
+    {
+      "time_offset_ms": 5000,
+      "type": "NEWS_SHOCK",
+      "data": {
+        "source": "GLOBAL_NEWS_FEED",
+        "headline": "MAJOR REGULATORY CRACKDOWN ON STABLECOIN ISSUERS",
+        "sentiment_score": -0.99,
+        "note": "Bad news hits. Volatility spikes immediately."
+      }
+    },
+    {
+      "time_offset_ms": 10000,
+      "type": "PEG_INSTABILITY",
+      "data": {
+        "usdt_price_usd": 0.98,
+        "btc_price_usdt": 51020.00,
+        "btc_price_usd": 49000.00,
+        "note": "USDT slips. BTC/USDT price artificially rises while real value drops. Engine must detect this discrepancy via Oracle."
+      }
+    },
+    {
+      "time_offset_ms": 15000,
+      "type": "MASSIVE_DEPEG",
+      "data": {
+        "usdt_price_usd": 0.85,
+        "spread_percent": 5.0,
+        "note": "USDT collapses to $0.85. Panic selling everywhere."
+      }
+    },
+    {
+      "time_offset_ms": 20000,
+      "type": "INFRASTRUCTURE_FAIL",
+      "data": {
+        "api_response_code": 503,
+        "error_message": "Service Unavailable - Overload",
+        "latency_ms": 5000,
+        "note": "Exchange goes offline due to panic load. Engine is blind."
+      }
+    },
+    {
+      "time_offset_ms": 30000,
+      "type": "PARTIAL_RECOVERY_TRAP",
+      "data": {
+        "api_response_code": 200,
+        "usdt_price_usd": 0.90,
+        "note": "Exchange back online, but peg is still broken. Engine MUST NOT resume buying."
+      }
+    },
+    {
+      "time_offset_ms": 40000,
+      "type": "SYSTEM_CHECK",
+      "data": {
+        "check_target": "RISK_ENGINE",
+        "expected_state": "LOCKDOWN",
+        "reason": "QUOTE_CURRENCY_FAILURE",
+        "note": "Verify that the system identified USDT as the risk, not BTC."
+      }
+    }
+  ]
+}

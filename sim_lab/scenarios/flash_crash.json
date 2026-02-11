@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "scenario_id": "SCN_CRASH_001",
+    "name": "The Void Drop (Flash Crash Simulation)",
+    "description": "Simulates a catastrophic 90% price drop in 5 seconds followed by a liquidity vacuum. Tests Circuit Breakers and Stop-Loss Slippage.",
+    "difficulty": "EXTREME",
+    "author": "Alpha Sentinel Team",
+    "created_at": "2026-02-02T14:00:00Z"
+  },
+  "configuration": {
+    "asset_pair": "BTC/USDT",
+    "initial_price": 60000.00,
+    "latency_simulation_ms": 50,
+    "packet_loss_ratio": 0.05
+  },
+  "expected_outcomes": {
+    "circuit_breaker_triggered": true,
+    "max_drawdown_allowed_percent": 15.0,
+    "system_status_after_crash": "HALTED",
+    "positions_liquidated": false
+  },
+  "timeline_events": [
+    {
+      "time_offset_ms": 0,
+      "type": "MARKET_STATE",
+      "data": {
+        "price": 60000.00,
+        "spread": 10.0,
+        "liquidity_depth": "HIGH",
+        "note": "Market is stable."
+      }
+    },
+    {
+      "time_offset_ms": 1000,
+      "type": "ORDER_BOOK_UPDATE",
+      "data": {
+        "bid_volume": 500.0,
+        "ask_volume": 500.0,
+        "price": 59950.00,
+        "note": "Minor volatility starts."
+      }
+    },
+    {
+      "time_offset_ms": 2500,
+      "type": "MASSIVE_SELL_OFF",
+      "data": {
+        "price": 55000.00,
+        "volume": 5000.0,
+        "note": "Whale dumps 5000 BTC. Price drops 8% instantly."
+      }
+    },
+    {
+      "time_offset_ms": 3000,
+      "type": "LIQUIDITY_VACUUM",
+      "data": {
+        "bids_removed_percent": 100,
+        "price": 45000.00,
+        "spread": 2000.0,
+        "note": "Order book bids disappear. Spread widens massively. IDS should flag this."
+      }
+    },
+    {
+      "time_offset_ms": 3500,
+      "type": "FREE_FALL",
+      "data": {
+        "price": 12000.00,
+        "volume": 200.0,
+        "note": "Price collapses to $12k (-80%). Circuit Breaker MUST act before this tick is processed."
+      }
+    },
+    {
+      "time_offset_ms": 5000,
+      "type": "DEAD_CAT_BOUNCE",
+      "data": {
+        "price": 35000.00,
+        "volume": 1000.0,
+        "note": "Price snaps back up. System should remain halted until manual override."
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+// Microsecond Pulse
+
+// =================================================================
+// ALPHA SOVEREIGN ORGANISM - ATOMIC HEARTBEAT SCHEMA
+// =================================================================
+// File: schemas/flatbuffers/heartbeat.fbs
+// Status: PRODUCTION (Microsecond Precision)
+// Pillar: Stability & Resilience (الركيزة: الاستقرار والصمود)
+// Forensic Purpose: إرسال إشارات حياة دورية عالية السرعة للتأكد من أن المحرك لم يتجمد (Deadlock Detection).
+// =================================================================
+
+namespace alpha.engine.v1;
+
+// -----------------------------------------------------------------
+// 1. حالة النظام (SYSTEM STATE)
+// -----------------------------------------------------------------
+
+enum SystemState : byte {
+  UNKNOWN = 0,
+  BOOTING = 1,          // النظام يقلع (لم يصبح جاهزاً بعد).
+  READY_IDLE = 2,       // جاهز وينتظر الأوامر (Idle).
+  PROCESSING = 3,       // مشغول بمعالجة البيانات (Normal Load).
+  HEAVY_LOAD = 4,       // ضغط عالي (High Load) - تحذير.
+  SHUTTING_DOWN = 5,    // في طور الإغلاق.
+  PANIC_MODE = 6        // وضع الذعر (حدث خطأ فادح).
+}
+
+// -----------------------------------------------------------------
+// 2. جدول نبض القلب (HEARTBEAT TABLE)
+// -----------------------------------------------------------------
+
+table Heartbeat {
+  // معرف المكون المرسل (مثال: "Matching_Engine_Core_1").
+  component_id: string;
+
+  // توقيت الإرسال بدقة النانو ثانية.
+  // يتم مقارنته بوقت الوصول لاكتشاف أي تأخير في الذاكرة المشتركة.
+  timestamp_nanos: long;
+
+  // رقم التسلسل (Sequence ID).
+  // إذا فقدنا رقم 100 ووصلنا 101، نعلم أن هناك "Drop" في النظام.
+  sequence_id: ulong;
+
+  // الحالة الحالية للمكون.
+  state: SystemState;
+
+  // مدة الدورة الأخيرة (Loop Duration).
+  // هذا أهم رقم للمبرمج: كم استغرق المحرك لإنهاء دورة كاملة؟
+  // إذا تجاوز هذا الرقم 1 مللي ثانية في HFT، فهناك مشكلة كود (Performance Bug).
+  last_cycle_duration_nanos: ulong;
+
+  // عدد الكائنات الحية في الذاكرة (للكشف عن Memory Leaks).
+  resident_memory_size_mb: float;
+  
+  // حرارة المعالج (اختياري، إذا كان متاحاً).
+  cpu_temperature_c: float;
+}
+
+// تحديد الجذر
+root_type Heartbeat;

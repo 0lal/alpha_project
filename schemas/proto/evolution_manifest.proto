@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package alpha.evolution;
+
+// =============================================================================
+// ALPHA SOVEREIGN - GENETIC EVOLUTION PROTOCOL
+// =============================================================================
+// هذا الملف يعرف هيكل "حزم التطور" التي يرسلها العقل للمحرك.
+// الهدف: السماح للنظام بتحديث نفسه (Self-Patching) بطريقة آمنة ومراقبة.
+// =============================================================================
+
+// نوع الطفرة الجينية (ما طبيعة التغيير؟)
+enum MutationType {
+  UNKNOWN_MUTATION = 0;
+  
+  // تعديل بارامترات رقمية (مثل نسبة المخاطرة، الرافعة المالية)
+  PARAMETER_TUNING = 1;
+  
+  // تحديث منطق برمجي (كود بايثون جديد أو استراتيجية جديدة)
+  LOGIC_UPDATE = 2;
+  
+  // تحديث أوزان الشبكة العصبية (Model Weights)
+  MODEL_WEIGHTS = 3;
+  
+  // إصلاح طارئ (يتم تطبيقه فوراً دون انتظار الدورة التالية)
+  HOTFIX_SECURITY = 4;
+}
+
+// البيئة المستهدفة للتغيير
+enum TargetRuntime {
+  RUNTIME_UNSPECIFIED = 0;
+  PYTHON_BRAIN = 1;       // التغيير يخص العقل
+  RUST_ENGINE = 2;        // التغيير يخص المحرك (نادراً ما يحدث ذاتياً)
+  STRATEGY_SANDBOX = 3;   // التغيير يخص استراتيجية معزولة
+}
+
+// تعريف "جين" واحد (تغيير ذري واحد)
+message GeneticMutation {
+  string key = 1;              // اسم المتغير أو الملف (e.g., "rsi_threshold", "strategy_v2.py")
+  MutationType type = 2;       // نوع التغيير
+  bytes new_value = 3;         // القيمة الجديدة (Raw Bytes or Serialized Data)
+  string previous_hash = 4;    // هاش القيمة القديمة (لضمان التسلسل الصحيح)
+  string checksum_sha256 = 5;  // للتحقق من سلامة البيانات المنقولة
+}
+
+// المانيفست الكامل (حزمة التطور)
+message EvolutionManifest {
+  // الهوية الزمنية
+  uint64 generation_id = 1;    // رقم الجيل (Gen 1, Gen 2...)
+  int64 timestamp_utc = 2;     // وقت إنشاء التحديث
+  
+  // المحتوى الجيني
+  repeated GeneticMutation mutations = 3; // قائمة التغييرات
+  TargetRuntime target_env = 4;           // أين سيتم تطبيق هذا التحديث؟
+  
+  // مبررات التطور (Explainability)
+  double predicted_fitness = 5; // التحسن المتوقع في الأداء (0.0 - 1.0)
+  string reasoning_summary = 6; // نص يشرح لماذا قرر الـ AI هذا التغيير (للبشر)
+  
+  // الأمان والسيادة
+  bytes author_signature = 7;   // توقيع العقل (Brain's Private Key Signature)
+  bool require_human_ack = 8;   // هل يتطلب موافقة بشرية قبل التطبيق؟
+  
+  // استراتيجية التراجع
+  bool auto_rollback_on_fail = 9; // التراجع التلقائي إذا فشل اختبار الصحة
+}
+
+// رسالة حالة التطور (رد المحرك على العقل)
+message EvolutionStatus {
+  uint64 generation_id = 1;
+  bool applied_successfully = 2;
+  string error_message = 3;
+  int64 execution_time_ms = 4;
+}

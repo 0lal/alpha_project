@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package alpha.core.v1;
+option go_package = "github.com/alpha/core/unified";
+
+// تعريف خدمة التحكم في المحرك
+service EngineControl {
+  // دالة تنفيذ أمر جديد
+  rpc ExecuteOrder (ExecuteOrderRequest) returns (ExecuteOrderResponse);
+}
+
+// طلب تنفيذ أمر
+message ExecuteOrderRequest {
+  string order_id = 1;
+  string strategy_id = 2;
+  string symbol = 3;
+  string exchange = 4;
+  int32 side = 5;       // 0 = Buy, 1 = Sell
+  int32 order_type = 6; // 0 = Market, 1 = Limit
+  string quantity = 7;  // Decimal as string
+  string price = 8;     // Decimal as string (empty for Market)
+}
+
+// رد التنفيذ
+message ExecuteOrderResponse {
+  string order_id = 1;
+  string status = 2;
+  string filled_qty = 3;
+  string message = 4;
+}

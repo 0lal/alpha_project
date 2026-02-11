@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # --- العضلات: محرك التداول (Rust Engine) ---
+  alpha-engine:
+    build:
+      context: .
+      dockerfile: engine/Dockerfile
+    container_name: alpha_engine_kernel
+    restart: always
+    volumes:
+      - ./engine:/app/engine
+      - ./shared:/app/shared
+    networks:
+      - alpha-internal
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+
+  # --- العقل: مصفوفة الذكاء الاصطناعي (Python Brain) ---
+  alpha-brain:
+    build:
+      context: .
+      dockerfile: brain/Dockerfile
+    container_name: alpha_brain_matrix
+    depends_on:
+      - alpha-db
+      - alpha-engine
+    env_file:
+      - .env
+    volumes:
+      - ./brain:/app/brain
+      - ./shared:/app/shared
+    networks:
+      - alpha-internal
+    command: python brain/main.py
+
+  # --- الذاكرة: قاعدة البيانات السيادية (PostgreSQL + Vector) ---
+  alpha-db:
+    image: ankane/pgvector:latest # نسخة متطورة لدعم الذاكرة الدلالية
+    container_name: alpha_vault_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: alpha_sovereign
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-vault_key_99}
+    volumes:
+      - alpha-db-data:/var/lib/postgresql/data
+    networks:
+      - alpha-internal
+
+  # --- الواجهة: قمرة القيادة (Flutter Web/API Bridge) ---
+  alpha-ui:
+    build:
+      context: ./ui
+    container_name: alpha_cockpit
+    ports:
+      - "8080:80"
+    depends_on:
+      - alpha-brain
+    networks:
+      - alpha-internal
+
+# --- شبكة الاتصال السيادية (The Nexus Network) ---
+networks:
+  alpha-internal:
+    driver: bridge
+    labels:
+      com.alpha.network: "sovereign-isolation"
+
+# --- التخزين الدائم (Persistent Memory) ---
+volumes:
+  alpha-db-data:
+    driver: local

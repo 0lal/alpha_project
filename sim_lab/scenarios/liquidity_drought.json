@@ -1,0 +1,82 @@
+{
+  "_meta": {
+    "scenario_id": "SCN_DROUGHT_002",
+    "name": "The Sahara Spread (Liquidity Crisis)",
+    "description": "Simulates a sudden withdrawal of market makers. Order book thins out, and spread widens by 50x. Tests Slippage Protection and Strategy Adaptability.",
+    "difficulty": "HIGH",
+    "author": "Alpha Sentinel Team",
+    "created_at": "2026-02-02T15:30:00Z"
+  },
+  "configuration": {
+    "asset_pair": "ETH/USDT",
+    "initial_price": 3000.00,
+    "latency_simulation_ms": 20,
+    "fee_tier": "VIP_0"
+  },
+  "expected_outcomes": {
+    "market_orders_rejected": true,
+    "strategy_switch_triggered": "PASSIVE_LIQUIDITY_HUNTING",
+    "max_slippage_tolerance_percent": 0.1,
+    "warnings_generated": ["LOW_LIQUIDITY", "WIDE_SPREAD"]
+  },
+  "timeline_events": [
+    {
+      "time_offset_ms": 0,
+      "type": "MARKET_STATE",
+      "data": {
+        "best_bid": 2999.90,
+        "best_ask": 3000.10,
+        "spread_percent": 0.006,
+        "volume_24h": "HIGH",
+        "note": "Normal market. Tight spread ($0.20)."
+      }
+    },
+    {
+      "time_offset_ms": 2000,
+      "type": "MAKER_WITHDRAWAL",
+      "data": {
+        "action": "REMOVE_TOP_10_LEVELS",
+        "remaining_volume": 0.5,
+        "note": "Market Makers pull their orders. Depth evaporates."
+      }
+    },
+    {
+      "time_offset_ms": 4000,
+      "type": "SPREAD_WIDENING",
+      "data": {
+        "best_bid": 2980.00,
+        "best_ask": 3020.00,
+        "spread_percent": 1.33,
+        "note": "Spread explodes to $40.00. Any Market Order now guarantees instant loss."
+      }
+    },
+    {
+      "time_offset_ms": 6000,
+      "type": "TRAP_CANDLE",
+      "data": {
+        "price": 3050.00,
+        "volume": 0.01,
+        "note": "Price jumps up on tiny volume (Fakeout). Smart agents should ignore this low-confidence move."
+      }
+    },
+    {
+      "time_offset_ms": 8000,
+      "type": "ADAPTATION_TEST",
+      "data": {
+        "trigger": "ATTEMPT_BUY",
+        "expected_behavior": "USE_LIMIT_ORDER_ONLY",
+        "note": "Agent attempts to buy. Engine MUST convert Market Order to Limit Order or Reject."
+      }
+    },
+    {
+      "time_offset_ms": 12000,
+      "type": "LIQUIDITY_RETURN",
+      "data": {
+        "best_bid": 3005.00,
+        "best_ask": 3006.00,
+        "spread_percent": 0.03,
+        "note": "Liquidity slowly returns. Agents can resume aggressive strategies."
+      }
+    }
+  ]
+}
