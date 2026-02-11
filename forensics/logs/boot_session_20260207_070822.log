@@ -1,0 +1,46 @@
+2026-02-07 07:08:22,275 | INFO | [BOOTLOADER] 📍 System Root Anchored at: F:\win10\Linux\alpha_project
+2026-02-07 07:08:22,275 | INFO | [BOOTLOADER] 🛡️ Initiating Alpha Sovereign Bootstrap Sequence...
+2026-02-07 07:08:22,876 | INFO | [BOOTLOADER] 📦 Loading Core Modules...
+2026-02-07 07:08:25,873 | INFO | [BOOTLOADER] 🧠 Initializing Neural Core (StateStore)...
+2026-02-07 07:08:25,873 | INFO | [BOOTLOADER] bridge Initializing Diplomatic Channels (Bridge)...
+2026-02-07 07:08:25,874 | WARNING | [BOOTLOADER] ⚠️ Bridge operating in OFFLINE/SIMULATION mode.
+2026-02-07 07:08:25,874 | INFO | [BOOTLOADER] 🖥️ Constructing Sovereign Cockpit (UI)...
+2026-02-07 07:08:25,874 | INFO | [BOOTLOADER] 🚀 Sovereign Worker Pool Active | Capacity: 11 Threads
+2026-02-07 07:08:25,878 | INFO | [BOOTLOADER] 🔧 Sovereign Worker Pool initialized successfully.
+2026-02-07 07:08:25,882 | WARNING | [BOOTLOADER] ⚠️ Icon missing: home.svg. Using text fallback.
+2026-02-07 07:08:25,883 | WARNING | [BOOTLOADER] ⚠️ Icon missing: brain.svg. Using text fallback.
+2026-02-07 07:08:25,883 | WARNING | [BOOTLOADER] ⚠️ Icon missing: activity.svg. Using text fallback.
+2026-02-07 07:08:25,885 | WARNING | [BOOTLOADER] ⚠️ Icon missing: vault.svg. Using text fallback.
+2026-02-07 07:08:25,885 | WARNING | [BOOTLOADER] ⚠️ Icon missing: settings.svg. Using text fallback.
+2026-02-07 07:08:25,886 | ERROR | [BOOTLOADER] ❌ Failed to load component AlphaChatView: cannot import name 'WorkerPoolManager' from 'ui.core.integrations.workers' (F:\win10\Linux\alpha_project\ui\core\integrations\workers.py)
+2026-02-07 07:08:26,885 | CRITICAL | [BOOTLOADER] ⚠️ SECTOR FAILURE: Dashboard Sector
+name 'QGroupBox' is not defined
+Traceback (most recent call last):
+  File "F:\win10\Linux\alpha_project\ui\views\main_cockpit.py", line 132, in _safe_load_sector
+    return factory_func()
+  File "F:\win10\Linux\alpha_project\ui\views\main_cockpit.py", line 103, in <lambda>
+    lambda: AlphaDashboardView(self.bridge, self.state_store),
+  File "F:\win10\Linux\alpha_project\ui\views\tactical\dashboard_view.py", line 39, in __init__
+    self._init_ui()
+  File "F:\win10\Linux\alpha_project\ui\views\tactical\dashboard_view.py", line 70, in _init_ui
+    self.health_frame = QGroupBox("📡 SYSTEM DATA PIPELINES")
+NameError: name 'QGroupBox' is not defined
+
+2026-02-07 07:08:26,908 | INFO | [BOOTLOADER] 📡 Global Data Pulse established across Cockpit.
+2026-02-07 07:08:26,932 | INFO | [BOOTLOADER] 🎨 Sovereign Theme applied successfully.
+2026-02-07 07:08:27,207 | INFO | [BOOTLOADER] 🚀 [SUCCESS] ALPHA SOVEREIGN IS ONLINE
+2026-02-07 07:08:37,582 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> STRATEGIC
+2026-02-07 07:08:37,583 | INFO | [BOOTLOADER] ⚓ Navigating to: strategic
+2026-02-07 07:08:38,686 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> TACTICAL
+2026-02-07 07:08:38,687 | INFO | [BOOTLOADER] ⚓ Navigating to: tactical
+2026-02-07 07:08:39,454 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> VAULT
+2026-02-07 07:08:39,454 | INFO | [BOOTLOADER] ⚓ Navigating to: vault
+2026-02-07 07:08:39,983 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> SETTINGS
+2026-02-07 07:08:39,984 | INFO | [BOOTLOADER] ⚓ Navigating to: settings
+2026-02-07 07:08:40,671 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> STRATEGIC
+2026-02-07 07:08:40,672 | INFO | [BOOTLOADER] ⚓ Navigating to: strategic
+2026-02-07 07:08:43,182 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> STRATEGIC
+2026-02-07 07:08:43,183 | INFO | [BOOTLOADER] ⚓ Navigating to: strategic
+2026-02-07 07:08:43,366 | INFO | [BOOTLOADER] 🧭 Navigation Switch: -> STRATEGIC
+2026-02-07 07:08:43,366 | INFO | [BOOTLOADER] ⚓ Navigating to: strategic
+2026-02-07 07:08:45,670 | INFO | [BOOTLOADER] 🚪 Saving session state and shutting down...

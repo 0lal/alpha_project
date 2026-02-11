@@ -1,0 +1,2 @@
+2026-02-06 17:32:44,876 | CRITICAL | [Alpha.Master] ❌ Dependency Error: No module named 'ui.components.molecules.side_nav_bar'. Check your virtual environment.
+2026-02-06 17:32:44,876 | ERROR | [Alpha.Master] ⚠️ Alpha System terminated with exit code: 1

@@ -1,0 +1,88 @@
+2026-02-05T10:19:58.010980Z  INFO main ThreadId(01) src/utils/logger.rs:88: LOGGER: Initialized non-blocking logging system at ./logs/alpha_core.log
+2026-02-05T10:19:58.013094Z  INFO main ThreadId(01) src/main.rs:18: 🚀 ALPHA ENGINE: Boot sequence initiated...
+2026-02-05T10:19:58.013097Z  INFO main ThreadId(01) src/main.rs:19:    - Mode: High-Frequency Production
+2026-02-05T10:19:58.013142Z  INFO main ThreadId(01) src/main.rs:25: ✅ CPU Affinity applied. Main thread pinned to Core 0.
+2026-02-05T10:19:58.013146Z  INFO main ThreadId(01) src/main.rs:29: 🛡️ Initializing Risk Engine...
+2026-02-05T10:19:58.013147Z  INFO main ThreadId(01) src/main.rs:32: ⚙️ Initializing Matching Engine...
+2026-02-05T10:19:58.013150Z  INFO main ThreadId(01) src/main.rs:39: 🌐 ALPHA ENGINE: All systems GREEN. Listening on 0.0.0.0:50051
+2026-02-05T10:55:27.178239Z  WARN main ThreadId(01) src/main.rs:52: 
+🛑 SHUTDOWN SIGNAL RECEIVED: Initiating emergency landing protocols...
+2026-02-05T10:55:27.178303Z  INFO main ThreadId(01) src/main.rs:59: ALPHA ENGINE: Shutdown Complete.
+2026-02-05T11:48:08.313901Z  INFO main ThreadId(01) src/utils/logger.rs:88: LOGGER: Initialized non-blocking logging system at ./logs/alpha_core.log
+2026-02-05T11:48:08.313913Z  INFO main ThreadId(01) src/main.rs:33: 🚀 ALPHA ENGINE: Boot sequence initiated...
+2026-02-05T11:48:08.313914Z  INFO main ThreadId(01) src/main.rs:34:    - Version: 1.0.0 (Sovereign Edition)
+2026-02-05T11:48:08.313915Z  INFO main ThreadId(01) src/main.rs:35:    - Mode: High-Frequency Production
+2026-02-05T11:48:08.315337Z  INFO main ThreadId(01) src/main.rs:42: ✅ CPU Affinity applied. Main thread pinned to Core 0.
+2026-02-05T11:48:08.315356Z  INFO main ThreadId(01) src/main.rs:48: 🛡️ Initializing Risk Engine...
+2026-02-05T11:48:08.315359Z  INFO main ThreadId(01) src/main.rs:53: ⚙️ Initializing Matching Engine...
+2026-02-05T11:48:08.315362Z  INFO main ThreadId(01) src/main.rs:64: 🌐 ALPHA ENGINE: gRPC Server STARTING on 0.0.0.0:50051
+2026-02-05T11:48:08.315364Z  INFO main ThreadId(01) src/main.rs:65:    -> Waiting for Brain (Python) connection...
+2026-02-05T12:16:02.505682Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293762497987
+2026-02-05T12:16:06.234139Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293766232766
+2026-02-05T12:16:09.849235Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293769847750
+2026-02-05T12:16:12.071416Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293772070215
+2026-02-05T12:16:15.971501Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293775970157
+2026-02-05T12:16:18.979335Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293778978129
+2026-02-05T12:16:21.686487Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293781684568
+2026-02-05T12:16:24.599730Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293784598518
+2026-02-05T12:16:26.756907Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293786755553
+2026-02-05T12:16:28.900071Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293788898886
+2026-02-05T12:16:32.874923Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293792873723
+2026-02-05T12:16:35.046188Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293795044776
+2026-02-05T12:16:37.183369Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293797182157
+2026-02-05T12:16:39.970165Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293799968898
+2026-02-05T12:16:42.756915Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293802755610
+2026-02-05T12:16:46.675840Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293806674410
+2026-02-05T12:16:50.008755Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293810007216
+2026-02-05T12:16:53.162859Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293813161526
+2026-02-05T12:16:55.762490Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293815761131
+2026-02-05T12:16:58.030629Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293818029303
+2026-02-05T12:17:00.180889Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293820179680
+2026-02-05T12:17:03.996558Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293823995107
+2026-02-05T12:17:07.218180Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293827216941
+2026-02-05T12:17:11.089406Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293831088108
+2026-02-05T12:17:13.379556Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293833378368
+2026-02-05T12:17:16.828696Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293836826519
+2026-02-05T12:17:18.982533Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293838981345
+2026-02-05T12:17:21.979197Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293841978005
+2026-02-05T12:17:24.656780Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293844655540
+2026-02-05T12:17:28.125507Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293848124126
+2026-02-05T12:17:31.429168Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293851427700
+2026-02-05T12:17:33.788385Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293853787175
+2026-02-05T12:17:37.482791Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293857481544
+2026-02-05T12:17:40.714557Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293860712609
+2026-02-05T12:17:44.003591Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293864002459
+2026-02-05T12:17:46.691110Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293866689740
+2026-02-05T12:17:50.055593Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293870054303
+2026-02-05T12:17:53.233773Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293873232424
+2026-02-05T12:17:55.853103Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293875851099
+2026-02-05T12:17:59.699784Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293879698622
+2026-02-05T12:18:02.978783Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293882977608
+2026-02-05T12:18:06.116900Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293886115700
+2026-02-05T12:18:08.966710Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293888965219
+2026-02-05T12:18:12.544073Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293892542820
+2026-02-05T12:18:15.816518Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293895814679
+2026-02-05T12:18:19.503526Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293899502341
+2026-02-05T12:18:22.068945Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293902067698
+2026-02-05T12:18:24.845515Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293904844316
+2026-02-05T12:18:28.012598Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293908011384
+2026-02-05T12:18:31.150633Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293911149462
+2026-02-05T12:18:34.221349Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293914220197
+2026-02-05T12:18:36.914652Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293916913469
+2026-02-05T12:18:39.024549Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293919023329
+2026-02-05T12:18:41.819240Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293921817900
+2026-02-05T12:18:44.867999Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293924866745
+2026-02-05T12:18:46.901290Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293926900102
+2026-02-05T12:18:49.898987Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293929897746
+2026-02-05T12:18:52.588832Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293932587532
+2026-02-05T12:18:54.849145Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293934847531
+2026-02-05T12:18:56.999279Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293936998103
+2026-02-05T12:18:59.720591Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293939719387
+2026-02-05T12:19:02.488480Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293942486917
+2026-02-05T12:19:06.231518Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293946230124
+2026-02-05T12:19:08.342490Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293948341322
+2026-02-05T12:19:11.545661Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293951544132
+2026-02-05T12:19:15.468599Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293955467258
+2026-02-05T12:19:18.737970Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293958736644
+2026-02-05T12:19:20.807989Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293960806733
+2026-02-05T12:19:24.419572Z  INFO tokio-runtime-worker ThreadId(02) src/api/mod.rs:37: API: Received Order Request ID: 1770293964418262

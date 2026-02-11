@@ -1,0 +1,141 @@
+# =================================================================
+# ALPHA SOVEREIGN - ENGINE MANIFEST (RUST)
+# =================================================================
+# Component: engine/Cargo.toml
+# Status: PRODUCTION (High-Frequency Optimized)
+# =================================================================
+
+[package]
+name = "alpha_engine"
+version = "0.1.0"
+edition = "2021"
+authors = ["Alpha Sovereign Team <admin@alpha-system.local>"]
+description = "High-frequency execution engine and risk gateway for Alpha Sovereign."
+publish = false
+default-run = "alpha_core"
+
+[[bin]]
+name = "alpha_core"
+path = "src/main.rs"
+
+[[bench]]
+name = "matching_bench"
+harness = false
+
+# =================================================================
+# 1. النواة غير المتزامنة (ASYNC CORE)
+# =================================================================
+[dependencies]
+tokio = { version = "1.32", features = ["full", "tracing", "signal"] }
+futures = "0.3"
+async-stream = "0.3"
+async-trait = "0.1"
+
+# =================================================================
+# 2. الرياضيات والدقة المالية (FINANCIAL PRECISION)
+# =================================================================
+rust_decimal = { version = "1.32", features = ["serde-float", "maths"] }
+rust_decimal_macros = "1.32"
+
+# =================================================================
+# 3. الاتصال والبروتوكولات (COMMUNICATION & RPC)
+# =================================================================
+tonic = "0.10"
+prost = "0.12"
+prost-types = "0.12"
+tmq = "0.4"
+tokio-tungstenite = { version = "0.20", features = ["native-tls"] }
+url = "2.4"
+
+# [مضاف] FlatBuffers لنقل البيانات فائق السرعة
+flatbuffers = "23.5.26"
+
+# =================================================================
+# 4. التزامن والسرعة القصوى (CONCURRENCY & SPEED)
+# =================================================================
+crossbeam = "0.8"
+parking_lot = "0.12"
+rayon = "1.8"
+
+# =================================================================
+# 5. التعامل مع العتاد والذاكرة (HARDWARE & MEMORY)
+# =================================================================
+core_affinity = "0.8"
+memmap2 = "0.9"
+sys-info = "0.9"
+
+# Jemalloc (Only on Linux/macOS)
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = "0.5"
+
+# =================================================================
+# 6. بيئة العزل والحماية (SHIELD / SANDBOX)
+# =================================================================
+wasmtime = "14.0"
+wasi-common = "14.0"
+anyhow = "1.0"
+
+# =================================================================
+# 7. التسلسل والمعالجة (SERIALIZATION)
+# =================================================================
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_json = "1.0"
+bincode = "1.3"
+simd-json = "0.13"
+
+# =================================================================
+# 8. التشفير والأمان (CRYPTOGRAPHY)
+# =================================================================
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+pqcrypto-kyber = "0.8"
+pqcrypto-traits = "0.3.5"
+zeroize = { version = "1.7", features = ["derive"] }
+
+# =================================================================
+# 9. المراقبة والتحليل الجنائي (OBSERVABILITY)
+# =================================================================
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+thiserror = "1.0"
+
+# =================================================================
+# 10. أدوات مساعدة (UTILITIES)
+# =================================================================
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.4", features = ["v4", "serde"] }
+config = "0.13"
+notify = "6.1"
+rand = "0.8"
+dotenv = "0.15"
+ipnetwork = { version = "0.20", features = ["serde"] }
+
+# =================================================================
+# تبعيات البناء (BUILD DEPENDENCIES)
+# =================================================================
+[build-dependencies]
+tonic-build = "0.10"
+cc = "1.0"
+
+# =================================================================
+# تبعيات التطوير والاختبار (DEV DEPENDENCIES)
+# =================================================================
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+# =================================================================
+# إعدادات المترجم (PROFILE SETTINGS)
+# =================================================================
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = 'abort'
+strip = true
+
+[profile.bench]
+opt-level = 3
+lto = true
+codegen-units = 1
