@@ -1,0 +1,117 @@
+{
+  "_header_info": {
+    "Project": "ALPHA SOVEREIGN",
+    "Component": "data/governance/schema_registry.json",
+    "Responsibility": "تسجيل إصدارات العقود البرمجية للبيانات لضمان التوافق (Governance Pillar)",
+    "Forensic_Impact": "يمنع تلوث النظام ببيانات غير مطابقة للمواصفات، ويعمل كمرجع للتحقق من صحة الرسائل.",
+    "Last_Updated": "2026-02-01T15:00:00Z"
+  },
+  "registry_config": {
+    "enforce_strict_mode": true,
+    "reject_unknown_fields": true
+  },
+  "schemas": {
+    "market.tick.v1": {
+      "description": "النبضة السعرية القياسية الموحدة",
+      "status": "ACTIVE",
+      "required_fields": [
+        "time",
+        "symbol",
+        "price",
+        "quantity",
+        "source"
+      ],
+      "field_definitions": {
+        "time": "float (Unix Timestamp UTC)",
+        "symbol": "string (UPPERCASE, e.g. BTCUSDT)",
+        "price": "float (must be > 0)",
+        "quantity": "float (must be >= 0)",
+        "source": "string (enum: BINANCE, KRAKEN, DYDX)",
+        "is_anomalous": "boolean (default: false)"
+      }
+    },
+    "market.candle.v1": {
+      "description": "شمعة التداول المجمعة (OHLCV)",
+      "status": "ACTIVE",
+      "required_fields": [
+        "start_time",
+        "close_time",
+        "symbol",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "field_definitions": {
+        "start_time": "float (Unix Timestamp)",
+        "close_time": "float (Unix Timestamp)",
+        "symbol": "string",
+        "open": "float",
+        "high": "float",
+        "low": "float",
+        "close": "float",
+        "volume": "float",
+        "vwap": "float (optional)"
+      }
+    },
+    "trade.order.request.v1": {
+      "description": "طلب تنفيذ صفقة جديد صادر من المحرك",
+      "status": "ACTIVE",
+      "required_fields": [
+        "request_id",
+        "symbol",
+        "side",
+        "type",
+        "quantity",
+        "strategy_ref"
+      ],
+      "field_definitions": {
+        "request_id": "uuid (string)",
+        "symbol": "string",
+        "side": "string (enum: BUY, SELL)",
+        "type": "string (enum: LIMIT, MARKET, STOP_LOSS)",
+        "quantity": "float",
+        "price": "float (required if type != MARKET)",
+        "strategy_ref": "string (Strategy Name)",
+        "risk_check_override": "boolean (default: false)"
+      }
+    },
+    "system.audit_log.v1": {
+      "description": "سجل التدقيق الجنائي",
+      "status": "ACTIVE",
+      "required_fields": [
+        "event_id",
+        "timestamp",
+        "actor",
+        "action",
+        "severity"
+      ],
+      "field_definitions": {
+        "event_id": "uuid",
+        "timestamp": "iso8601 string",
+        "actor": "string (User or System Component)",
+        "action": "string",
+        "severity": "string (enum: INFO, WARN, ERROR, CRITICAL)",
+        "meta_data": "object (JSON)"
+      }
+    },
+    "ai.signal.v1": {
+      "description": "إشارة التداول الصادرة من نماذج الذكاء الاصطناعي",
+      "status": "EXPERIMENTAL",
+      "required_fields": [
+        "model_id",
+        "symbol",
+        "prediction",
+        "confidence"
+      ],
+      "field_definitions": {
+        "model_id": "string",
+        "symbol": "string",
+        "prediction": "float (range: -1.0 to 1.0)",
+        "confidence": "float (range: 0.0 to 1.0)",
+        "features_snapshot": "array (float)"
+      }
+    }
+  }
+}

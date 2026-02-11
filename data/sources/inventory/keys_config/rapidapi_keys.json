@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "classification": "TOP SECRET",
+    "description": "RapidAPI Gateway Configuration - Multi-Service Aggregator",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:RAPID_GATEWAY_V1_SECURE",
+    "source_reference": "api/rapidapi .txt"
+  },
+  "credentials": {
+    "_comment": "المفتاح الرئيسي للبوابة. لا تضعه هنا مباشرة، استخدم متغيرات البيئة.",
+    "provider": "rapidapi",
+    "auth_header_key": "X-RapidAPI-Key",
+    "auth_header_host": "X-RapidAPI-Host",
+    "api_key_env_var": "RAPIDAPI_KEY"
+  },
+  "global_policy": {
+    "_comment": "سياسة الأمان العامة لكل الخدمات المرتبطة بهذا المفتاح.",
+    "timeout_seconds": 8,
+    "verify_ssl": true,
+    "stop_on_limit_reached": true,
+    "warning": "إذا تجاوزت الحد، سيتم إيقاف الطلبات فوراً لمنع الخصم المالي (Over-limit fees)."
+  },
+  "subscribed_services": {
+    "_comment": "قائمة الخدمات التي يستخدمها نظام Alpha عبر RapidAPI. يجب ضبط الحدود لكل واحدة بدقة.",
+    "yahoo_finance": {
+      "host": "yahoo-finance15.p.rapidapi.com",
+      "description": "بيانات مالية مساعدة (احتياطي لـ Alpha Vantage).",
+      "tier_limits": {
+        "requests_per_month": 500,
+        "requests_per_second": 5,
+        "reset_strategy": "monthly_subscription_date"
+      },
+      "usage_cost": "free",
+      "endpoints": {
+        "summary": "/market/get-summary",
+        "movers": "/market/get-movers"
+      }
+    },
+    "investing_com": {
+      "host": "investing-cryptocurrency-markets.p.rapidapi.com",
+      "description": "بيانات الكريبتو وتحليل المشاعر.",
+      "tier_limits": {
+        "requests_per_month": 200,
+        "requests_per_second": 2
+      },
+      "usage_cost": "free"
+    },
+    "bloomberg_market": {
+      "host": "bloomberg-market-and-financial-news.p.rapidapi.com",
+      "description": "أخبار وتحليلات بلومبيرغ (للطوارئ فقط).",
+      "tier_limits": {
+        "requests_per_month": 100,
+        "requests_per_second": 1
+      },
+      "usage_cost": "free"
+    }
+  },
+  "data_normalization": {
+    "_comment": "توحيد الردود لأن كل خدمة في RapidAPI لها شكل مختلف.",
+    "default_mapping": {
+      "price": ["last_price", "price", "regularMarketPrice"],
+      "change_pct": ["change_percent", "regularMarketChangePercent"],
+      "symbol": ["symbol", "ticker"],
+      "volume": ["volume", "regularMarketVolume"]
+    },
+    "error_handling": {
+      "on_429_too_many_requests": "DISABLE_SERVICE_FOR_REMAINDER_OF_CYCLE",
+      "on_403_forbidden": "FLAG_SUBSCRIPTION_EXPIRED"
+    }
+  },
+  "failover_routing": {
+    "_comment": "إذا فشلت RapidAPI، العودة للمزودين الأصليين.",
+    "yahoo_finance": "SWITCH_TO_ALPHA_VANTAGE",
+    "investing_com": "SWITCH_TO_TWELVE_DATA",
+    "bloomberg_market": "SWITCH_TO_CRYPTOPANIC"
+  }
+}

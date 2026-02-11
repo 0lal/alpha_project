@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "classification": "TOP SECRET",
+    "description": "SearXNG Meta-Search Engine - Financial Intelligence Gathering",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:SEARXNG_MULTI_NODE_V4",
+    "source_reference": "api/SearXNG .txt"
+  },
+  "connection_policy": {
+    "_comment": "إعدادات الاتصال الآمن. نستخدم POST لحماية محتوى البحث من الظهور في سجلات الشبكة.",
+    "method": "POST",
+    "timeout_seconds": 6,
+    "format": "json",
+    "verify_ssl": true
+  },
+  "instance_strategy": {
+    "_comment": "استراتيجية التوافر العالي. لا نعتمد على سيرفر واحد، بل قائمة من النخبة.",
+    "strategy_type": "ROUND_ROBIN_WITH_HEALTH_CHECK",
+    "active_pool": [
+      {
+        "url": "https://search.rhscz.eu",
+        "region": "EU",
+        "priority": 1,
+        "notes": "Slower but very high privacy score (A+)"
+      },
+      {
+        "url": "https://searx.be",
+        "region": "EU",
+        "priority": 2,
+        "notes": "Fast response, reliable for news"
+      },
+      {
+        "url": "https://searx.space",
+        "region": "GLOBAL",
+        "priority": 3,
+        "notes": "Fallback node"
+      }
+    ],
+    "health_check_interval_min": 60
+  },
+  "search_parameters": {
+    "_comment": "فلاتر البحث المخصصة لاستخراج المعلومات المالية النظيفة.",
+    "categories": [
+      "news",
+      "science",
+      "it",
+      "economy"
+    ],
+    "engines": [
+      "google",
+      "bing",
+      "duckduckgo",
+      "wikipedia",
+      "currency"
+    ],
+    "safe_search": 0,
+    "language": "all"
+  },
+  "financial_filters": {
+    "_comment": "قواعد تصفية النتائج لضمان الدقة (Forensic Filtering).",
+    "blocked_domains": [
+      "pinterest.com",
+      "instagram.com",
+      "tiktok.com",
+      "facebook.com"
+    ],
+    "required_keywords_logic": "OR",
+    "time_range_mapping": {
+      "REALTIME": "day",
+      "TRENDING": "week",
+      "RESEARCH": "month"
+    }
+  },
+  "usage_limits": {
+    "_comment": "الحدود التقنية لتجنب حظر الـ IP من السيرفرات العامة.",
+    "requests_per_second": 1,
+    "requests_per_hour": 300,
+    "cooldown_on_error_sec": 5
+  },
+  "data_normalization": {
+    "_comment": "توحيد مخرجات البحث لتتوافق مع نظام الذاكرة.",
+    "field_mapping": {
+      "title": "title",
+      "url": "source_url",
+      "content": "snippet",
+      "publishedDate": "timestamp",
+      "score": "relevance_score"
+    },
+    "default_confidence": 0.7
+  },
+  "failover_routing": {
+    "_comment": "ماذا نفعل إذا فشلت كل سيرفرات البحث؟",
+    "on_all_instances_down": "SWITCH_TO_GOOGLE_API_PAID",
+    "on_partial_failure": "ROTATE_TO_NEXT_INSTANCE"
+  }
+}

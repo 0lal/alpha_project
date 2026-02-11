@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "classification": "TOP SECRET",
+    "description": "Alpha Vantage Configuration - Multi-Key Rotation Enabled",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:ALPHA_V_ROTATION_STRATEGY_V9",
+    "source_reference": "api/حدود استخدام Alpha Vantage .txt"
+  },
+  "credentials": {
+    "_comment": "استراتيجية التدوير: النظام سيجرب المفاتيح بالترتيب. يتم جلب القيم من ملف .env",
+    "provider": "alpha_vantage",
+    "auth_type": "query_param",
+    "param_name": "apikey",
+    "keys_rotation_env_vars": [
+      "ALPHA_VANTAGE_KEY_1",
+      "ALPHA_VANTAGE_KEY_2",
+      "ALPHA_VANTAGE_KEY_3"
+    ]
+  },
+  "connection_policy": {
+    "_comment": "سياسة الاتصال المالي. Alpha Vantage قد يكون بطيئاً، لذا نرفع المهلة قليلاً.",
+    "base_url": "https://www.alphavantage.co/query",
+    "timeout_seconds": 15,
+    "max_retries": 3,
+    "backoff_factor": 2.0,
+    "verify_ssl": true
+  },
+  "usage_limits_per_key": {
+    "_comment": "الحدود القانونية للحساب المجاني (للمفتاح الواحد).",
+    "requests_per_minute": 5,
+    "requests_per_day": 500,
+    "reset_strategy": "utc_midnight",
+    "cooldown_on_exhaustion_minutes": 1440
+  },
+  "endpoints_map": {
+    "_comment": "خريطة الوظائف. تربط طلبات النظام بالدالة الصحيحة في API.",
+    "market_tick": {
+      "function": "TIME_SERIES_INTRADAY",
+      "mandatory_params": {
+        "interval": "1min",
+        "outputsize": "compact",
+        "adjusted": "true"
+      },
+      "cost_weight": 1
+    },
+    "historical_candles": {
+      "function": "TIME_SERIES_DAILY_ADJUSTED",
+      "mandatory_params": {
+        "outputsize": "full"
+      },
+      "description": "يستخدم للتحليل الفني الطويل. يعالج تقسيم الأسهم.",
+      "cost_weight": 1
+    },
+    "fundamental_data": {
+      "function": "OVERVIEW",
+      "secondary_functions": ["INCOME_STATEMENT", "BALANCE_SHEET"],
+      "description": "العقل المالي. تحليل قوة الشركة.",
+      "cost_weight": 1
+    },
+    "market_sentiment": {
+      "function": "NEWS_SENTIMENT",
+      "mandatory_params": {
+        "topics": "financial_markets",
+        "sort": "LATEST"
+      },
+      "description": "تحليل الأخبار والمشاعر.",
+      "cost_weight": 1
+    },
+    "technical_indicator": {
+      "function": "RSI",
+      "dynamic_params": ["time_period", "series_type"],
+      "description": "طلب المؤشرات جاهزة لتوفير المعالجة المحلية.",
+      "cost_weight": 1
+    }
+  },
+  "data_normalization": {
+    "_comment": "توحيد أسماء الحقول لضمان عمل النظام حتى لو غيرنا المزود.",
+    "price_field_mapping": {
+      "1. open": "open",
+      "2. high": "high",
+      "3. low": "low",
+      "4. close": "close",
+      "5. volume": "volume"
+    },
+    "timestamp_format": "%Y-%m-%d %H:%M:%S",
+    "timezone_handling": "convert_to_utc"
+  },
+  "failover_strategy": {
+    "_comment": "خطة الطوارئ. 1- تدوير المفتاح. 2- الانتقال لمزود آخر.",
+    "on_rate_limit_429": "ROTATE_NEXT_KEY",
+    "on_all_keys_exhausted": "SWITCH_TO_TWELVE_DATA",
+    "on_server_error_5xx": "RETRY_THEN_SWITCH_TO_TWELVE_DATA",
+    "on_stale_data": "FLAG_WARNING_AND_SWITCH"
+  }
+}

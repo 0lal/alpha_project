@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "classification": "SECRET",
+    "description": "Make.com (Integromat) Orchestration Configuration - External Automation",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:MAKE_AGGR_SECURE_OPS_V5",
+    "source_reference": "api/Aggregators - Make.com.txt"
+  },
+  "credentials": {
+    "_comment": "بيانات المصادقة الرئيسية للتحكم في السيناريوهات (تشغيل/إيقاف).",
+    "provider": "make_com",
+    "api_version": "v2",
+    "api_key_env_var": "MAKE_API_KEY_V1",
+    "organization_id_env_var": "MAKE_ORG_ID",
+    "base_url": "https://eu1.make.dev/api/v2"
+  },
+  "connection_policy": {
+    "_comment": "Make.com يربط خدمات متعددة، لذا الاستجابة قد تتأخر. يجب رفع المهلة.",
+    "timeout_seconds": 30,
+    "max_retries": 2,
+    "verify_ssl": true,
+    "content_type": "application/json"
+  },
+  "usage_governance": {
+    "_comment": "إدارة الكوتا (Operations). خطط Make محدودة بعدد العمليات شهرياً.",
+    "monthly_operations_limit": 10000,
+    "reset_strategy": "monthly_billing_date",
+    "warning_threshold_percent": 85,
+    "action_on_limit": "STOP_NON_CRITICAL_SCENARIOS"
+  },
+  "scenario_map": {
+    "_comment": "خريطة العمليات. هنا نحدد الرابط الخاص لكل وظيفة أتمتة.",
+    "emergency_alert": {
+      "webhook_url_env_var": "MAKE_WEBHOOK_EMERGENCY",
+      "method": "POST",
+      "description": "يرسل رسائل SMS واتصال هاتفي عند انهيار السوق.",
+      "criticality": "HIGH",
+      "retry_policy": "IMMEDIATE_RETRY"
+    },
+    "daily_report_generation": {
+      "webhook_url_env_var": "MAKE_WEBHOOK_REPORTING",
+      "method": "POST",
+      "description": "يقوم بتجميع البيانات وإنشاء ملف PDF وإرساله للإيميل.",
+      "criticality": "LOW",
+      "retry_policy": "QUEUE_FOR_LATER"
+    },
+    "data_enrichment_sheet": {
+      "webhook_url_env_var": "MAKE_WEBHOOK_EXCEL_LOG",
+      "method": "POST",
+      "description": "تسجيل الصفقات في Google Sheets للمحاسبة الضريبية.",
+      "criticality": "MEDIUM"
+    }
+  },
+  "payload_security": {
+    "_comment": "تأمين البيانات المرسلة. النظام سيوقع البيانات لمنع التزوير.",
+    "signing_enabled": true,
+    "signature_header": "X-Alpha-Signature",
+    "shared_secret_env_var": "MAKE_PAYLOAD_SECRET"
+  },
+  "data_normalization": {
+    "_comment": "توحيد البيانات المرسلة لـ Make لضمان فهمها من الطرف الآخر.",
+    "standard_fields": [
+      "timestamp_utc",
+      "source_module",
+      "alert_level",
+      "payload_data"
+    ],
+    "datetime_format": "ISO8601"
+  },
+  "failover_routing": {
+    "_comment": "ماذا نفعل إذا تعطل خادم Make.com؟",
+    "on_connection_failure": "LOG_LOCALLY_AND_RETRY_HOURLY",
+    "on_critical_failure": "USE_DIRECT_TELEGRAM_BOT"
+  }
+}

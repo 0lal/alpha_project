@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "component": "data/db/seeds/baseline_stats.json",
+    "responsibility": "توفير الإحصائيات المرجعية لبدء مراقبة الشذوذ السعري (Intelligence Pillar)",
+    "description": "يحتوي على الانحراف المعياري ومتوسط السيولة للأزواج الرئيسية لتجنب فترة الإحماء الباردة (Cold Start).",
+    "last_updated": "2026-02-01T12:00:00Z",
+    "version": "1.0.0"
+  },
+  "global_config": {
+    "default_volatility_threshold_pct": 0.5,
+    "max_allowed_spread_pct": 0.1,
+    "min_liquidity_usdt": 10000.0
+  },
+  "assets": {
+    "BTCUSDT": {
+      "reference_price": 95000.00,
+      "daily_volatility_pct": 2.5,
+      "avg_tick_spread": 0.01,
+      "avg_1m_volume_usdt": 500000.0,
+      "max_safe_slippage_pct": 0.05,
+      "anomalies": {
+        "price_std_dev": 150.0,
+        "volume_std_dev": 25.5
+      }
+    },
+    "ETHUSDT": {
+      "reference_price": 2800.00,
+      "daily_volatility_pct": 3.2,
+      "avg_tick_spread": 0.05,
+      "avg_1m_volume_usdt": 250000.0,
+      "max_safe_slippage_pct": 0.08,
+      "anomalies": {
+        "price_std_dev": 12.5,
+        "volume_std_dev": 10.0
+      }
+    },
+    "SOLUSDT": {
+      "reference_price": 145.50,
+      "daily_volatility_pct": 4.5,
+      "avg_tick_spread": 0.08,
+      "avg_1m_volume_usdt": 120000.0,
+      "max_safe_slippage_pct": 0.1,
+      "anomalies": {
+        "price_std_dev": 1.2,
+        "volume_std_dev": 500.0
+      }
+    },
+    "BNBUSDT": {
+      "reference_price": 620.00,
+      "daily_volatility_pct": 1.8,
+      "avg_tick_spread": 0.02,
+      "avg_1m_volume_usdt": 80000.0,
+      "max_safe_slippage_pct": 0.06,
+      "anomalies": {
+        "price_std_dev": 2.5,
+        "volume_std_dev": 15.0
+      }
+    }
+  }
+}

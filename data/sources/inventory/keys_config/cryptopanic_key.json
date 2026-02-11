@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "classification": "TOP SECRET",
+    "description": "CryptoPanic News Aggregator - Emergency & High Volatility Only",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:CRYPTO_PANIC_STRICT_QUOTA_V2",
+    "source_reference": "api/حدود استخدام Credentials .txt"
+  },
+  "credentials": {
+    "_comment": "بيانات المصادقة. المفتاح يجب أن يكون في Environment Variables.",
+    "provider": "cryptopanic",
+    "auth_type": "query_param",
+    "param_name": "auth_token",
+    "api_key_env_var": "CRYPTOPANIC_API_KEY"
+  },
+  "connection_policy": {
+    "_comment": "إعدادات الاتصال الأساسية.",
+    "base_url": "https://cryptopanic.com/api/v2/posts/",
+    "timeout_seconds": 10,
+    "max_retries": 1,
+    "verify_ssl": true
+  },
+  "usage_limits": {
+    "_comment": "القيود الصارمة جداً للحساب المطور (Developer Plan).",
+    "requests_per_second_burst": 2,
+    "min_interval_between_requests_sec": 30,
+    "requests_per_month_hard_limit": 100,
+    "reset_strategy": "monthly_first_day",
+    "alert_threshold_percent": 80
+  },
+  "scheduling_policy": {
+    "_comment": "سياسة الجدولة الذكية للتعامل مع ندرة الطلبات (3 طلبات يومياً).",
+    "mode": "EVENT_TRIGGERED_ONLY",
+    "allowed_triggers": [
+      "MANUAL_USER_REQUEST",
+      "MARKET_CRASH_DETECTED",
+      "VOLATILITY_INDEX_SPIKE"
+    ],
+    "auto_polling": {
+      "enabled": false,
+      "warning": "تفعيل التحديث التلقائي سيحرق الـ 100 طلب في ساعات."
+    }
+  },
+  "endpoints_map": {
+    "_comment": "خريطة نقاط الاتصال مع الفلاتر المتاحة.",
+    "latest_news": {
+      "path": "",
+      "method": "GET",
+      "mandatory_params": {
+        "kind": "news",
+        "filter": "important",
+        "public": "true"
+      },
+      "description": "جلب الأخبار المصنفة كـ هامة فقط لتوفير الرصيد."
+    },
+    "specific_coin_news": {
+      "path": "",
+      "method": "GET",
+      "dynamic_params": ["currencies"],
+      "description": "جلب أخبار عملة محددة (مثال: BTC,ETH) عند حدوث حركة مفاجئة."
+    }
+  },
+  "data_normalization": {
+    "_comment": "توحيد صيغة الخبر ليتوافق مع نظام Alpha.",
+    "field_mapping": {
+      "id": "news_id",
+      "title": "headline",
+      "published_at": "timestamp",
+      "source.title": "source_name",
+      "url": "url",
+      "currencies.code": "related_assets"
+    },
+    "timestamp_format": "ISO8601",
+    "filter_logic": {
+      "ignore_keywords": ["giveaway", "airdrop", "promoted"],
+      "required_sentiment_confidence": 0.0
+    }
+  },
+  "failover_strategy": {
+    "_comment": "ماذا نفعل إذا انتهت الـ 100 طلب؟",
+    "on_quota_exceeded": "SWITCH_TO_GEMINI_SEARCH",
+    "on_server_error": "WAIT_AND_RETRY_LATER"
+  }
+}

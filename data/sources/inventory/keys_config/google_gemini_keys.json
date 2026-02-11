@@ -1,0 +1,85 @@
+{
+  "_meta": {
+    "classification": "TOP SECRET",
+    "description": "Google Gemini API Configuration - Financial Grade",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:GEMINI_MULTI_TIER_OPTIMIZED_V4",
+    "source_reference": "api/حدود استخدام google.txt"
+  },
+  "credentials": {
+    "_comment": "يتم جلب المفتاح من متغيرات البيئة للأمان. لا تضع المفتاح هنا.",
+    "provider": "google",
+    "api_key_env_var": "GOOGLE_API_KEY",
+    "project_id": "alpha-sovereign-financial"
+  },
+  "connection_policy": {
+    "_comment": "إعدادات الشبكة. جوجل أبطأ قليلاً من Groq، لذا زدنا المهلة لـ 10 ثواني.",
+    "timeout_seconds": 10,
+    "max_retries": 3,
+    "backoff_factor": 1.5
+  },
+  "safety_settings": {
+    "_comment": "هام جداً: تقليل الحساسية لكي لا يتم حجب المصطلحات المالية (مثل: هجوم، تسييل، دماء في السوق).",
+    "HARM_CATEGORY_HARASSMENT": "BLOCK_ONLY_HIGH",
+    "HARM_CATEGORY_HATE_SPEECH": "BLOCK_ONLY_HIGH",
+    "HARM_CATEGORY_SEXUALLY_EXPLICIT": "BLOCK_ONLY_HIGH",
+    "HARM_CATEGORY_DANGEROUS_CONTENT": "BLOCK_ONLY_HIGH"
+  },
+  "global_limits": {
+    "_comment": "الحدود العامة للحساب المجاني لضمان عدم الحظر.",
+    "requests_per_day_limit": 1500,
+    "reset_time_utc": "00:00"
+  },
+  "models": {
+    "gemini-1.5-flash": {
+      "role": "REFLEX_AND_DATA",
+      "description_ar": "النموذج السريع. يستخدم لتحليل الأخبار العاجلة وقراءة البيانات الكثيرة.",
+      "rate_limits": {
+        "_comment": "الحدود المسموحة: 15 طلب/دقيقة، مليون توكن/دقيقة.",
+        "rpm": 15,
+        "tpm": 1000000,
+        "rpd": 1500
+      },
+      "parameters": {
+        "temperature": 0.1,
+        "top_p": 0.8,
+        "max_output_tokens": 8192
+      },
+      "priority_score": 10,
+      "cost_tier": "free"
+    },
+    "gemini-1.5-pro": {
+      "role": "DEEP_REASONING_ONLY",
+      "description_ar": "النموذج الذكي. يستخدم فقط للقرارات المصيرية المعقدة بسبب حدوده الضيقة جداً.",
+      "rate_limits": {
+        "_comment": "تحذير: 2 طلب في الدقيقة فقط! استخدامه مقنن جداً.",
+        "rpm": 2,
+        "tpm": 32000,
+        "rpd": 50
+      },
+      "parameters": {
+        "temperature": 0.3,
+        "top_k": 40,
+        "max_output_tokens": 8192
+      },
+      "priority_score": 8,
+      "cost_tier": "free"
+    },
+    "gemini-pro-vision": {
+      "role": "CHART_ANALYSIS",
+      "description_ar": "مخصص للنظر إلى صور الشارتات والرسوم البيانية.",
+      "rate_limits": {
+        "rpm": 15,
+        "tpm": 32000
+      },
+      "priority_score": 7,
+      "cost_tier": "free"
+    }
+  },
+  "failover_routing": {
+    "_comment": "خريطة التحويل عند الفشل. إذا فشل البرو، نعود للفلاش فوراً.",
+    "gemini-1.5-pro": "gemini-1.5-flash",
+    "gemini-1.5-flash": "groq-llama3-70b",
+    "gemini-pro-vision": "none_return_error"
+  }
+}

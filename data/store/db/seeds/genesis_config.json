@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "component": "data/db/seeds/genesis_config.json",
+    "responsibility": "تعريف الهوية التأسيسية والقوانين الصارمة للنظام (Constitution).",
+    "security_level": "CRITICAL",
+    "notes": "هذا الملف يُقرأ مرة واحدة فقط عند التهيئة الأولية (System Genesis)."
+  },
+  "system_identity": {
+    "instance_name": "Alpha_Phoenix_01",
+    "version": "1.0.0-GENESIS",
+    "birth_timestamp_utc": "2026-02-03T12:00:00Z",
+    "environment": "PRODUCTION",
+    "sovereignty_mode": true
+  },
+  "initial_admin": {
+    "username": "bishoy1100",
+    "role": "SUPERUSER",
+    "access_level": "L5_GOD_MODE",
+    "permissions": [
+      "FULL_SYSTEM_ACCESS",
+      "KILL_SWITCH_ACTIVATION",
+      "MANUAL_OVERRIDE",
+      "GENETIC_MODIFICATION",
+      "TREASURY_WITHDRAWAL"
+    ],
+    "auth_method": "MFA_REQUIRED"
+  },
+  "risk_mandate": {
+    "description": "قوانين البقاء الصارمة (Hard-coded Constraints). العقل لا يملك صلاحية تغييرها.",
+    "global_max_drawdown_pct": 15.0,
+    "daily_loss_limit_pct": 3.0,
+    "per_trade_risk_cap_pct": 2.0,
+    "max_leverage_allowed": 5.0,
+    "max_concurrent_positions": 5,
+    "min_liquidity_reserve_usdt": 1000.0,
+    "emergency_shutdown_trigger": "AUTOMATIC_ON_VIOLATION"
+  },
+  "operational_limits": {
+    "max_api_requests_per_min": 1200,
+    "data_retention_days": 90,
+    "allowed_exchanges": ["BINANCE", "BYBIT"],
+    "base_currency": "USDT"
+  }
+}

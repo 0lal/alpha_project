@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "classification": "TOP SECRET",
+    "description": "Twelve Data Configuration - Hybrid Engine (REST + WebSocket)",
+    "last_audit": "2026-02-10",
+    "integrity_hash": "SHA256:TWELVE_DATA_HYBRID_V3_FINANCIAL",
+    "source_reference": "api/حدود استخدام Twelve Data.txt"
+  },
+  "credentials": {
+    "_comment": "يتم جلب المفتاح من متغيرات البيئة للأمان التام.",
+    "provider": "twelvedata",
+    "api_key_env_var": "TWELVE_DATA_API_KEY",
+    "socket_url": "wss://ws.twelvedata.com/v1/quotes/price"
+  },
+  "connection_policy": {
+    "_comment": "سياسة الاتصال الصارمة لضمان دقة البيانات.",
+    "base_url": "https://api.twelvedata.com",
+    "timeout_seconds": 10,
+    "force_ntp_sync": true,
+    "ssl_verification": true,
+    "keep_alive_heartbeat_sec": 10
+  },
+  "rate_limits": {
+    "_comment": "الحدود الصارمة للخطة المجانية (Basic Free Tier).",
+    "requests_per_minute": 8,
+    "requests_per_day": 800,
+    "websocket_max_symbols": 8,
+    "reset_strategy": "rolling_window_1min",
+    "cooldown_on_limit_reached_sec": 60
+  },
+  "features_toggle": {
+    "_comment": "تفعيل الخدمات بناءً على الحاجة.",
+    "enable_historical_rest": true,
+    "enable_live_websocket": true,
+    "enable_gap_filling": true
+  },
+  "endpoints_map": {
+    "_comment": "خريطة الوظائف لجلب البيانات حسب النوع.",
+    "time_series": {
+      "path": "/time_series",
+      "method": "GET",
+      "mandatory_params": {
+        "outputsize": 30,
+        "format": "JSON"
+      },
+      "description": "لجلب الشموع اليابانية التاريخية عند بدء التشغيل."
+    },
+    "real_time_price": {
+      "path": "/price",
+      "method": "GET",
+      "description": "للتحقق السريع من السعر الحالي عبر HTTP."
+    },
+    "technical_indicators": {
+      "path": "/technical_indicators",
+      "method": "GET",
+      "description": "لجلب المؤشرات المعقدة (MACD, RSI) جاهزة."
+    }
+  },
+  "websocket_config": {
+    "_comment": "إعدادات القناة الحية (Live Feed). هذا هو القلب النابض للنظام.",
+    "action": "subscribe",
+    "reconnect_strategy": {
+      "max_attempts": 5,
+      "delay_type": "exponential_backoff",
+      "base_delay_sec": 2
+    },
+    "gap_recovery": {
+      "enabled": true,
+      "description": "عند انقطاع النت، النظام يحفظ آخر رقم تسلسلي ويطلب ما فاته."
+    }
+  },
+  "data_normalization": {
+    "_comment": "ترجمة البيانات لتتوافق مع نظام Alpha الموحد.",
+    "field_mapping": {
+      "datetime": "timestamp",
+      "open": "open",
+      "high": "high",
+      "low": "low",
+      "close": "close",
+      "volume": "volume",
+      "price": "close"
+    },
+    "timestamp_format": "%Y-%m-%d %H:%M:%S",
+    "timezone": "UTC"
+  },
+  "failover_trigger": {
+    "_comment": "متى نعتبر هذا المزود قد فشل؟",
+    "conditions": [
+      "RATE_LIMIT_EXCEEDED_429",
+      "WEBSOCKET_DISCONNECT_MORE_THAN_3_TIMES",
+      "LATENCY_ABOVE_500MS"
+    ],
+    "fallback_action": "SWITCH_TO_NEXT_AVAILABLE_PROVIDER"
+  }
+}
