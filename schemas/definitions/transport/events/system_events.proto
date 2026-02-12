@@ -6,6 +6,9 @@ option java_multiple_files = true;
 option java_package = "com.alpha.transport.events";
 option go_package = "alpha/transport/events;events";
 
+// Goal: بث أحداث النظام والتعطل والتعافي.
+// Dependencies: Orchestration, Incident Response
+
 // أحداث النظام (ServiceCrash, Reboot, Failover)
 enum SystemEventType {
   SYSTEM_EVENT_TYPE_UNSPECIFIED = 0;
