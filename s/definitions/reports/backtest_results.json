@@ -1,0 +1,53 @@
+{
+  "_header": {
+    "Goal": "قالب نتائج backtest مع مقاييس أداء ومخاطر رئيسية.",
+    "Dependencies": [
+      "Strategy Lab",
+      "ML Evaluator",
+      "Dashboard"
+    ]
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "strategy_id": {
+      "type": "string"
+    },
+    "period_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "period_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sharpe": {
+      "type": "number"
+    },
+    "sortino": {
+      "type": "number"
+    },
+    "max_drawdown": {
+      "type": "number"
+    },
+    "pnl": {
+      "type": "number"
+    },
+    "win_rate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": [
+    "run_id",
+    "strategy_id",
+    "period_start",
+    "period_end",
+    "pnl"
+  ]
+}

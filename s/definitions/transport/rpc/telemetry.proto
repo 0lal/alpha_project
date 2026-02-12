@@ -8,6 +8,9 @@ option java_multiple_files = true;
 option java_package = "com.alpha.transport.rpc";
 option go_package = "alpha/transport/rpc;rpc";
 
+// Goal: بث المقاييس الصحية والزمنية والأخطاء مركزياً.
+// Dependencies: Dashboard, Alerting, Observability
+
 // بث حالة النظام (CPU, Latency, Errors)
 service Telemetry {
   rpc PublishHealth(HealthSample) returns (TelemetryAck);

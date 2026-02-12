@@ -1,3 +1,6 @@
+-- Goal: دفتر قيود مالي مزدوج القيد لحركة الأموال والرسوم.
+-- Dependencies: Billing, Settlement, Accounting Reports.
+
 -- دفتر الأستاذ المالي (double-entry capable with reconciliation fields)
 create table if not exists ledger_entries (
   entry_id                 text primary key,

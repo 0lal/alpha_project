@@ -1,0 +1,15 @@
+# Goal: سياسة إعداد الشبكة منخفضة الكمون لـ HFT.
+# Dependencies: NIC driver, packet processor, kernel bypass runtime.
+network:
+  mode: dpdk
+  interface: eth0
+  rx_queues: 8
+  tx_queues: 8
+  mtu: 1500
+  busy_poll_us: 50
+  rss: true
+  checksum_offload: true
+latency_budget:
+  p50_us: 30
+  p99_us: 120
+  max_us: 250

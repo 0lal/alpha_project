@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package alpha.transport.rpc;
+
+option java_multiple_files = true;
+option java_package = "com.alpha.transport.rpc";
+option go_package = "alpha/transport/rpc;rpc";
+
+// Goal: تسجيل الخدمات النشطة واكتشافها بين المكونات الداخلية.
+// Dependencies: Nexus, Service Mesh, جميع خدمات transport.
+service ServiceDiscovery {
+  rpc Register(RegisterServiceRequest) returns (RegisterServiceResponse);
+  rpc Deregister(DeregisterServiceRequest) returns (DeregisterServiceResponse);
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse);
+  rpc Heartbeat(ServiceHeartbeat) returns (ServiceHeartbeatAck);
+}
+
+message RegisterServiceRequest {
+  string service_name = 1;
+  string instance_id = 2;
+  string version = 3;
+  string endpoint = 4;
+  string region = 5;
+  map<string, string> tags = 6;
+}
+
+message RegisterServiceResponse {
+  bool registered = 1;
+  string lease_id = 2;
+}
+
+message DeregisterServiceRequest {
+  string service_name = 1;
+  string instance_id = 2;
+}
+
+message DeregisterServiceResponse {
+  bool deregistered = 1;
+}
+
+message ListServicesRequest {
+  string service_name = 1;
+  string region = 2;
+}
+
+message ServiceInstance {
+  string service_name = 1;
+  string instance_id = 2;
+  string version = 3;
+  string endpoint = 4;
+  string region = 5;
+  int64 last_seen_ms = 6;
+}
+
+message ListServicesResponse {
+  repeated ServiceInstance instances = 1;
+}
+
+message ServiceHeartbeat {
+  string service_name = 1;
+  string instance_id = 2;
+  int64 heartbeat_time_ms = 3;
+}
+
+message ServiceHeartbeatAck {
+  bool accepted = 1;
+}

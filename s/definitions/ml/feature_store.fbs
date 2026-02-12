@@ -1,0 +1,27 @@
+// Goal: تمثيل متجهات الخصائص للنماذج مع سياق زمني وتشغيلي.
+// Dependencies: Training Pipeline, Inference Engine, Feature Registry.
+namespace alpha.ml;
+
+enum FeatureQuality : ubyte {
+  FEATURE_QUALITY_UNKNOWN = 0,
+  FEATURE_QUALITY_OK = 1,
+  FEATURE_QUALITY_IMPUTED = 2,
+  FEATURE_QUALITY_STALE = 3
+}
+
+table FeatureVector {
+  vector_id:string (required);
+  model_id:string (required);
+  symbol:string;
+  timeframe:string;
+  features:[double];
+  labels:[double];
+  feature_quality:FeatureQuality = FEATURE_QUALITY_OK;
+  source_snapshot_hash:string;
+  event_time_ns:ulong;
+  ingest_time_ns:ulong;
+  trace_id:string;
+}
+
+root_type FeatureVector;
+file_identifier "FEAT";

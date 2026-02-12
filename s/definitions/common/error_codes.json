@@ -1,0 +1,50 @@
+{
+  "_header": {
+    "Goal": "قاموس أكواد أخطاء موحد عبر كل الخدمات والواجهات.",
+    "Dependencies": [
+      "RPC Layer",
+      "REST Layer",
+      "Alerting",
+      "Audit"
+    ]
+  },
+  "version": "1.0.0",
+  "codes": [
+    {
+      "code": "AUTH_001",
+      "http_status": 401,
+      "severity": "ERROR",
+      "message": "Unauthorized"
+    },
+    {
+      "code": "AUTH_002",
+      "http_status": 403,
+      "severity": "ERROR",
+      "message": "Forbidden"
+    },
+    {
+      "code": "RISK_101",
+      "http_status": 422,
+      "severity": "CRITICAL",
+      "message": "Risk limit exceeded"
+    },
+    {
+      "code": "DATA_201",
+      "http_status": 400,
+      "severity": "ERROR",
+      "message": "Malformed payload"
+    },
+    {
+      "code": "DATA_202",
+      "http_status": 409,
+      "severity": "WARNING",
+      "message": "Duplicate event detected"
+    },
+    {
+      "code": "SYS_500",
+      "http_status": 500,
+      "severity": "CRITICAL",
+      "message": "Internal server error"
+    }
+  ]
+}

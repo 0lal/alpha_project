@@ -1,0 +1,16 @@
+# Goal: سياسة صلاحيات موحدة تعتمد RBAC للأدوار التشغيلية.
+# Dependencies: auth gateway, policy engine, admin panel.
+# مبدأ الأمان: أقل صلاحية ممكنة (Least Privilege).
+roles:
+  admin:
+    - "*"
+  risk_manager:
+    - "risk.read"
+    - "risk.update"
+    - "killswitch.trigger"
+  trader:
+    - "orders.submit"
+    - "orders.cancel"
+    - "risk.read"
+  viewer:
+    - "reports.read"

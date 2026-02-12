@@ -1,0 +1,9 @@
+# Goal: سياسة دورة حياة البيانات من Hot إلى Cold ثم Archive.
+# Dependencies: archival manager, storage services, compliance.
+retention:
+  hot_hours: 24
+  warm_days: 30
+  cold_years: 5
+  archive_years: 10
+  archive_format: parquet
+  legal_hold_overrides_retention: true

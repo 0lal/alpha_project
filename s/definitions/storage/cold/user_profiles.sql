@@ -1,3 +1,6 @@
+-- Goal: بيانات تعريف العملاء والمحافظ مع ضوابط الامتثال.
+-- Dependencies: KYC Service, Access Control, CRM.
+
 -- بيانات المستخدمين والمحافظ (compliance + portfolio governance)
 create table if not exists user_profiles (
   user_id                  text primary key,

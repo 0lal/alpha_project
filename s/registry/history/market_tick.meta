@@ -1,0 +1,6 @@
+# Goal: تتبع تاريخ التغييرات الذكي لملف market_tick.fbs.
+# Dependencies: registry/catalog.py, release process.
+author: "system"
+reason: "bootstrap"
+hashes:
+  - "0000000000000000000000000000000000000000"
