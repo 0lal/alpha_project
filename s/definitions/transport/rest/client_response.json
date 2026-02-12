@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "alpha/transport/rest/client_response.json",
+  "title": "Client Response Envelope",
+  "description": "Standard response envelope with rich error and pagination metadata.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "success": { "type": "boolean" },
+    "code": { "type": "string", "minLength": 1 },
+    "message": { "type": "string", "minLength": 1 },
+    "trace_id": { "type": "string", "minLength": 8 },
+    "data": {},
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/error_item" }
+    },
+    "pagination": { "$ref": "#/$defs/pagination" },
+    "server_time": { "type": "string", "format": "date-time" }
+  },
+  "required": ["success", "code", "message", "trace_id", "server_time"],
+  "$defs": {
+    "error_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": { "type": "string" },
+        "reason": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] }
+      },
+      "required": ["reason", "severity"]
+    },
+    "pagination": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cursor": { "type": ["string", "null"] },
+        "next_cursor": { "type": ["string", "null"] },
+        "limit": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "has_more": { "type": "boolean" }
+      },
+      "required": ["limit", "has_more"]
+    }
+  }
+}

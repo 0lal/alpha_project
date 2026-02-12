@@ -1,0 +1,87 @@
+namespace alpha.storage.hot;
+
+// Market microstructure quality for downstream smart-routing and filtering.
+enum DataQuality : ubyte {
+  DATA_QUALITY_UNSPECIFIED = 0,
+  DATA_QUALITY_REALTIME = 1,
+  DATA_QUALITY_DELAYED = 2,
+  DATA_QUALITY_RECOVERED = 3,
+  DATA_QUALITY_SYNTHETIC = 4
+}
+
+enum TickCondition : ubyte {
+  NONE = 0,
+  REGULAR = 1,
+  AUCTION = 2,
+  HALT = 3,
+  RESUME = 4,
+  CROSS = 5,
+  ODD_LOT = 6
+}
+
+enum TradeSide : ubyte {
+  UNKNOWN = 0,
+  BUY = 1,
+  SELL = 2
+}
+
+table VenueQuote {
+  venue:string;
+  bid:double;
+  bid_size:double;
+  ask:double;
+  ask_size:double;
+  quote_time_ns:ulong;
+  quote_latency_us:uint;
+}
+
+table TickStats {
+  rolling_vwap_1m:double;
+  rolling_vwap_5m:double;
+  turnover_24h:double;
+  trade_count_24h:ulong;
+  realized_vol_5m:double;
+  realized_vol_1h:double;
+}
+
+table MarketTick {
+  // Identity & observability
+  tick_id:string (required);
+  symbol:string (required);
+  venue:string;
+  trace_id:string;
+  feed_id:string;
+  partition_key:string;
+
+  // Timing & sequencing
+  event_time_ns:ulong;
+  exchange_time_ns:ulong;
+  ingest_time_ns:ulong;
+  processing_time_ns:ulong;
+  source_seq:ulong;
+
+  // Price/size
+  last_price:double;
+  last_size:double;
+  side:TradeSide = UNKNOWN;
+  condition:TickCondition = REGULAR;
+  data_quality:DataQuality = DATA_QUALITY_REALTIME;
+
+  // Top-of-book
+  bid:double;
+  bid_size:double;
+  ask:double;
+  ask_size:double;
+
+  // Optional market-wide context
+  mark_price:double;
+  index_price:double;
+  funding_rate_8h:double;
+  open_interest:double;
+
+  stats:TickStats;
+  quotes:[VenueQuote];
+}
+
+root_type MarketTick;
+file_identifier "MTIK";
