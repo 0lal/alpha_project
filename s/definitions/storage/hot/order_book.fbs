@@ -1,0 +1,72 @@
+namespace alpha.storage.hot;
+
+enum BookSide : ubyte {
+  BID = 0,
+  ASK = 1
+}
+
+enum BookUpdateType : ubyte {
+  SNAPSHOT = 0,
+  DELTA = 1,
+  RESET = 2,
+  HEARTBEAT = 3
+}
+
+enum MatchingModel : ubyte {
+  FIFO = 0,
+  PRO_RATA = 1,
+  HYBRID = 2
+}
+
+table PriceLevel {
+  price:double;
+  size:double;
+  order_count:uint;
+  implied_size:double;
+}
+
+table OrderLevel {
+  order_id:string;
+  participant_id:string;
+  price:double;
+  size:double;
+  side:BookSide;
+  priority_ts_ns:ulong;
+  iceberg_visible_size:double;
+}
+
+table BookStats {
+  best_bid:double;
+  best_ask:double;
+  spread:double;
+  mid_price:double;
+  imbalance_l1:double;
+  imbalance_l10:double;
+}
+
+table OrderBook {
+  book_id:string (required);
+  symbol:string (required);
+  venue:string;
+  matching_model:MatchingModel = FIFO;
+
+  depth:uint = 100;
+  update_type:BookUpdateType = SNAPSHOT;
+
+  event_time_ns:ulong;
+  ingest_time_ns:ulong;
+  source_seq:ulong;
+  prev_source_seq:ulong;
+
+  bids:[PriceLevel];
+  asks:[PriceLevel];
+  l3_orders:[OrderLevel];
+
+  stats:BookStats;
+  checksum:uint;
+  snapshot_version:ulong;
+  trace_id:string;
+}
+
+root_type OrderBook;
+file_identifier "OBOK";

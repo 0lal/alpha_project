@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package alpha.transport.rpc;
+
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_package = "com.alpha.transport.rpc";
+option go_package = "alpha/transport/rpc;rpc";
+
+// بث حالة النظام (CPU, Latency, Errors)
+service Telemetry {
+  rpc PublishHealth(HealthSample) returns (TelemetryAck);
+  rpc PublishLatency(LatencySample) returns (TelemetryAck);
+  rpc PublishError(ErrorSample) returns (TelemetryAck);
+  rpc StreamMetrics(StreamMetricsRequest) returns (stream MetricEnvelope);
+}
+
+message HealthSample {
+  string service = 1;
+  string instance_id = 2;
+  string region = 3;
+  double cpu_percent = 4;
+  double memory_percent = 5;
+  double disk_percent = 6;
+  int64 open_file_descriptors = 7;
+  int64 timestamp_ms = 8;
+}
+
+message LatencySample {
+  string service = 1;
+  string route = 2;
+  int64 p50_ms = 3;
+  int64 p95_ms = 4;
+  int64 p99_ms = 5;
+  int64 max_ms = 6;
+  int64 sample_count = 7;
+  int64 timestamp_ms = 8;
+}
+
+message ErrorSample {
+  string service = 1;
+  string instance_id = 2;
+  string severity = 3;
+  string error_code = 4;
+  string message = 5;
+  string stack_hash = 6;
+  int64 timestamp_ms = 7;
+}
+
+message StreamMetricsRequest {
+  string consumer_id = 1;
+  repeated string services = 2;
+  bool include_errors = 3;
+}
+
+message MetricEnvelope {
+  string trace_id = 1;
+  int64 emitted_at_ms = 2;
+  oneof metric {
+    HealthSample health = 3;
+    LatencySample latency = 4;
+    ErrorSample error = 5;
+  }
+  google.protobuf.Struct tags = 6;
+}
+
+message TelemetryAck {
+  bool received = 1;
+  string ingestion_id = 2;
+}
