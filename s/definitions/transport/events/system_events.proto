@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package alpha.transport.events;
+
+option java_multiple_files = true;
+option java_package = "com.alpha.transport.events";
+option go_package = "alpha/transport/events;events";
+
+// أحداث النظام (ServiceCrash, Reboot, Failover)
+enum SystemEventType {
+  SYSTEM_EVENT_TYPE_UNSPECIFIED = 0;
+  SYSTEM_EVENT_TYPE_SERVICE_CRASH = 1;
+  SYSTEM_EVENT_TYPE_REBOOT = 2;
+  SYSTEM_EVENT_TYPE_FAILOVER = 3;
+  SYSTEM_EVENT_TYPE_DEGRADED = 4;
+}
+
+message SystemEvent {
+  string event_id = 1;
+  string trace_id = 2;
+  string service = 3;
+  string instance_id = 4;
+  string region = 5;
+  SystemEventType type = 6;
+  string details = 7;
+  int64 timestamp_ms = 8;
+  int64 sequence = 9;
+}
