@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package alpha.transport.rpc;
+
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_package = "com.alpha.transport.rpc";
+option go_package = "alpha/transport/rpc;rpc";
+
+// ضوابط المخاطر الفورية (Limits, KillSwitches)
+service RiskControl {
+  rpc ValidateOrder(ValidateOrderRequest) returns (ValidateOrderResponse);
+  rpc ReserveExposure(ReserveExposureRequest) returns (ReserveExposureResponse);
+  rpc TriggerKillSwitch(TriggerKillSwitchRequest) returns (TriggerKillSwitchResponse);
+  rpc GetRiskState(GetRiskStateRequest) returns (GetRiskStateResponse);
+}
+
+enum KillSwitchScope {
+  KILL_SWITCH_SCOPE_UNSPECIFIED = 0;
+  KILL_SWITCH_SCOPE_ACCOUNT = 1;
+  KILL_SWITCH_SCOPE_STRATEGY = 2;
+  KILL_SWITCH_SCOPE_GLOBAL = 3;
+}
+
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_INFO = 1;
+  SEVERITY_WARNING = 2;
+  SEVERITY_CRITICAL = 3;
+}
+
+message LimitSnapshot {
+  double max_notional = 1;
+  double max_position = 2;
+  double max_leverage = 3;
+  double max_daily_loss = 4;
+}
+
+message ValidateOrderRequest {
+  string request_id = 1;
+  string trace_id = 2;
+  string account_id = 3;
+  string strategy_id = 4;
+  string symbol = 5;
+  string side = 6;
+  double quantity = 7;
+  double notional = 8;
+  double leverage = 9;
+  LimitSnapshot limit_snapshot = 10;
+  google.protobuf.Struct context = 11;
+}
+
+message RiskViolation {
+  string rule_id = 1;
+  string rule_name = 2;
+  Severity severity = 3;
+  string message = 4;
+  double threshold = 5;
+  double observed = 6;
+}
+
+message ValidateOrderResponse {
+  bool allowed = 1;
+  repeated RiskViolation violations = 2;
+  string decision = 3;
+}
+
+message ReserveExposureRequest {
+  string request_id = 1;
+  string trace_id = 2;
+  string account_id = 3;
+  string symbol = 4;
+  double notional = 5;
+  int64 hold_ttl_ms = 6;
+}
+
+message ReserveExposureResponse {
+  bool reserved = 1;
+  string reservation_id = 2;
+  int64 expires_at_ms = 3;
+  string reason = 4;
+}
+
+message TriggerKillSwitchRequest {
+  string request_id = 1;
+  string actor = 2;
+  KillSwitchScope scope = 3;
+  string account_id = 4;
+  string strategy_id = 5;
+  string reason = 6;
+}
+
+message TriggerKillSwitchResponse {
+  bool active = 1;
+  KillSwitchScope scope = 2;
+  int64 activated_at_ms = 3;
+  string incident_id = 4;
+}
+
+message GetRiskStateRequest {
+  string request_id = 1;
+  string account_id = 2;
+  string strategy_id = 3;
+}
+
+message GetRiskStateResponse {
+  bool kill_switch_active = 1;
+  repeated RiskViolation active_violations = 2;
+  LimitSnapshot current_limits = 3;
+  int64 as_of_ms = 4;
+}
