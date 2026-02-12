@@ -1,90 +1,72 @@
-// Goal: تمثيل نبضة السوق اللحظية بزمن منخفض جداً.
-// Dependencies: Ingestion Bus, HFT Cache, Validators.
+// Zero-Copy Market Data
 
-namespace alpha.storage.hot;
+// =================================================================
+// ALPHA SOVEREIGN ORGANISM - ATOMIC MARKET TICK SCHEMA
+// =================================================================
+// File: schemas/flatbuffers/market_tick.fbs
+// Status: PRODUCTION (Zero-Copy Serialization)
+// Pillar: Performance & HFT (الركيزة: الأداء والتداول عالي التردد)
+// Forensic Purpose: تعريف الهيكل الثنائي للبيانات السعرية لضمان نقل ملايين الأسعار في الثانية دون تأخير.
+// =================================================================
 
-// Market microstructure quality for downstream smart-routing and filtering.
-enum DataQuality : ubyte {
-  DATA_QUALITY_UNSPECIFIED = 0,
-  DATA_QUALITY_REALTIME = 1,
-  DATA_QUALITY_DELAYED = 2,
-  DATA_QUALITY_RECOVERED = 3,
-  DATA_QUALITY_SYNTHETIC = 4
-}
+namespace alpha.market.v1;
 
-enum TickCondition : ubyte {
-  NONE = 0,
-  REGULAR = 1,
-  AUCTION = 2,
-  HALT = 3,
-  RESUME = 4,
-  CROSS = 5,
-  ODD_LOT = 6
-}
+// -----------------------------------------------------------------
+// 1. التصنيفات (ENUMERATIONS)
+// -----------------------------------------------------------------
+// استخدام byte بدلاً من int لتوفير المساحة في الذاكرة (Memory Alignment).
 
-enum TradeSide : ubyte {
+// نوع الحركة السعرية
+enum TickType : byte {
   UNKNOWN = 0,
-  BUY = 1,
-  SELL = 2
+  TRADE = 1,       // صفقة تم تنفيذها فعلياً (الأهم لتحليل الحجم).
+  BID = 2,         // أفضل عرض شراء (Best Bid).
+  ASK = 3,         // أفضل عرض بيع (Best Ask).
+  LIQUIDATION = 4  // تصفية قسرية (إشارة قوية جداً للانعكاس).
 }
 
-table VenueQuote {
-  venue:string;
-  bid:double;
-  bid_size:double;
-  ask:double;
-  ask_size:double;
-  quote_time_ns:ulong;
-  quote_latency_us:uint;
+// مصدر البيانات (للتتبع الجنائي ومقارنة الأسعار بين المنصات).
+enum DataSource : byte {
+  SIMULATION = 0,   // بيانات وهمية للاختبار.
+  BINANCE_SPOT = 1,
+  BINANCE_FUTURES = 2,
+  COINBASE_PRO = 3,
+  KRAKEN_X = 4
 }
 
-table TickStats {
-  rolling_vwap_1m:double;
-  rolling_vwap_5m:double;
-  turnover_24h:double;
-  trade_count_24h:ulong;
-  realized_vol_5m:double;
-  realized_vol_1h:double;
-}
+// -----------------------------------------------------------------
+// 2. جدول النبضة السعرية (MARKET TICK TABLE)
+// -----------------------------------------------------------------
+// هذا هو الجدول الذي سيتم نقله عبر الذاكرة المشتركة (Shared Memory).
 
 table MarketTick {
-  // Identity & observability
-  tick_id:string (required);
-  symbol:string (required);
-  venue:string;
-  trace_id:string;
-  feed_id:string;
-  partition_key:string;
+  // رمز العملة (مثال: "BTCUSDT").
+  // ملاحظة: في النسخ المتقدمة جداً، قد نستبدل هذا بـ Hash ID (ulong) لزيادة السرعة.
+  symbol: string;
 
-  // Timing & sequencing
-  event_time_ns:ulong;
-  exchange_time_ns:ulong;
-  ingest_time_ns:ulong;
-  processing_time_ns:ulong;
-  source_seq:ulong;
+  // السعر الحالي.
+  price: double;
 
-  // Price/size
-  last_price:double;
-  last_size:double;
-  side:TradeSide = UNKNOWN;
-  condition:TickCondition = REGULAR;
-  data_quality:DataQuality = DATA_QUALITY_REALTIME;
+  // حجم الكمية (Quantity).
+  volume: double;
 
-  // Top-of-book
-  bid:double;
-  bid_size:double;
-  ask:double;
-  ask_size:double;
+  // التوقيت الدقيق للحدث (Unix Nanoseconds).
+  // حيوي جداً لحساب زمن الوصول (Latency) واكتشاف التأخير.
+  timestamp_nanos: long;
 
-  // Optional market-wide context
-  mark_price:double;
-  index_price:double;
-  funding_rate_8h:double;
-  open_interest:double;
+  // نوع النبضة (بيع، شراء، تصفية).
+  tick_type: TickType;
 
-  stats:TickStats;
-  quotes:[VenueQuote];
+  // المصدر (المنصة).
+  source: DataSource;
+
+  // رقم التسلسل (Sequence ID).
+  // يستخدم لاكتشاف فقدان الحزم (Packet Loss). إذا قفز الرقم من 1 إلى 3، نعلم أننا فقدنا 2.
+  sequence_id: ulong;
+
+  // هل هذه النبضة مصححة؟ (مثلاً: تصحيح لسعر خاطئ سابق).
+  is_correction: bool = false;
 }
 
+// تحديد الجذر (Root Type) لبدء القراءة.
 root_type MarketTick;
-file_identifier "MTIK";
