@@ -1,0 +1,90 @@
+// Brain <-> Engine Contract
+
+// =================================================================
+// ALPHA SOVEREIGN ORGANISM - COGNITIVE BRAIN PROTOCOL
+// =================================================================
+// File: schemas/proto/brain_service.proto
+// Status: PRODUCTION (gRPC Definition)
+// Pillar: Integration & Intelligence (الركيزة: التكامل والذكاء)
+// Forensic Purpose: تحديد اللغة الدقيقة التي تخاطب بها الأعضاء "الدماغ" لطلب الفتوى أو القرار.
+// =================================================================
+
+syntax = "proto3";
+
+package alpha.brain.v1;
+
+// استيراد أنواع الطوابع الزمنية القياسية (إذا توفرت، وإلا نستخدم strings للتبسيط في البيئات المعزولة)
+// import "google/protobuf/timestamp.proto";
+
+// -----------------------------------------------------------------
+// 1. تعريف الخدمة (SERVICE DEFINITION)
+// -----------------------------------------------------------------
+// هذه هي الواجهة التي يستدعيها النظام عندما يحتاج إلى تفكير عميق.
+
+service CognitiveBrain {
+  // الوظيفة الأساسية: طلب استنتاج أو خطة استراتيجية.
+  // الدخل: سياق المشكلة. الخرج: الحل المقترح مع التبرير.
+  rpc AskStrategy (InferenceRequest) returns (InferenceResponse);
+
+  // وظيفة البث: للتفكير المستمر أثناء تدفق بيانات السوق (Real-time Thinking).
+  rpc StreamThoughts (stream InferenceRequest) returns (stream InferenceResponse);
+}
+
+// -----------------------------------------------------------------
+// 2. رسائل الطلب (REQUEST MESSAGES)
+// -----------------------------------------------------------------
+
+message InferenceRequest {
+  // المعرف الفريد للتتبع الجنائي (مثال: "REQ-2026-10293")
+  string trace_id = 1;
+
+  // نوع المهمة المطلوبة من الدماغ
+  enum TaskType {
+    UNKNOWN_TASK = 0;
+    MARKET_ANALYSIS = 1;      // تحليل وضع السوق
+    RISK_ASSESSMENT = 2;      // تقييم المخاطر لصفقة محتملة
+    CODE_GENERATION = 3;      // كتابة كود جديد (التطور الذاتي)
+    STRATEGIC_PLANNING = 4;   // تخطيط طويل المدى
+  }
+  TaskType task = 2;
+
+  // المدخلات النصية (Prompt) أو البيانات الخام
+  string prompt_payload = 3;
+
+  // السياق المحيط (Context) الذي يساعد الدماغ على الفهم
+  // مثال: {"market_sentiment": "fear", "btc_price": "45000"}
+  map<string, string> context_vars = 4;
+
+  // مستوى الإبداع المطلوب (0.0 = صارم ومنطقي، 1.0 = إبداعي ومخاطر)
+  float temperature = 5;
+}
+
+// -----------------------------------------------------------------
+// 3. رسائل الاستجابة (RESPONSE MESSAGES)
+// -----------------------------------------------------------------
+
+message InferenceResponse {
+  // معرف التتبع (يجب أن يطابق الطلب)
+  string trace_id = 1;
+
+  // القرار النهائي أو النص المولد
+  string decision_payload = 2;
+
+  // درجة الثقة في القرار (من 0.0 إلى 1.0)
+  // إذا كانت الثقة منخفضة (< 0.7)، قد يرفض النظام التنفيذ.
+  float confidence_score = 3;
+
+  // سلسلة التفكير (Chain of Thought) - للأغراض الجنائية
+  // كيف وصل الدماغ لهذا الاستنتاج؟ خطوة بخطوة.
+  repeated ReasoningStep reasoning_chain = 4;
+
+  // الطابع الزمني للمعالجة (متى تم التفكير؟)
+  string timestamp_utc = 5;
+}
+
+// هيكل خطوة التفكير الواحدة (لتوثيق المنطق)
+message ReasoningStep {
+  int32 step_number = 1;      // رقم الخطوة (1, 2, 3...)
+  string thought_content = 2; // "بما أن السعر كسر المقاومة..."
+  string conclusion = 3;      // "إذن الاتجاه صاعد."
+}

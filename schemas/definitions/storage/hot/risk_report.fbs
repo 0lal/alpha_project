@@ -1,0 +1,73 @@
+// Pre-trade Risk Check
+
+// =================================================================
+// ALPHA SOVEREIGN ORGANISM - ATOMIC RISK REPORT SCHEMA
+// =================================================================
+// File: schemas/flatbuffers/risk_report.fbs
+// Status: PRODUCTION (High-Velocity Risk Stream)
+// Pillar: Risk Management & Safety (الركيزة: إدارة المخاطر والأمان)
+// Forensic Purpose: نقل تقييم المخاطر اللحظي للمحرك لاتخاذ إجراءات وقائية أو تصحيحية فورية.
+// =================================================================
+
+namespace alpha.risk.v1;
+
+// -----------------------------------------------------------------
+// 1. مستويات الخطر (RISK LEVELS)
+// -----------------------------------------------------------------
+
+enum RiskLevel : byte {
+  SAFE = 0,             // الوضع آمن (المنطقة الخضراء).
+  WARNING = 1,          // تحذير: اقتربنا من الحدود (المنطقة الصفراء).
+  CRITICAL = 2,         // خطر: تجاوزنا الحدود المسموحة (المنطقة الحمراء).
+  FATAL_BREACH = 3      // خرق قاتل: خطر التصفية وشيك (المنطقة السوداء).
+}
+
+// -----------------------------------------------------------------
+// 2. الإجراءات المطلوبة (REQUIRED ACTIONS)
+// -----------------------------------------------------------------
+// هذا الحقل يخبر المحرك ماذا يفعل بالضبط دون الحاجة للتفكير.
+
+enum RiskAction : byte {
+  NO_ACTION = 0,
+  NOTIFY_ONLY = 1,       // إرسال تنبيه للمشغل فقط.
+  RESTRICT_NEW_ORDERS = 2, // منع فتح صفقات جديدة (Reduce Only).
+  DELEVERAGE = 3,        // تقليص المراكز المفتوحة تدريجياً.
+  PANIC_LIQUIDATE = 4,   // إغلاق كل شيء فوراً (Panic Button).
+  HEDGE_EXPOSURE = 5     // فتح صفقة عكسية للتحوط (Delta Neutraling).
+}
+
+// -----------------------------------------------------------------
+// 3. جدول تقرير المخاطر (RISK REPORT TABLE)
+// -----------------------------------------------------------------
+
+table RiskReport {
+  // توقيت التقييم (نانوثانية).
+  timestamp_nanos: long;
+
+  // معرف المحفظة أو الحساب الذي يتم فحصه.
+  portfolio_id: string;
+
+  // 1. الصحة المالية (Financial Health)
+  total_equity: double;        // الرصيد الكلي الحالي.
+  margin_usage_percent: double; // نسبة استخدام الهامش (أخطر رقم).
+  daily_pnl: double;           // الربح/الخسارة اليومية.
+
+  // 2. التعرض (Exposure)
+  total_exposure_long: double;  // قيمة صفقات الشراء.
+  total_exposure_short: double; // قيمة صفقات البيع.
+  net_exposure: double;         // الصافي (Long - Short).
+
+  // 3. التراجع (Drawdown)
+  current_drawdown_percent: double; // التراجع الحالي من القمة.
+  
+  // 4. القرار (The Verdict)
+  risk_level: RiskLevel;
+  recommended_action: RiskAction;
+
+  // رسالة توضيحية (للسجلات الجنائية).
+  // مثال: "Margin > 80% due to BTC crash".
+  breach_reason: string;
+}
+
+// تحديد الجذر
+root_type RiskReport;
