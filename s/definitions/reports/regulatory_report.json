@@ -1,0 +1,50 @@
+{
+  "_header": {
+    "Goal": "قالب تقرير رقابي قابل للإرسال للجهات المنظمة.",
+    "Dependencies": [
+      "Compliance Engine",
+      "Audit Trail",
+      "Backoffice"
+    ]
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "report_id": {
+      "type": "string"
+    },
+    "period_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "period_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "total_trades": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "report_id",
+    "period_start",
+    "period_end",
+    "jurisdiction",
+    "generated_at"
+  ]
+}

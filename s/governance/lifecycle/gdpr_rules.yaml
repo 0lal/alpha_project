@@ -1,0 +1,11 @@
+# Goal: ضبط امتثال الخصوصية (GDPR) لطلبات النسيان والتقليل.
+# Dependencies: privacy service, data purger, audit policy.
+gdpr:
+  right_to_be_forgotten: true
+  anonymization_fields:
+    - email
+    - phone
+    - ip_address
+    - client_name
+  request_sla_days: 30
+  keep_minimum_for_regulatory: true

@@ -1,0 +1,15 @@
+# Goal: قواعد أولية لكشف أنماط التلاعب في التداول.
+# Dependencies: compliance engine, surveillance jobs, audit trail.
+rules:
+  - id: WASH_001
+    description: "Detect self-trades across linked accounts"
+    enabled: true
+    severity: CRITICAL
+  - id: SPOOF_002
+    description: "Detect large fake orders canceled quickly"
+    enabled: true
+    severity: HIGH
+  - id: LAYER_003
+    description: "Detect layered order-book manipulation"
+    enabled: true
+    severity: HIGH

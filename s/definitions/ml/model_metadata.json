@@ -1,0 +1,74 @@
+{
+  "_header": {
+    "Goal": "وصف تفصيلي لإصدارات النماذج وسجل الحوكمة الخاص بها.",
+    "Dependencies": [
+      "Model Registry",
+      "Inference Service",
+      "Audit"
+    ]
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "alpha/definitions/ml/model_metadata.json",
+  "title": "Model Metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "model_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "shadow",
+        "deprecated"
+      ]
+    },
+    "feature_schema_hash": {
+      "type": "string"
+    },
+    "training_dataset_ref": {
+      "type": "string"
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "approved_by": {
+          "type": "string"
+        },
+        "approved_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "approved_by"
+      ]
+    }
+  },
+  "required": [
+    "model_id",
+    "version",
+    "created_at",
+    "status",
+    "owner"
+  ]
+}

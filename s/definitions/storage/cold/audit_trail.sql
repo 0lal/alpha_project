@@ -1,3 +1,6 @@
+-- Goal: سجل تدقيق جنائي كامل لكل الأحداث التشغيلية والمالية.
+-- Dependencies: Audit Service, Compliance Engine, Forensics.
+
 -- سجل جنائي لكل حركة في النظام (forensics + compliance ready)
 create table if not exists audit_trail (
   audit_id                 bigserial primary key,

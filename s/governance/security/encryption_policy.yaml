@@ -1,0 +1,12 @@
+# Goal: تحديد الحقول الحساسة الواجب تشفيرها أثناء النقل والتخزين.
+# Dependencies: api gateway, storage mutators, key management.
+# مبدأ: no plaintext for credentials/secrets/PII.
+encryption:
+  algorithm: "AES-256-GCM"
+  key_rotation_days: 30
+  encrypted_fields:
+    - access_token
+    - refresh_token
+    - api_key
+    - secret_key
+    - private_note

@@ -6,6 +6,9 @@ option java_multiple_files = true;
 option java_package = "com.alpha.transport.rpc";
 option go_package = "alpha/transport/rpc;rpc";
 
+// Goal: إدارة المصادقة والجلسات وتبادل مفاتيح الخدمة.
+// Dependencies: All Services, Security Policy Engine
+
 // المصادقة وتبادل المفاتيح (Sessions, Handshakes)
 service AuthGateway {
   rpc OpenSession(OpenSessionRequest) returns (OpenSessionResponse);

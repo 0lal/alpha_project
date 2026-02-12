@@ -1,0 +1,13 @@
+# Goal: تحديد سياسة الأحداث الإلزامية للسجل الجنائي والرقابي.
+# Dependencies: audit logger, lineage tracker, compliance reports.
+audit:
+  must_log:
+    - auth.login
+    - auth.session.refresh
+    - orders.submit
+    - orders.cancel
+    - risk.killswitch
+    - governance.threshold.update
+  retention_days: 1825
+  immutable_storage: true
+  pii_redaction: true

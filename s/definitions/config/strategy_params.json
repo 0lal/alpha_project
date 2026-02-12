@@ -1,0 +1,45 @@
+{
+  "_header": {
+    "Goal": "مخطط معلمات الاستراتيجية وقيود المخاطر المرتبطة بها.",
+    "Dependencies": [
+      "Brain Service",
+      "Risk Control",
+      "Backtester"
+    ]
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "strategy_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "risk_budget": {
+      "type": "number",
+      "minimum": 0
+    },
+    "max_positions": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "symbols": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "rebalance_interval_sec": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    }
+  },
+  "required": [
+    "strategy_id",
+    "risk_budget",
+    "max_positions",
+    "symbols"
+  ]
+}

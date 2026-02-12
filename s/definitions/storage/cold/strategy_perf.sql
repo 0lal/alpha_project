@@ -1,3 +1,6 @@
+-- Goal: قياس أداء الاستراتيجيات ومخاطرها عبر الزمن.
+-- Dependencies: Strategy Engine, Backtest, Risk Analytics.
+
 -- سجل أداء الاستراتيجيات (institutional KPI + risk factor snapshot)
 create table if not exists strategy_perf (
   perf_id                  bigserial primary key,
