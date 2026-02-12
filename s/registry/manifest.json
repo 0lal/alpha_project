@@ -1,0 +1,31 @@
+{
+  "_header": {
+    "Goal": "تعريف سياسة الحوكمة والإصدارات لمستودع Bio-Schema.",
+    "Dependencies": [
+      "s/registry/catalog.py",
+      "s/toolkit/compilers/schema_builder.py",
+      "s/toolkit/linters/style_check.py"
+    ]
+  },
+  "Goal": "الفهرس الشامل لجميع schema الرسمية مع سياسات التطور.",
+  "Dependencies": [
+    "s/toolkit/compilers/schema_builder.py",
+    "s/toolkit/linters/style_check.py",
+    "s/registry/catalog.py"
+  ],
+  "version": "2.1.0",
+  "active_roots": [
+    "s/definitions",
+    "s/governance",
+    "s/intelligence"
+  ],
+  "history_policy": {
+    "hash_depth": 5,
+    "require_reason": true,
+    "require_author": true
+  },
+  "compatibility": {
+    "disallow_breaking_proto_removals": true,
+    "require_header_proto_json": true
+  }
+}

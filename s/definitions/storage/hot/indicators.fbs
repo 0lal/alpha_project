@@ -1,3 +1,6 @@
+// Goal: تمثيل المؤشرات الفنية لحظياً لدعم قرارات الذكاء.
+// Dependencies: Feature Engine, Strategy Brain, ML Inference.
+
 namespace alpha.storage.hot;
 
 enum IndicatorTimeframe : ubyte {

@@ -1,3 +1,6 @@
+// Goal: تمثيل نبضة السوق اللحظية بزمن منخفض جداً.
+// Dependencies: Ingestion Bus, HFT Cache, Validators.
+
 namespace alpha.storage.hot;
 
 // Market microstructure quality for downstream smart-routing and filtering.

@@ -1,3 +1,6 @@
+-- Goal: أرشيف صفقات التنفيذ مع قابلية تحليل ومراجعة تنظيمية.
+-- Dependencies: Execution Engine, Ledger, Reporting.
+
 -- أرشيف الصفقات المنفذة (execution-grade with analytics-friendly indexes)
 create table if not exists trade_history (
   trade_id                 text primary key,

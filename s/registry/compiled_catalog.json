@@ -1,0 +1,174 @@
+{
+  "_header": {
+    "Goal": "كتالوج مبني آلياً لملفات schema والبصمات.",
+    "Dependencies": [
+      "s/registry/manifest.json",
+      "s/registry/catalog.py"
+    ]
+  },
+  "manifest_version": "2.1.0",
+  "active_roots": [
+    "s/definitions",
+    "s/governance",
+    "s/intelligence"
+  ],
+  "artifact_count": 39,
+  "artifacts": [
+    {
+      "path": "s/definitions/common/currency_codes.json",
+      "sha256": "08b249ef4854e6e02300b5da6e2bb3516d18fd46367e4f2bc9a5bde8a082ff2a"
+    },
+    {
+      "path": "s/definitions/common/error_codes.json",
+      "sha256": "2de25322dda891a14402ab30017f4c8d468c4dfeca5e5e8c964c312c6e745310"
+    },
+    {
+      "path": "s/definitions/config/strategy_params.json",
+      "sha256": "d06639d755a84d2179df746f10d59b6824d6004c38c3b0671110b30cb2276b59"
+    },
+    {
+      "path": "s/definitions/config/system_config.json",
+      "sha256": "f470f58d0da602930e1c7116c0dd3affdd82bd2f8978b049a1481d16b14bea11"
+    },
+    {
+      "path": "s/definitions/hardware/fpga_registers.yaml",
+      "sha256": "f1d332cdb0a3b7459c0ac22269f1332f1e504a348c420a5388febf864178c718"
+    },
+    {
+      "path": "s/definitions/hardware/network_stack.yaml",
+      "sha256": "3bced3db32395db4abe5b7b7acea26d5fcacb20fcefba366acd27d1f9ccb95d3"
+    },
+    {
+      "path": "s/definitions/ml/feature_store.fbs",
+      "sha256": "b67a19aa7de2a60a378f9f41ad72955939bae6e1b78c9abb182d1cb8fd9bb4b8"
+    },
+    {
+      "path": "s/definitions/ml/model_metadata.json",
+      "sha256": "c3c0b6d4b9f8a24fb0691a1f1c607bc7e357dd2b71240a6ed04451ce40bc895a"
+    },
+    {
+      "path": "s/definitions/reports/backtest_results.json",
+      "sha256": "d4b0781c145c7b36ef16cfc6676f9f168f3ef789d9692a153602bdbf49b8f4a6"
+    },
+    {
+      "path": "s/definitions/reports/regulatory_report.json",
+      "sha256": "4fba5299b7448f8c0323dbfc571c3f268775416e163de73e52fe2a76526d784b"
+    },
+    {
+      "path": "s/definitions/storage/cold/audit_trail.sql",
+      "sha256": "1c6b2836b6a3521359db248bf285ec2ffeed3ab1b77abfbd0772b58011c3f27c"
+    },
+    {
+      "path": "s/definitions/storage/cold/ledger_entries.sql",
+      "sha256": "f14a6dbe4da520c21de8b0b0823945832cfe1c0d80cd05958ce98e9ae44039a4"
+    },
+    {
+      "path": "s/definitions/storage/cold/strategy_perf.sql",
+      "sha256": "9f12bc9f869fd1228ce800cf1027099ae5f82ed2c1810b99f6ce181f2d293a57"
+    },
+    {
+      "path": "s/definitions/storage/cold/trade_history.sql",
+      "sha256": "7a4979762a258bf8db84b6fa49342909f12d51221400b8c18fdf89de761e39a1"
+    },
+    {
+      "path": "s/definitions/storage/cold/user_profiles.sql",
+      "sha256": "e624a7947ebfd2c9e7f83e80dbf9a78faf782668308b81def3920d868bb630b7"
+    },
+    {
+      "path": "s/definitions/storage/hot/indicators.fbs",
+      "sha256": "debb7c391c51290b04eb11f92d9e407353b8f68f9663c383cbd29c09f7075bdc"
+    },
+    {
+      "path": "s/definitions/storage/hot/market_tick.fbs",
+      "sha256": "b0d20ff3d176ca97d5d8deaacec3064a0428491efbbe2ad4e8620c9b8b85b4df"
+    },
+    {
+      "path": "s/definitions/storage/hot/order_book.fbs",
+      "sha256": "eb7ceb4b9f28e81aaa1bffe8d7555479128f08907f1cb9285ab43c896e578554"
+    },
+    {
+      "path": "s/definitions/storage/hot/risk_state.fbs",
+      "sha256": "4cfa91730c9853fd7f09419537c676b7f25e4fc90ef90c86f2fb1d787def9074"
+    },
+    {
+      "path": "s/definitions/transport/events/market_events.proto",
+      "sha256": "6e3a237e45019f2421521b74ce0e1f7ddf6ff095210e7d5ec952614e2032fb2a"
+    },
+    {
+      "path": "s/definitions/transport/events/strategy_events.proto",
+      "sha256": "60319af1998c20bfddf4f8fadc26a07083a0cc11633b9d36d588c89a1467795f"
+    },
+    {
+      "path": "s/definitions/transport/events/system_events.proto",
+      "sha256": "47d0d00b00b54438067bbb712072b47bfed0f8815c5e51736940a782c1091a22"
+    },
+    {
+      "path": "s/definitions/transport/rest/admin_panel.json",
+      "sha256": "a1881a93b97405331a659729ff922b459396d459757c44d5da7f59ecc11b1a87"
+    },
+    {
+      "path": "s/definitions/transport/rest/client_response.json",
+      "sha256": "38f4cf8860db76cd0fb8a56bea54c7465360202afaf4273a739a4f54edefce74"
+    },
+    {
+      "path": "s/definitions/transport/rest/public_api.json",
+      "sha256": "a529dd1a56a0ede1ae3b7442cd36a9898e05973cb3836aa607b32ed50c75e322"
+    },
+    {
+      "path": "s/definitions/transport/rpc/auth_gateway.proto",
+      "sha256": "8b7bd642f0c446d49119d25a7a0378bfdef2e03edb14c390fc623d21184fa327"
+    },
+    {
+      "path": "s/definitions/transport/rpc/brain_service.proto",
+      "sha256": "6121e724ab789d7688636bfd07a3e67e04990535611fc588576e66f566f79736"
+    },
+    {
+      "path": "s/definitions/transport/rpc/execution_link.proto",
+      "sha256": "c99694547e09df0b94036d714e55419f2990b5cca60c01ca124de3760a74bd49"
+    },
+    {
+      "path": "s/definitions/transport/rpc/risk_control.proto",
+      "sha256": "ceb3a4eafac188b211318d59a6932aae4c5a36fee186ebfacea3c113b1fa36e7"
+    },
+    {
+      "path": "s/definitions/transport/rpc/service_discovery.proto",
+      "sha256": "5bf8b2e8a7810775b3832c45f9d3743dcb245aa0f33a5122c42a9694201b174a"
+    },
+    {
+      "path": "s/definitions/transport/rpc/telemetry.proto",
+      "sha256": "6585ba506af243469f3d69fd7cd24221d38e86820e86f23f5884c1980d42c6fc"
+    },
+    {
+      "path": "s/governance/compliance/anti_manipulation.yaml",
+      "sha256": "97a7a2c28e75e00c214e6a1b15429ce11b68c575a9b4155c7584a940db543d6c"
+    },
+    {
+      "path": "s/governance/compliance/audit_policy.yaml",
+      "sha256": "6e1ab83f3f208cf77542db0d9501da7614a7d29f7dbaa23a5cb037564300d1b3"
+    },
+    {
+      "path": "s/governance/lifecycle/gdpr_rules.yaml",
+      "sha256": "d7b539a813273312c8b61595e82563d35c6c217c49f4386007bc5be2590580a2"
+    },
+    {
+      "path": "s/governance/lifecycle/retention.yaml",
+      "sha256": "c1181334adc6114c11bd9cde3d8feb49aa9137f1d3f6140ebf54c4fdcc5acad3"
+    },
+    {
+      "path": "s/governance/security/access_control.yaml",
+      "sha256": "5f975a88b6493fe598892cbd0144cb2145be691535b3d54b1c83251434e46986"
+    },
+    {
+      "path": "s/governance/security/encryption_policy.yaml",
+      "sha256": "aec2444282d0473cba0e078eda631a8a962a591f6738bb92b485b663238dce90"
+    },
+    {
+      "path": "s/governance/thresholds/risk_limits.yaml",
+      "sha256": "3aa432bc6bdf83649e0ffba99a17465ca87746ad1c0296a1d91cca627c8a6814"
+    },
+    {
+      "path": "s/governance/thresholds/volatility.yaml",
+      "sha256": "bfab137b80f6949168d4b522804d4f759cd31ba798c6ca6785fbc901e7aac61c"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Goal: حدود التقلب الديناميكية التي يقرأها ContextualValidator لحظياً.
+# Dependencies: s/intelligence/validators/contextual.py, risk engines, market ingest.
+# ملاحظة: القيم تمثل baseline افتراضي ويجب ضبطها حسب الأصل/السوق.
+volatility:
+  max_drop_pct_per_sec: 5.0
+  max_spread_bps: 250
+  max_jump_sigma: 6
+  stale_tick_ms: 2000
+  abnormal_volume_zscore: 4.5

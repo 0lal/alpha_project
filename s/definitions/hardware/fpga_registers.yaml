@@ -1,0 +1,15 @@
+# Goal: تعريف خريطة سجلات FPGA المستخدمة في خط التنفيذ منخفض الكمون.
+# Dependencies: Hardware Abstraction Layer, FPGA Runtime, Observability agent.
+fpga:
+  board_id: "alpha-hft-fpga-v2"
+  firmware_version: "2.3.1"
+registers:
+  rx_ring_base: 0x00010000
+  tx_ring_base: 0x00020000
+  latency_counter: 0x00030010
+  drop_counter: 0x00030020
+  crc_error_counter: 0x00030030
+  heartbeat_counter: 0x00030040
+thresholds:
+  max_latency_us: 50
+  max_drop_rate_per_sec: 5

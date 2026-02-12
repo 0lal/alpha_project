@@ -1,0 +1,9 @@
+# Goal: حدود المخاطر العامة للاستخدام الفوري أثناء التنفيذ.
+# Dependencies: risk control service, contextual validator, execution link.
+# القيم التالية افتراضية ويجب أن تُضبط على مستوى الحساب/الاستراتيجية.
+risk_limits:
+  max_exposure_usd: 10000
+  max_leverage: 5
+  max_daily_loss_usd: 2000
+  max_order_notional_usd: 2500
+  max_open_orders: 40

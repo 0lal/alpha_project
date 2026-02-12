@@ -1,0 +1,44 @@
+{
+  "_header": {
+    "Goal": "تعريف العملات القياسية ودقة الكسور وسياق التسوية.",
+    "Dependencies": [
+      "Execution",
+      "Ledger",
+      "Reporting",
+      "Risk"
+    ]
+  },
+  "version": "1.0.0",
+  "currencies": [
+    {
+      "code": "USD",
+      "precision": 2,
+      "settlement_t_plus": 2
+    },
+    {
+      "code": "EUR",
+      "precision": 2,
+      "settlement_t_plus": 2
+    },
+    {
+      "code": "SAR",
+      "precision": 2,
+      "settlement_t_plus": 2
+    },
+    {
+      "code": "JPY",
+      "precision": 0,
+      "settlement_t_plus": 2
+    },
+    {
+      "code": "BTC",
+      "precision": 8,
+      "settlement_t_plus": 0
+    },
+    {
+      "code": "ETH",
+      "precision": 8,
+      "settlement_t_plus": 0
+    }
+  ]
+}
