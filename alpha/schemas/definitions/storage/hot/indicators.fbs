@@ -1,0 +1,80 @@
+namespace alpha.storage.hot;
+
+enum IndicatorTimeframe : ubyte {
+  TF_1M = 0,
+  TF_5M = 1,
+  TF_15M = 2,
+  TF_1H = 3,
+  TF_4H = 4,
+  TF_1D = 5,
+  TF_1W = 6
+}
+
+table RSI {
+  period:ushort;
+  value:double;
+}
+
+table MACD {
+  fast_period:ushort;
+  slow_period:ushort;
+  signal_period:ushort;
+  macd:double;
+  signal:double;
+  histogram:double;
+}
+
+table BollingerBands {
+  period:ushort;
+  stdev:double;
+  upper:double;
+  middle:double;
+  lower:double;
+}
+
+table TrendPack {
+  ema_20:double;
+  ema_50:double;
+  ema_200:double;
+  adx_14:double;
+  supertrend:double;
+}
+
+table OscillatorPack {
+  atr_14:double;
+  stoch_k:double;
+  stoch_d:double;
+  cci_20:double;
+  williams_r_14:double;
+}
+
+table VolumePack {
+  obv:double;
+  mfi_14:double;
+  cmf_20:double;
+  volume_sma_20:double;
+}
+
+table IndicatorSnapshot {
+  snapshot_id:string (required);
+  symbol:string (required);
+  venue:string;
+  timeframe:IndicatorTimeframe = TF_1M;
+  candle_open_time_ns:ulong;
+  candle_close_time_ns:ulong;
+
+  rsi:RSI;
+  macd:MACD;
+  bb:BollingerBands;
+  trend:TrendPack;
+  oscillator:OscillatorPack;
+  volume:VolumePack;
+
+  signal_bias:string;
+  confidence:double;
+  version:uint = 2;
+  trace_id:string;
+}
+
+root_type IndicatorSnapshot;
+file_identifier "INDI";
